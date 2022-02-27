@@ -29,7 +29,8 @@ class BaseService(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
     def get(self, db: Session):
         data = self.repo.get(db)
         if not data:
-            return ServiceResult(AppException.NotFound(f"No {self.model.__name__.lower}s found."))
+            data = []
+            # return ServiceResult(AppException.NotFound(f"No {self.model.__name__.lower}s found."))
         return ServiceResult(data, status_code=status.HTTP_200_OK)
 
     def get_one(self, db: Session, id: int):
@@ -37,7 +38,6 @@ class BaseService(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         if not data:
             return ServiceResult(AppException.NotFound(f"No {self.model.__name__.lower}s found."))
         return ServiceResult(data, status_code=status.HTTP_200_OK)
-        pass
 
     def update(self, db: Session, id: int, data_update: UpdateSchemaType):
         data = self.repo.update(db, id, data_update)
