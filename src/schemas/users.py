@@ -8,12 +8,12 @@ class UserBase(BaseModel):
     phone: constr(
         min_length=11, max_length=14, regex=r"(\+880)?[0-9]{11}"
     )
-    password: str
     sex: str
     is_active: bool
 
 
 class UserCreate(UserBase):
+    password: str
     role_name: str
 
 
