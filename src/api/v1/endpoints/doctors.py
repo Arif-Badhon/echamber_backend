@@ -1,17 +1,47 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from typing import List
-from api.v1.auth_dependcies import get_current_active_user
 from db import get_db
 from exceptions import handle_result
-from models import User
-from schemas import DoctorOut
-from services import doctors_service
+from schemas import DoctorSpecialityOut, DoctorQualificationOut, DoctorSpecialityOut, DoctorQualilficationUpdate, DoctorSpecialityUpdate, DoctorSignup, UserOut
+from services import doctors_service, doctor_qualifications_service, doctor_specialities_service
+from api.v1.auth_dependcies import logged_in_doctor
+
 
 router = APIRouter()
 
 
-@router.get('/', response_model=List[DoctorOut])
-def get(db: Session = Depends(get_db)):
-    doctor = doctors_service.get(db)
+@router.post('/signup', response_model=DoctorSpecialityOut)
+def signup(doctor_in: DoctorSignup, db: Session = Depends(get_db)):
+    doctor = doctors_service.signup(db, data_in=doctor_in)
     return handle_result(doctor)
+
+
+@router.get('/auth', response_model=UserOut)
+def auth(doctor: Session = Depends(logged_in_doctor)):
+    return doctor
+
+
+@router.get('/qualifications', response_model=DoctorQualificationOut)
+def get(db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
+    qualification = doctor_qualifications_service.get_by_user_id(
+        db, user_id=current_user.id)
+    return handle_result(qualification)
+
+
+@router.put('/qualifications/{id}', response_model=DoctorQualificationOut)
+def update(id: int, data_update: DoctorQualilficationUpdate, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
+    qualification = doctor_qualifications_service.update(db, id, data_update)
+    return handle_result(qualification)
+
+
+@router.get('/specialities', response_model=DoctorSpecialityOut)
+def get(db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
+    speciality = doctor_specialities_service.get_by_user_id(
+        db, user_id=current_user.id)
+    return handle_result(speciality)
+
+
+@router.put('/specialities/{id}', response_model=DoctorSpecialityOut)
+def update(id: int, data_update: DoctorSpecialityUpdate, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
+    speciality = doctor_specialities_service.update(db, id, data_update)
+    return handle_result(speciality)

@@ -1,42 +1,48 @@
 from fastapi import Depends
-from pydantic import ValidationError
-from models import User
-from db.core import settings
 from db import get_db
-from fastapi.security import OAuth2PasswordBearer
+from fastapi.security import HTTPBasicCredentials, HTTPBearer
 from sqlalchemy.orm import Session
 from exceptions.app_exceptions import AppException
-from exceptions.service_result import ServiceResult, handle_result
-from jose import jwt
-from schemas import TokenPayload
-from services import users_service
+from exceptions.service_result import handle_result
+from services import users_service, roles_service
+from utils import Token
 
-Oauth2_scheme = OAuth2PasswordBearer(
-    tokenUrl=f"{settings.API_V1_STR}/login"
-)
+security = HTTPBearer()
 
 
-def get_current_user(
-    db: Session = Depends(get_db), token: str = Depends(Oauth2_scheme)
-) -> User:
-    try:
-        payload = jwt.decode(
-            token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM]
-        )
-        token_data = TokenPayload(**payload)
-    except (jwt.JWTError, ValidationError):
-        return ServiceResult(AppException.CredentialsException())
+def logged_in(credentials: HTTPBasicCredentials = Depends(security), db: Session = Depends(get_db)):
+    token = credentials.credentials
+    token_data = Token.validate_token(token)
+    user = handle_result(users_service.get_one(db, id=token_data.user_id))
 
-    return users_service.search_by_email_service(db, email_in=token_data.sub)
+    if not user:
+        raise AppException.Unauthorized()
+    return user
 
 
-def get_current_active_user(
-    current_user: User = Depends(get_current_user),
-) -> User:
-    if not handle_result(current_user).is_active:
-        return ServiceResult(AppException.Forbidden("Inactive user"))
+def logged_in_doctor(credentials: HTTPBasicCredentials = Depends(security), db: Session = Depends(get_db)):
+    user = logged_in(credentials, db)
 
-    return current_user
+    role_name = roles_service.get_one(db, user.role_id)
+    role_name_obj = handle_result(role_name)
+
+    if(role_name_obj.name != 'doctor'):
+        raise AppException.Unauthorized()
+
+    if not user:
+        raise AppException.Unauthorized()
+    return user
 
 
-# We need to specify role
+def logged_in_patient(credentials: HTTPBasicCredentials = Depends(security), db: Session = Depends(get_db)):
+    user = logged_in(credentials, db)
+
+    role_name = roles_service.get_one(db, user.role_id)
+    role_name_obj = handle_result(role_name)
+
+    if(role_name_obj.name != 'patient'):
+        raise AppException.Unauthorized()
+
+    if not user:
+        raise AppException.Unauthorized()
+    return user

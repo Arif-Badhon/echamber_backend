@@ -1,17 +1,15 @@
-from datetime import timedelta
-from db import settings
-from exceptions.app_exceptions import AppException
-from exceptions.service_result import ServiceResult
 from schemas import Token
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from db import get_db
 from exceptions import handle_result
-from schemas import UserCreate, UserOut, UserLogin
+from schemas import UserCreate, UserOut, UserLogin, Token
+from schemas.users import UserUpdate
 from services import users_service
-from fastapi.security import OAuth2PasswordRequestForm, HTTPBasic, HTTPBasicCredentials
+from fastapi.security import HTTPBasic
+from models import User
+from api.v1.auth_dependcies import logged_in
 
-from utils.password_utils import create_access_token
 
 router = APIRouter()
 
@@ -25,23 +23,19 @@ def signup(data_in: UserCreate, db: Session = Depends(get_db)):
     return handle_result(user)
 
 
-@router.post('/login')
-def login(db: Session = Depends(get_db), data_in: OAuth2PasswordRequestForm = Depends()):
-    user = users_service.is_auth(
-        db, identifier=data_in.username, password=data_in.password)
+@router.post('/login', response_model=Token)
+def login(data_in: UserLogin, db: Session = Depends(get_db)):
+    user = users_service.login(db, data_in.identifier, data_in.password)
+    return handle_result(user)
 
-    if not user:
-        return handle_result(
-            ServiceResult(AppException.BadRequest(
-                "Incorrect username or password"))
-        )
-    elif not user.is_active:
-        return handle_result(ServiceResult(AppException.BadRequest("User is inactive")))
 
-    access_token_expires = timedelta(
-        minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = create_access_token(user.email, access_token_expires)
+@router.get('/auth', response_model=UserOut)
+def auth(current_user: User = Depends(logged_in)):
+    return current_user
 
-    return {"access_token": access_token, "token_type": "bearer"}
 
-# data_in: UserLogin,
+@router.put('/user/update', response_model=UserOut)
+def user_update(user_update: UserUpdate, db: Session = Depends(get_db), current_user: User = Depends(logged_in)):
+    user = users_service.update(
+        db, id=current_user.id, data_update=user_update)
+    return handle_result(user)

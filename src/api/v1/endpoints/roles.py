@@ -1,18 +1,18 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from api.v1.auth_dependcies import get_current_active_user
 from exceptions import handle_result
 from services import roles_service
 from schemas.roles import RoleOut, RoleIn, RoleUpdate
 from db import get_db
 from typing import List
 from models import User
+from api.v1.auth_dependcies import logged_in
 
 router = APIRouter()
 
 
 @router.get('/', response_model=List[RoleOut])
-def get(db: Session = Depends(get_db), current_user: User = Depends(get_current_active_user)):
+def get(db: Session = Depends(get_db)):
     roles = roles_service.get(db)
     return handle_result(roles)
 
@@ -26,6 +26,7 @@ def post(role_in: RoleIn, db: Session = Depends(get_db)):
 @router.get('/{id}', response_model=RoleOut)
 def get_one(id, db: Session = Depends(get_db)):
     roles = roles_service.get_one(db, id)
+    print(roles)
     return handle_result(roles)
 
 

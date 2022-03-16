@@ -14,12 +14,27 @@ class BaseRepo(Generic[ModelType, CreateSchemaType, UpdateSchemaType], ABSRepo):
     def __init__(self, model: Type[ModelType]):
         self.model = model
 
+    """"Data create related methods"""
+
     def create(self, db: Session, data_in: CreateSchemaType) -> ModelType:
         data = self.model(**data_in.dict())
         db.add(data)
         db.commit()
         db.refresh(data)
         return data
+
+    def create_with_flush(self, db: Session, data_in: CreateSchemaType):
+        data = self.model(**data_in.dict())
+        db.add(data)
+        db.flush()
+        return data
+
+    def create_commit_after_flush(self, db: Session, data_obj: ModelType):
+        db.commit()
+        db.refresh(data_obj)
+        return data_obj
+
+    """Data get related methods"""
 
     def get(self, db: Session) -> List[ModelType]:
         query = db.query(self.model).all()

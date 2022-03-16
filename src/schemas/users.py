@@ -1,3 +1,4 @@
+from typing import Optional
 from pydantic import BaseModel
 from pydantic.types import constr
 
@@ -22,8 +23,13 @@ class UserDBIn(UserBase):
     role_id: int
 
 
-class UserUpdate(UserBase):
-    role_id: int
+class UserUpdate(BaseModel):
+    name: Optional[str]
+    email: Optional[str]
+    phone: constr(
+        min_length=11, max_length=14, regex=r"(\+880)?[0-9]{11}"
+    )
+    sex: Optional[str]
 
 
 class UserOut(UserBase):

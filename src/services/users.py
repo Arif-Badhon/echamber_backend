@@ -1,21 +1,18 @@
-from datetime import timedelta
+from utils import Token
 from sqlalchemy.orm import Session
-from db.db_session import get_db
 from exceptions import ServiceResult
-from exceptions import AppException, handle_result
+from exceptions import AppException
 from repositories import users_repo, roles_repo
 from services import BaseService
 from models import User
 from schemas import UserCreate, UserUpdate, UserDBIn
-from utils import password_hash, create_access_token, verify_password
-from fastapi import Depends, status
-from db import settings
-from fastapi.security import OAuth2PasswordRequestForm
+from utils import password_hash, verify_password
+from fastapi import status
 
 
 class UserService(BaseService[User, UserCreate, UserUpdate]):
 
-    def signup(self, db: Session, data_in: UserCreate):
+    def signup(self, db: Session, data_in: UserCreate, flush: bool):
 
         # Email and phone check
         if self.repo.search_by_email(db, data_in.email):
@@ -30,8 +27,13 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
         password = password_hash(data_in.password)
         data_obj.update({"password": password})
 
-        data = self.repo.create(db, data_in=UserDBIn(
-            **data_obj, role_id=role))
+        # data: User = None
+        if not flush:
+            data = self.repo.create(db, data_in=UserDBIn(
+                **data_obj, role_id=role))
+        else:
+            data = self.repo.create_with_flush(db, data_in=UserDBIn(
+                **data_obj, role_id=role))
 
         if not data:
             return ServiceResult(AppException.ServerError("Something went wrong!"))
@@ -59,24 +61,11 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
         else:
             return None
 
-    # def login(self, db: Session = Depends(get_db), form_data: OAuth2PasswordRequestForm = Depends()):
-    #     user = self.is_auth(db, identifier=form_data.username,
-    #                         password=form_data.password)
-
-    #     if not user:
-    #         return handle_result(
-    #             ServiceResult(AppException.BadRequest(
-    #                 "Incorrect username or password"))
-    #         )
-    #     elif not user.is_active:
-    #         return handle_result(ServiceResult(AppException.BadRequest("User is inactive")))
-
-    #     access_token_expires = timedelta(
-    #         minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
-
-    #     access_token = create_access_token(user.email, access_token_expires)
-
-    #     return ServiceResult({"access_token": access_token, "token_type": "bearer"}, status_code=200)
+    def login(self, db: Session, identifier: str, password: str):
+        user: User = self.is_auth(db, identifier, password)
+        if user is not None:
+            access_token = Token.create_access_token({"sub": user.id})
+            return ServiceResult({"access_token": access_token, "token_type": "bearer"}, status_code=200)
 
 
 users_service = UserService(User, users_repo)

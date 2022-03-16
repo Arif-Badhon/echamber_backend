@@ -1,15 +1,16 @@
 from typing import Optional
 from pydantic import BaseModel
+from pydantic.types import constr
 
 
 class DoctorBase(BaseModel):
-    bmdc: str
-    left_header: Optional[str]
-    right_header: Optional[str]
+    user_id: int
+    bmdc: Optional[str] = None
+    main_chamber: Optional[str] = None
 
 
 class DoctorIn(DoctorBase):
-    user_id: int
+    pass
 
 
 class DoctorUpdate(BaseModel):
@@ -24,3 +25,17 @@ class DoctorOut(DoctorBase):
 
     class Config:
         orm_mode = True
+
+
+class DoctorSignup(BaseModel):
+    name: str
+    email: str
+    phone: constr(
+        min_length=11, max_length=14, regex=r"(\+880)?[0-9]{11}"
+    )
+    sex: str
+    password: str
+    role_name: str
+    speciality: str
+    qualification: str
+    bmdc: str

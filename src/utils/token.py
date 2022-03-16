@@ -1,14 +1,15 @@
-from asyncio.log import logger
 from datetime import datetime, timedelta
 from typing import Optional
 from db import settings
 from jose import jwt, JWTError, ExpiredSignatureError
 from exceptions import *
 from schemas.token import TokenData
-import logging
 
-logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger(__name__)
+
+# import logging
+
+# logging.basicConfig(level=logging.DEBUG)
+# logger = logging.getLogger(__name__)
 
 
 class Token:
@@ -40,5 +41,5 @@ class Token:
         except ExpiredSignatureError:
             raise AppException.BadRequest({"message": "Token expired"})
         except JWTError as err:
-            logger.exception(err)
+            print(err)
             raise AppException.CredentialsException()

@@ -7,9 +7,18 @@ from api.v1.routes import api_router
 from db import settings
 from exceptions import AppExceptionCase, AppException, app_exception_handler, generic_exception_handler
 from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
 
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.exception_handler(AppExceptionCase)
