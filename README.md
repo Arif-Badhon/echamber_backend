@@ -8,6 +8,12 @@ URL_ONE=http://localhost:3000
 URL_TWO=https://localhost:3000
 ```
 
+# installation
+
+```
+pip3 install -r requirements.txt
+```
+
 # migration
 
 ```
