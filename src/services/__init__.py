@@ -7,3 +7,4 @@ from .doctor_qualifications import *
 from .doctor_specialities import *
 from .patients import *
 from .patient_indicators import *
+from .ep_chief_complaints import *
