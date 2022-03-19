@@ -109,4 +109,22 @@ class PatientIndicator(BaseModel):
     user_patient_indicator = relationship("User", back_populates="patient_indicator")
 
 
+
 # E-prescription related models
+
+class EpChiefComplaintsList(BaseModel):
+    __tablename__ = "ep_chief_complaints_list"
+    cc = Column(String(255), nullable=False)
+    inserted_by = Column(String(255), nullable= True)
+
+
+class EpInvestigagtionList(BaseModel):
+    __tablename__ = "ep_investigation_list"
+    investigation = Column(String(255), nullable=False)
+    inserted_by = Column(String(255), nullable= True)
+
+
+class EpAdviceList(BaseModel):
+    __tablename__ = "ep_advice_list"
+    advice = Column(String(255), nullable=False)
+    inserted_by = Column(String(255), nullable= True)
