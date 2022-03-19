@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from .endpoints import users, roles, doctors, patients, user_details, patient_indicators
+from .endpoints import users, roles, doctors, patients, user_details, patient_indicators, ep_chief_complaints
 
 api_router = APIRouter()
 
@@ -10,3 +10,4 @@ api_router.include_router(roles.router, prefix='/roles', tags=['Roles'])
 api_router.include_router(doctors.router, prefix='/doctors', tags=['Doctors'])
 api_router.include_router( patients.router, prefix='/patients', tags=['Patients'])
 api_router.include_router(patient_indicators.router, prefix="/patient/indicators", tags=['Patient Indicators'])
+api_router.include_router(ep_chief_complaints.router, prefix="/chief-complaints", tags=['Chief Complaints List'])
