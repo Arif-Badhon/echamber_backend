@@ -1,0 +1,10 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /var/www/echamber/
+permissions:
+  - object: /var/www/echamber/
+    owner: ec2-user
+    group: www
+
