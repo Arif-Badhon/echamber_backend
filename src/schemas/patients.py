@@ -6,8 +6,6 @@ class PatientBase(BaseModel):
     bio: Optional[str]
     marital_status: Optional[str]
     occupation: Optional[str]
-    height: Optional[int]
-    weight: Optional[int]
 
 
 class PatientIn(PatientBase):
