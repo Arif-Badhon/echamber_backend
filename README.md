@@ -4,8 +4,8 @@
 SECRET_KEY=fb0c812aa3cf11b55357eae4142f3ae348d48074ca2c5a0c1616ea43f76039c9
 ALGORITHM=HS256
 DATABASE_URL=mysql+mysqlconnector://root:@localhost:3306/echamber
-URL_ONE=http://localhost:3000
-URL_TWO=https://localhost:3000
+URL_ONE=http://localhost:8000
+URL_TWO=https://localhost:8000
 ```
 
 # installation
