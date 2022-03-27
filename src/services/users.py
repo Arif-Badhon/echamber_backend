@@ -66,6 +66,8 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
         if user is not None:
             access_token = Token.create_access_token({"sub": user.id})
             return ServiceResult({"access_token": access_token, "token_type": "bearer"}, status_code=200)
+        else:
+            return ServiceResult(AppException.NotFound("User not found"))
 
 
 users_service = UserService(User, users_repo)
