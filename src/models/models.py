@@ -85,8 +85,6 @@ class Patient(BaseModel):
     bio = Column(Text, nullable=True)
     marital_status = Column(String(20), nullable=True)
     occupation = Column(String(255), nullable=True)
-    height = Column(Integer, nullable=True)
-    weight = Column(Integer, nullable=True)
 
     user_patient = relationship("User", back_populates="patient")
 
