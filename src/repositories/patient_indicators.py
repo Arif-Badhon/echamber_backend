@@ -33,6 +33,8 @@ class PatientIndicatorRepo(BaseRepo[PatientIndicator,
     def get_last_item(self, db: Session, key: str, user_id: int):
         all = db.query(self.model).filter(self.model.key == key).filter(
             self.model.user_id == user_id).all()
+        if len(all) == 0:
+            return []
         return all[-1]
 
 
