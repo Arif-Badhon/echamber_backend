@@ -1,8 +1,9 @@
+from schemas.users import NewPasswordIn
 from utils import Token
 from sqlalchemy.orm import Session
 from exceptions import ServiceResult
 from exceptions import AppException
-from repositories import users_repo, roles_repo
+from repositories import users_repo, roles_repo, UpdateSchemaType
 from services import BaseService
 from models import User
 from schemas import UserCreate, UserUpdate, UserDBIn
@@ -68,6 +69,19 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
             return ServiceResult({"access_token": access_token, "token_type": "bearer"}, status_code=200)
         else:
             return ServiceResult(AppException.NotFound("User not found"))
+
+    def new_password(self, db: Session, user_id: int, data_update: UpdateSchemaType):
+
+        data_obj = data_update.dict(exclude={"password"})
+        password = password_hash(data_update.password)
+        data_obj.update({"password": password})
+
+        data = self.repo.update_by_user_id(
+            db, user_id, data_update=NewPasswordIn(**data_obj))
+        if not data:
+            return ServiceResult(AppException.NotAccepted())
+        access_token = Token.create_access_token({"sub": user_id})
+        return ServiceResult({"access_token": access_token, "token_type": "bearer"}, status_code=200)
 
 
 users_service = UserService(User, users_repo)
