@@ -9,3 +9,5 @@ from .patients import *
 from .patient_indicators import *
 from .ep_chief_complaints_list import *
 from .ep_investigations_list import *
+from .ep_advices_list import *
+from .ep_medicines_list import *
