@@ -42,3 +42,7 @@ class UserOut(UserBase):
 class UserLogin(BaseModel):
     identifier: str
     password: str
+
+
+class NewPasswordIn(BaseModel):
+    password: str
