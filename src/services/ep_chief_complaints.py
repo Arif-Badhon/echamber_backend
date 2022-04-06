@@ -11,7 +11,8 @@ class EpCcListService(BaseService[EpChiefComplaintsList, CcIn, CcUpdate]):
     def search_by_cc(self, db: Session, search_str: str, skip: int, limit: int):
         cc = self.repo.search_by_cc(db, search_str, skip, limit)
         if not cc:
-            return ServiceResult(AppException.NotFound("Patient not found"))
+            return ServiceResult(cc, status_code=status.HTTP_200_OK)
+            # return ServiceResult(AppException.NotFound("Result not found"))
         else:
             return ServiceResult(cc, status_code=status.HTTP_200_OK)
 
