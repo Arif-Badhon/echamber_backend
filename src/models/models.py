@@ -110,13 +110,22 @@ class PatientIndicator(BaseModel):
 
 # E-prescription related models
 
+class EpMedicineList(BaseModel):
+    __tablename__ = "ep_medicine_list"
+    name = Column(String(255), nullable=False)
+    generic = Column(String(255), nullable=False)
+    form = Column(String(255), nullable=False)
+    strength = Column(String(255), nullable=False)
+    pharmaceuticals = Column(String(255), nullable=False)
+
+
 class EpChiefComplaintsList(BaseModel):
     __tablename__ = "ep_chief_complaints_list"
     cc = Column(String(255), nullable=False)
     inserted_by = Column(String(255), nullable= True)
 
 
-class EpInvestigagtionList(BaseModel):
+class EpInvestigationList(BaseModel):
     __tablename__ = "ep_investigation_list"
     investigation = Column(String(255), nullable=False)
     inserted_by = Column(String(255), nullable= True)
