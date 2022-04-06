@@ -2,18 +2,12 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from api.v1.auth_dependcies import logged_in_patient
 from exceptions import handle_result
-from schemas import PatientOut, PatientSignup, UserDetailOut
+from schemas import PatientOut, PatientSignup, UserDetailOut, NewPasswordIn, Token
 from db import get_db
 from schemas import PatientBase, UserOut
-from services import patients_service
+from services import patients_service, users_service
 
 router = APIRouter()
-
-
-# @router.get('/', response_model=List[PatientOut])
-# def get(db: Session = Depends(get_db)):
-#     patients = patients_service.get(db)
-#     return handle_result(patients)
 
 
 @router.post('/signup/', response_model=UserDetailOut)

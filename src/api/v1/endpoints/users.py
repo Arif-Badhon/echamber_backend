@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from db import get_db
 from exceptions import handle_result
 from schemas import UserCreate, UserOut, UserLogin, Token
-from schemas.users import UserUpdate
+from schemas.users import NewPasswordIn, UserUpdate
 from services import users_service
 from fastapi.security import HTTPBasic
 from models import User
@@ -32,6 +32,13 @@ def login(data_in: UserLogin, db: Session = Depends(get_db)):
 @router.get('/auth', response_model=UserOut)
 def auth(current_user: User = Depends(logged_in)):
     return current_user
+
+
+@router.put('/password/new', response_model=Token)
+def new_password(new_password: NewPasswordIn,  db: Session = Depends(get_db), current_user: User = Depends(logged_in)):
+    new = users_service.new_password(
+        db, user_id=current_user.id, data_update=new_password)
+    return handle_result(new)
 
 
 @router.put('/user/update', response_model=UserOut)
