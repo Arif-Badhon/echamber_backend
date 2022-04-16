@@ -1,3 +1,4 @@
+from email.policy import default
 from sqlalchemy import Column, ForeignKey, Integer, Boolean, String, Text, Date
 from models import BaseModel
 from sqlalchemy.orm import relationship
@@ -17,12 +18,22 @@ class User(BaseModel):
     role_id = Column(Integer, ForeignKey("roles.id"))
 
     role = relationship("Role", back_populates="user")
+    propic = relationship("ProfilePic", back_populates= "user_pic")
     user_details = relationship("UserDetail", back_populates="user")
     doctor = relationship("Doctor", back_populates="user_doctor")
+    doctors_chamber =  relationship("DoctorChamber", back_populates="user_doctors_chamber")
     doctor_qualification = relationship("DoctorQualification", back_populates="user_doctor_qualification")
     doctor_speciality = relationship("DoctorSpeciality", back_populates="user_doctor_speciality")
     patient = relationship("Patient", back_populates="user_patient")
     patient_indicator = relationship("PatientIndicator", back_populates="user_patient_indicator")
+
+
+class ProfilePic(BaseModel):
+    __tablename__ = "profile_pic"
+    img_name =  Column(String(100), nullable=False)
+    user_id =  Column(Integer, ForeignKey("users.id"))
+
+    user_pic = relationship("User", back_populates="propic")
 
 
 class Role(BaseModel):
@@ -75,6 +86,15 @@ class DoctorSpeciality(BaseModel):
 
     user_doctor_speciality = relationship("User", back_populates="doctor_speciality")
 
+
+class DoctorChamber(BaseModel):
+    __tablename__ = "doctor_chambers"
+    user_id = Column(Integer, ForeignKey("users.id"))
+    name = Column(String(255), nullable=False)
+    detail = Column(Text, nullable=False)
+    is_active = Column(Boolean, default=False)
+
+    user_doctors_chamber = relationship("User", back_populates="doctors_chamber")
 
 
 # Patient related models
