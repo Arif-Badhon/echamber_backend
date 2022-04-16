@@ -3,6 +3,7 @@ from .users import *
 from .user_details import *
 from .roles import *
 from .doctors import *
+from .doctor_chambers import *
 from .doctor_qualifications import *
 from .doctor_specialities import *
 from .patients import *
