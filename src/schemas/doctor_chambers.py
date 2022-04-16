@@ -14,10 +14,10 @@ class DoctorChamberIn(DoctorChamberBase):
 class DoctorChamberUpdate(BaseModel):
     name: Optional[str] = None
     detail: Optional[str] = None
-    is_active: Optional[bool] = None
 
 
 class DoctorChamberOut(BaseModel):
+    id: int
     user_id: int
     name: str
     detail: str
