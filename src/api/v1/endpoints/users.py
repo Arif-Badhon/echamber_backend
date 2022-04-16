@@ -1,5 +1,5 @@
 from schemas import Token
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, UploadFile
 from sqlalchemy.orm import Session
 from db import get_db
 from exceptions import handle_result
@@ -46,3 +46,8 @@ def user_update(user_update: UserUpdate, db: Session = Depends(get_db), current_
     user = users_service.update(
         db, id=current_user.id, data_update=user_update)
     return handle_result(user)
+
+
+@router.post('/uploadimage')
+async def create_upload_file(file: UploadFile, db: Session = Depends(get_db), current_user: User = Depends(logged_in)):
+    return {"filename": file.filename, "id": current_user.id}
