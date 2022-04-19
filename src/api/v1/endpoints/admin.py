@@ -19,3 +19,9 @@ def auth(admin: Session = Depends(logged_in_admin)):
 def signup(data_in: UserCreate, db: Session = Depends(get_db)):
     admn = admin_service.signup_admin(db, data_in=data_in)
     return handle_result(admn)
+
+
+@router.post('/create/moderator', response_model=UserCreate)
+def moderator_create(data_in: UserCreate, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin)):
+    moderator = admin_service.signup_moderator(db, data_in=data_in)
+    return handle_result(moderator)
