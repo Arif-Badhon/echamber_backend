@@ -33,5 +33,22 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
 
         return ServiceResult(AppException.ServerError('Admin exist'))
 
+    def signup_moderator(self, db: Session, data_in: UserCreate):
+
+        sginup_data = UserCreate(
+            name=data_in.name,
+            email=data_in.email,
+            phone=data_in.phone,
+            sex=data_in.sex,
+            is_active=True,
+            password=data_in.password,
+            role_name='admin'
+        )
+
+        signup_moderator = users_service.signup(
+            db, data_in=sginup_data, flush=False)
+
+        return signup_moderator
+
 
 admin_service = Admin(User, admin_repo)
