@@ -5,6 +5,7 @@ from models import User
 from repositories import admin_repo, roles_repo
 from sqlalchemy.orm import Session
 from exceptions import ServiceResult, AppException
+from fastapi import status
 
 
 class Admin(BaseService[User, UserCreate, UserUpdate]):
@@ -49,6 +50,18 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
             db, data_in=sginup_data, flush=False)
 
         return signup_moderator
+
+    def doctor_inactive_list(self, db: Session):
+        all_doc = self.repo.doctors_inactive_list(db)
+        if not all_doc:
+            return ServiceResult([], status_code=status.HTTP_200_OK)
+        else:
+            return ServiceResult(all_doc, status_code=status.HTTP_200_OK)
+
+    def doctor_active_id(self, db: Session, id: int):
+        active = self.repo.doctor_active_by_id(db, id)
+
+        return self.get_one(db, id)
 
 
 admin_service = Admin(User, admin_repo)
