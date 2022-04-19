@@ -18,6 +18,10 @@ class UserCreate(UserBase):
     role_name: str
 
 
+class UserCreateWitoutRole(UserBase):
+    password: str
+
+
 class UserDBIn(UserBase):
     password: str
     role_id: int

@@ -42,7 +42,7 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
             sex=data_in.sex,
             is_active=True,
             password=data_in.password,
-            role_name='admin'
+            role_name='moderator'
         )
 
         signup_moderator = users_service.signup(
