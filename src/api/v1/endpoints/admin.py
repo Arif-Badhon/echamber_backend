@@ -4,7 +4,7 @@ from exceptions.service_result import handle_result
 from schemas import UserOut, UserCreate
 from sqlalchemy.orm import Session
 from services import admin_service
-from api.v1.auth_dependcies import logged_in_admin
+from api.v1.auth_dependcies import logged_in_admin, logged_in_moderator
 
 
 router = APIRouter()
@@ -19,6 +19,11 @@ def auth(admin: Session = Depends(logged_in_admin)):
 def signup(data_in: UserCreate, db: Session = Depends(get_db)):
     admn = admin_service.signup_admin(db, data_in=data_in)
     return handle_result(admn)
+
+
+@router.get('/auth/moderator', response_model=UserOut)
+def moderator_auth(moderator: Session = Depends(logged_in_moderator)):
+    return moderator
 
 
 @router.post('/create/moderator', response_model=UserCreate)
