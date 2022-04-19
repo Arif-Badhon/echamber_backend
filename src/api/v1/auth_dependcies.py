@@ -48,6 +48,20 @@ def logged_in_moderator(credentials: HTTPBasicCredentials = Depends(security), d
     return user
 
 
+def logged_in_admin_moderator(credentials: HTTPBasicCredentials = Depends(security), db: Session = Depends(get_db)):
+    user = logged_in(credentials, db)
+
+    role_name = roles_service.get_one(db, user.role_id)
+    role_name_obj = handle_result(role_name)
+
+    if(role_name_obj.name == 'admin' or role_name_obj.name == 'moderator'):
+        if not user:
+            raise AppException.Unauthorized()
+        return user
+    else:
+        raise AppException.Unauthorized()
+
+
 def logged_in_doctor(credentials: HTTPBasicCredentials = Depends(security), db: Session = Depends(get_db)):
     user = logged_in(credentials, db)
 
