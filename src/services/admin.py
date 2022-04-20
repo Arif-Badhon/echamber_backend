@@ -51,6 +51,13 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
 
         return signup_moderator
 
+    def all_moderator(self, db: Session):
+        moderators = self.repo.all_moderators(db)
+        if not moderators:
+            return ServiceResult([], status_code=status.HTTP_200_OK)
+        else:
+            return ServiceResult(moderators, status_code=status.HTTP_200_OK)
+
     def doctor_inactive_list(self, db: Session):
         all_doc = self.repo.doctors_inactive_list(db)
         if not all_doc:

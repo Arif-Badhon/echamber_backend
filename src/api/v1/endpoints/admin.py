@@ -22,6 +22,12 @@ def signup(data_in: UserCreateWitoutRole, db: Session = Depends(get_db)):
     return handle_result(admn)
 
 
+@router.get('/all/moderator', response_model=List[UserOut])
+def all_moderators(db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin_moderator)):
+    all = admin_service.all_moderator(db)
+    return handle_result(all)
+
+
 @router.get('/auth/moderator', response_model=UserOut)
 def moderator_auth(moderator: Session = Depends(logged_in_moderator)):
     return moderator
