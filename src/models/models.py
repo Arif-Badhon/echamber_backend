@@ -99,6 +99,17 @@ class DoctorChamber(BaseModel):
 
 # Schedule
 
+class DocotorSchedule(BaseModel):
+    __tablename__ = "doctor_schedules"
+    doctor_id = Column(Integer, nullable=False, default=0)
+    patient_id = Column(Integer, nullable=False, default=0)
+    date = Column(String(255), nullable=False)
+    time =  Column(Integer, nullable=False)
+    payable_amount = Column(Integer, nullable=True, default=0)
+    payment = Column(Integer, nullable=True, default=0)
+    pending = Column(Integer, nullable=True, default=0)
+    others = Column(Text, nullable=True)
+
 
 
 # Patient related models
