@@ -97,6 +97,10 @@ class DoctorChamber(BaseModel):
     user_doctors_chamber = relationship("User", back_populates="doctors_chamber")
 
 
+# Schedule
+
+
+
 # Patient related models
 
 class Patient(BaseModel):
