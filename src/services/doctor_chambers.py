@@ -31,6 +31,13 @@ class DoctorChamberService(BaseService[DoctorChamber, DoctorChamberIn, DoctorCha
 
         return self.get_by_user_id(db, user_id)
 
+    def currently_active_chamber(self, db: Session, user_id: int):
+        active = self.repo.currently_active_chamber(db=db, user_id=user_id)
+        if not active:
+            return ServiceResult(AppException.NotFound("No chamber active or something went wrong."))
+        else:
+            return ServiceResult(active, status_code=status.HTTP_200_OK)
+
 
 doctor_chambers_service = DoctorChamberService(
     DoctorChamber, doctor_chambers_repo)

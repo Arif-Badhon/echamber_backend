@@ -29,5 +29,10 @@ class DoctorChamberRepo(BaseRepo[DoctorChamber, DoctorChamberIn, DoctorChamberUp
         db.commit()
         return self.get_one(db, id)
 
+    def currently_active_chamber(self, db: Session, user_id: int):
+        query = db.query(self.model).filter(
+            self.model.user_id == user_id).filter(self.model.is_active == True).first()
+        return query
+
 
 doctor_chambers_repo = DoctorChamberRepo(DoctorChamber)

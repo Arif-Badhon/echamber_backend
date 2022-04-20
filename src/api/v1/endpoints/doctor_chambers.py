@@ -9,6 +9,14 @@ from schemas import DoctorChamberOut, DoctorChamberBase, DoctorChamberUpdate
 router = APIRouter()
 
 
+@router.get('/active')
+def active_chamber(db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
+    current_user_id = current_user.id
+    act = doctor_chambers_service.currently_active_chamber(
+        db=db, user_id=current_user_id)
+    return handle_result(act)
+
+
 @router.get('/', response_model=List[DoctorChamberOut])
 def get(db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
     doc_chamber = doctor_chambers_service.get_by_user_id(
@@ -37,7 +45,7 @@ def edit(id: int, data_update: DoctorChamberUpdate, db: Session = Depends(get_db
     return handle_result(update_chamber)
 
 
-@router.put('/active/{id}', response_model=List[DoctorChamberOut])
+@router.put('/activate/{id}', response_model=List[DoctorChamberOut])
 def active(id: int, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
     actv = doctor_chambers_service.active_chamber(
         db, id, user_id=current_user.id)
