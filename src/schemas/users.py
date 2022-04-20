@@ -4,7 +4,6 @@ from pydantic.types import constr
 
 
 class UserBase(BaseModel):
-    id: int
     name: str
     email: str
     phone: constr(
@@ -38,6 +37,7 @@ class UserUpdate(BaseModel):
 
 
 class UserOut(UserBase):
+    id: int
     role_id: int
 
     class Config:
