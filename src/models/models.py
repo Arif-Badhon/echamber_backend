@@ -1,4 +1,3 @@
-from email.policy import default
 from sqlalchemy import Column, ForeignKey, Integer, Boolean, String, Text, Date
 from models import BaseModel
 from sqlalchemy.orm import relationship
@@ -103,6 +102,7 @@ class DocotorSchedule(BaseModel):
     __tablename__ = "doctor_schedules"
     doctor_id = Column(Integer, nullable=False, default=0)
     patient_id = Column(Integer, nullable=False, default=0)
+    chamber_id = Column(Integer, nullable=False, default=0)
     date = Column(String(255), nullable=False)
     time =  Column(Integer, nullable=False)
     payable_amount = Column(Integer, nullable=True, default=0)
