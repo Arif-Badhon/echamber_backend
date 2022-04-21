@@ -1,4 +1,4 @@
-from sqlalchemy import Column, ForeignKey, Integer, Boolean, String, Text, Date
+from sqlalchemy import Column, ForeignKey, Integer, Boolean, String, Text, Date, text
 from models import BaseModel
 from sqlalchemy.orm import relationship
 
@@ -100,14 +100,14 @@ class DoctorChamber(BaseModel):
 
 class DocotorSchedule(BaseModel):
     __tablename__ = "doctor_schedules"
-    doctor_id = Column(Integer, nullable=False, default=0)
-    patient_id = Column(Integer, nullable=False, default=0)
-    chamber_id = Column(Integer, nullable=False, default=0)
+    doctor_id = Column(Integer, nullable=False, server_default=text('0'))
+    patient_id = Column(Integer, nullable=False, server_default=text('0'))
+    chamber_id = Column(Integer, nullable=False, server_default=text('0'))
     date = Column(String(255), nullable=False)
     time =  Column(Integer, nullable=False)
-    payable_amount = Column(Integer, nullable=True, default=0)
-    payment = Column(Integer, nullable=True, default=0)
-    pending = Column(Integer, nullable=True, default=0)
+    payable_amount = Column(Integer, nullable=True, server_default=text('0'))
+    payment = Column(Integer, nullable=True, server_default=text('0'))
+    pending = Column(Integer, nullable=True, server_default=text('0'))
     others = Column(Text, nullable=True)
 
 

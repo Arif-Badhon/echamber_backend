@@ -1,3 +1,4 @@
+from __future__ import division
 from exceptions.app_exceptions import AppException
 from exceptions.service_result import ServiceResult
 from services import BaseService, UpdateSchemaType

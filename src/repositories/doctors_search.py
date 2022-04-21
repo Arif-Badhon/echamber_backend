@@ -12,6 +12,9 @@ class DoctorsSearchRepo(BaseRepo[User, UserBase, UserUpdate]):
         query = db.query(self.model, UserDetail).select_from(self.model).join(UserDetail).filter(self.model.name.like(
             f"%{search_key}%") | UserDetail.division.like(f"%{search_key}%") | UserDetail.district.like(f"{search_key}")).offset(skip).limit(limit).all()
         return query
+        # query = db.query(self.model, UserDetail).filter(self.model.name.like(f"%{search_key}%")).filter(UserDetail.division.like(f"%{search_key}%")).offset(skip).limit(limit).all()
+        # return query
+
 
 
 doctors_search_repo = DoctorsSearchRepo(User)
