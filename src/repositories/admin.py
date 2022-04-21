@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 from repositories import BaseRepo
 from .roles import roles_repo
 from schemas import UserCreate, UserUpdate
-from models import User, Doctor
+from models import User, Doctor, DoctorQualification, DoctorSpeciality
 
 
 class AdminRepo(BaseRepo[User, UserCreate, UserUpdate]):
@@ -16,11 +16,21 @@ class AdminRepo(BaseRepo[User, UserCreate, UserUpdate]):
             self.model.role_id == moderator_id).all()
         return query
 
+    def doctors_active_list(self, db: Session):
+        doctor_role_id = roles_repo.search_name_id(db, name='doctor')
+        query = db.query(User, Doctor,DoctorQualification, DoctorSpeciality).join(Doctor).filter(
+            User.role_id == doctor_role_id).filter(User.is_active == True).filter(User.id == DoctorQualification.user_id).filter(User.id==DoctorSpeciality.user_id).all()
+        return query
+
+
+
     def doctors_inactive_list(self, db: Session):
         doctor_role_id = roles_repo.search_name_id(db, name='doctor')
-        query = db.query(User, Doctor).join(Doctor).filter(
-            User.role_id == doctor_role_id).filter(User.is_active == False).all()
+        query = db.query(User, Doctor,DoctorQualification, DoctorSpeciality).join(Doctor).filter(
+            User.role_id == doctor_role_id).filter(User.is_active == False).filter(User.id == DoctorQualification.user_id).filter(User.id==DoctorSpeciality.user_id).all()
         return query
+    
+
 
     def doctor_active_by_id(self, db: Session, id):
         db.query(self.model).filter(self.model.id == id).update(

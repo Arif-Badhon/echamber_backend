@@ -39,13 +39,19 @@ def moderator_create(data_in: UserCreateWitoutRole, db: Session = Depends(get_db
     return handle_result(moderator)
 
 
+@router.get('/active/doctors', response_model=List[UserDoctorOut])
+def doctors_active_list(db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin_moderator)):
+    docs = admin_service.doctor_active_list(db)
+    return handle_result(docs)
+
+
 @router.get('/inactive/doctors', response_model=List[UserDoctorOut])
-def doctors_list(db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin_moderator)):
+def doctors_inactive_list(db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin_moderator)):
     docs = admin_service.doctor_inactive_list(db)
     return handle_result(docs)
 
 
-@router.put('/docto/active', response_model=UserOut)
+@router.put('/doctor/activate', response_model=UserOut)
 def doctor_active(id: int, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin_moderator)):
     doc = admin_service.doctor_active_id(db=db, id=id)
     return handle_result(doc)
