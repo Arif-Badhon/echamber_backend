@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from db import get_db
 from exceptions import handle_result
-from schemas import DoctorSpecialityOut, DoctorQualificationOut, DoctorSpecialityOut, DoctorQualilficationUpdate, DoctorSpecialityUpdate, DoctorSignup, UserOut
+from schemas import DoctorOut, DoctorSpecialityOut, DoctorQualificationOut, DoctorSpecialityOut, DoctorQualilficationUpdate, DoctorSpecialityUpdate, DoctorSignup, UserOut
 from services import doctors_service, doctor_qualifications_service, doctor_specialities_service
 from api.v1.auth_dependcies import logged_in_doctor
 
@@ -19,6 +19,12 @@ def signup(doctor_in: DoctorSignup, db: Session = Depends(get_db)):
 @router.get('/auth', response_model=UserOut)
 def auth(doctor: Session = Depends(logged_in_doctor)):
     return doctor
+
+
+@router.get('/',response_model=DoctorOut)
+def get_doctor(db: Session = Depends(get_db), current_user: Session= Depends(logged_in_doctor)):
+    doc = doctors_service.get_by_user_id(db=db, user_id=current_user.id)
+    return handle_result(doc)
 
 
 @router.get('/qualifications', response_model=DoctorQualificationOut)

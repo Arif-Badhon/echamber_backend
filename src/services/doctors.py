@@ -13,12 +13,21 @@ from fastapi import status
 
 class DoctorService(BaseService[Doctor, DoctorIn, DoctorUpdate]):
 
+    def get_by_user_id(self, db: Session, user_id: int):
+        data = self.repo.get_by_user_id(db=db, user_id=user_id)
+        if not data:
+            return ServiceResult(AppException.ServerError("Not found"))
+        else:
+            return ServiceResult(data, status_code=status.HTTP_200_OK)
+
     def create_with_flush(self, db: Session, data_in: DoctorIn):
         data = self.repo.create_with_flush(db, data_in)
 
         if not data:
             return ServiceResult(AppException.ServerError("Something went wrong!"))
         return ServiceResult(data, status_code=status.HTTP_201_CREATED)
+
+    
 
     def signup(self, db: Session, data_in: DoctorSignup):
 

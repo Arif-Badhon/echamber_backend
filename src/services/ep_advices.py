@@ -11,7 +11,7 @@ class EpAdviceListService(BaseService[EpAdviceList, AdviceIn, AdviceUpdate]):
     def search_by_advice(self, db: Session, search_str: str, skip: int, limit: int):
         adv = self.repo.search_by_advice(db, search_str, skip, limit)
         if not adv:
-            return ServiceResult(adv, status_code=status.HTTP_200_OK)
+            return ServiceResult([], status_code=status.HTTP_200_OK)
         else:
             return ServiceResult(adv, status_code=status.HTTP_200_OK)
 
