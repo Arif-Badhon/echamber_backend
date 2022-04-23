@@ -12,7 +12,11 @@ router = APIRouter()
 
 
 @router.get('/auth', response_model=UserOut)
-def auth(admin: Session = Depends(logged_in_admin)):
+def auth(auth: Session = Depends(logged_in_admin_moderator)):
+    return auth
+
+@router.get('/auth/admin', response_model=UserOut)
+def admin_auth(admin: Session = Depends(logged_in_admin)):
     return admin
 
 
