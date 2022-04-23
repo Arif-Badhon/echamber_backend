@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from repositories import BaseRepo
 from schemas import DoctorChamberIn, DoctorChamberUpdate, DoctorChamberBase
-from models import DoctorChamber
+from models import DoctorChamber, User
 
 
 class DoctorChamberRepo(BaseRepo[DoctorChamber, DoctorChamberIn, DoctorChamberUpdate]):

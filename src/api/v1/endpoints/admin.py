@@ -2,9 +2,9 @@ from typing import List
 from fastapi import APIRouter, Depends
 from db import get_db
 from exceptions.service_result import handle_result
-from schemas import UserOut, UserCreateWitoutRole, UserDoctorOut
+from schemas import UserOut, UserCreateWitoutRole, UserDoctorOut, DoctorChamberOut
 from sqlalchemy.orm import Session
-from services import admin_service
+from services import admin_service, doctor_chambers_service
 from api.v1.auth_dependcies import logged_in_admin, logged_in_admin_moderator, logged_in_moderator
 
 
@@ -55,3 +55,9 @@ def doctors_inactive_list(db: Session = Depends(get_db), current_user: Session =
 def doctor_active(id: int, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin_moderator)):
     doc = admin_service.doctor_active_id(db=db, id=id)
     return handle_result(doc)
+
+
+@router.get('/doctor/chambers/{user_id}',response_model=List[DoctorChamberOut])
+def chamber_list(user_id :int,db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin_moderator)):
+    chambers =  doctor_chambers_service.get_by_user_id(db=db, user_id=user_id)
+    return handle_result(chambers)
