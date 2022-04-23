@@ -9,8 +9,8 @@ from exceptions import ServiceResult
 
 class DoctorSearchService(BaseService[User, UserBase, UserUpdate]):
 
-    def doctor_search(self, db: Session, search_key: str, skip: int, limit: int):
-        repo = doctors_search_repo.doctor_search(db, search_key, skip, limit)
+    def doctor_search(self, db: Session, name: str, speciality: str, skip: int, limit: int):
+        repo = doctors_search_repo.doctor_search(db, name, speciality, skip, limit)
         if not repo:
             return ServiceResult([], status_code=status.HTTP_200_OK)
         else:
