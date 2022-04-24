@@ -5,15 +5,21 @@ class DoctorScheduleBase(BaseModel):
     patient_id:int
     chamber_id: int
     date: str
-    time: str
+    time: int
     payable_amount: int
     payment: int
     pending: int
     others: str = None
 
 
-class DoctorScheduleIn(DoctorScheduleBase):
-    pass
+class DoctorScheduleIn(BaseModel):
+    date: str
+    time: int 
+    payable_amount: int = None
+    others: str = None
+
+class DoctorScheduleInDB(DoctorScheduleIn):
+    doctor_id: int
 
 
 class DoctorScheduleUpdate(BaseModel):
