@@ -1,4 +1,4 @@
-from sqlalchemy import Column, ForeignKey, Integer, Boolean, String, Text, Date, text
+from sqlalchemy import Column, ForeignKey, Integer, Boolean, String, Text, Date
 from models import BaseModel
 from sqlalchemy.orm import relationship
 
@@ -97,17 +97,16 @@ class DoctorChamber(BaseModel):
 
 
 # Schedule
-
+# 0 means empty
 class DocotorSchedule(BaseModel):
     __tablename__ = "doctor_schedules"
-    doctor_id = Column(Integer, nullable=False, server_default=text('0'))
-    patient_id = Column(Integer, nullable=False, server_default=text('0'))
-    chamber_id = Column(Integer, nullable=False, server_default=text('0'))
+    doctor_user_id = Column(Integer, ForeignKey("users.id"))
+    patient_id = Column(Integer, nullable=False)
+    chamber_id = Column(Integer, nullable=False)
+    service_order_id = Column(Integer, nullable=False)
+    booked = Column(Boolean, nullable=False)
     date = Column(String(255), nullable=False)
     time =  Column(Integer, nullable=False)
-    payable_amount = Column(Integer, nullable=True, server_default=text('0'))
-    payment = Column(Integer, nullable=True, server_default=text('0'))
-    pending = Column(Integer, nullable=True, server_default=text('0'))
     others = Column(Text, nullable=True)
 
 
