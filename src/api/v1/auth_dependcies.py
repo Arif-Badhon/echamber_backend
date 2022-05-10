@@ -14,7 +14,9 @@ def logged_in(credentials: HTTPBasicCredentials = Depends(security), db: Session
     token = credentials.credentials
     token_data = Token.validate_token(token)
     user = handle_result(users_service.get_one(db, id=token_data.user_id))
-
+    role_name = roles_service.get_one(db, id=user.role_id)
+    user.role_name = handle_result(role_name).name
+    
     if not user:
         raise AppException.Unauthorized()
     return user

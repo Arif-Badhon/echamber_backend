@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, UploadFile
 from sqlalchemy.orm import Session
 from db import get_db
 from exceptions import handle_result
-from schemas import UserCreate, UserOut, UserLogin, Token
+from schemas import UserCreate, UserOut, UserOutAuth, UserLogin, Token
 from schemas.users import NewPasswordIn, UserUpdate
 from services import users_service
 from fastapi.security import HTTPBasic
@@ -29,7 +29,7 @@ def login(data_in: UserLogin, db: Session = Depends(get_db)):
     return handle_result(user)
 
 
-@router.get('/auth', response_model=UserOut)
+@router.get('/auth', response_model=UserOutAuth)
 def auth(current_user: User = Depends(logged_in)):
     return current_user
 

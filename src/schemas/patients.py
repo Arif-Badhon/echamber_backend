@@ -1,3 +1,4 @@
+from datetime import date
 from typing import Optional
 from pydantic import BaseModel
 
@@ -35,7 +36,7 @@ class PatientSignup(BaseModel):
     district: str
     sub_district: str
     post_code: str
-    dob: str
+    dob: Optional[date] = None 
 
 
 class PatientSignupOut(BaseModel):

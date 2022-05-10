@@ -2,7 +2,7 @@ from typing import List
 from fastapi import APIRouter, Depends
 from db import get_db
 from exceptions.service_result import handle_result
-from schemas import UserOut, UserCreateWitoutRole, UserDoctorOut, DoctorChamberOut
+from schemas import UserOut, UserOutAuth, UserCreateWitoutRole, UserDoctorOut, DoctorChamberOut
 from sqlalchemy.orm import Session
 from services import admin_service, doctor_chambers_service
 from api.v1.auth_dependcies import logged_in_admin, logged_in_admin_moderator, logged_in_moderator
@@ -11,11 +11,11 @@ from api.v1.auth_dependcies import logged_in_admin, logged_in_admin_moderator, l
 router = APIRouter()
 
 
-@router.get('/auth', response_model=UserOut)
+@router.get('/auth', response_model=UserOutAuth)
 def auth(auth: Session = Depends(logged_in_admin_moderator)):
     return auth
 
-@router.get('/auth/admin', response_model=UserOut)
+@router.get('/auth/admin', response_model=UserOutAuth)
 def admin_auth(admin: Session = Depends(logged_in_admin)):
     return admin
 
@@ -32,7 +32,7 @@ def all_moderators(db: Session = Depends(get_db), current_user: Session = Depend
     return handle_result(all)
 
 
-@router.get('/auth/moderator', response_model=UserOut)
+@router.get('/auth/moderator', response_model=UserOutAuth)
 def moderator_auth(moderator: Session = Depends(logged_in_moderator)):
     return moderator
 

@@ -38,7 +38,14 @@ class UserUpdate(BaseModel):
 
 class UserOut(UserBase):
     id: int
-    role_id: int
+    role_id: int 
+
+    class Config:
+        orm_mode = True
+
+class UserOutAuth(UserBase):
+    id: int
+    role_name: Optional[str] 
 
     class Config:
         orm_mode = True

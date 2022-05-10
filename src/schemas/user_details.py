@@ -10,7 +10,7 @@ class UserDetailBase(BaseModel):
     post_code: Optional[str]
     sub_district: Optional[str]
     nid: Optional[str]
-    dob: Optional[date]
+    dob: Optional[date] = None
     blood_group: Optional[str]
 
 

@@ -4,7 +4,7 @@ from api.v1.auth_dependcies import logged_in_patient
 from exceptions import handle_result
 from schemas import PatientOut, PatientSignup, UserDetailOut, NewPasswordIn, Token
 from db import get_db
-from schemas import PatientBase, UserOut
+from schemas import PatientBase, UserOut, UserOutAuth
 from services import patients_service, users_service
 
 router = APIRouter()
@@ -16,7 +16,7 @@ def signup(patient_in: PatientSignup, db: Session = Depends(get_db)):
     return handle_result(patient)
 
 
-@router.get('/auth', response_model=UserOut)
+@router.get('/auth', response_model=UserOutAuth)
 def auth(patient: Session = Depends(logged_in_patient)):
     return patient
 
