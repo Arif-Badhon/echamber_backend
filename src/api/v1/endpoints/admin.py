@@ -2,7 +2,7 @@ from typing import List
 from fastapi import APIRouter, Depends
 from db import get_db
 from exceptions.service_result import handle_result
-from schemas import UserOut, UserCreate, UserDoctorOut, DoctorChamberOut, UserCreateWitoutRole, AdminPanelActivityOut
+from schemas import UserOut, UserOutAuth, UserCreate, UserDoctorOut, DoctorChamberOut, UserCreateWitoutRole, AdminPanelActivityOut
 from sqlalchemy.orm import Session
 from services import admin_service, doctor_chambers_service
 from api.v1.auth_dependcies import logged_in_admin, logged_in_admin_moderator, logged_in_moderator
@@ -26,7 +26,7 @@ def signup(data_in: UserCreateWitoutRole, db: Session = Depends(get_db)):
     return handle_result(admn)
 
 
-@router.get('/all/employee', response_model=List[UserOut])
+@router.get('/all/employee', response_model=List[UserOutAuth])
 def all_employee(skip:int=0, limit:int=10, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin_moderator)):
     all = admin_service.all_employee(db, skip=skip, limit=limit)
     return handle_result(all)
@@ -67,3 +67,10 @@ def doctor_active(id: int, db: Session = Depends(get_db), current_user: Session 
 def chamber_list(user_id :int,db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin_moderator)):
     chambers =  doctor_chambers_service.get_by_user_id(db=db, user_id=user_id)
     return handle_result(chambers)
+
+
+# Admin for patient
+
+@router.post('/create/patient', response_model="")
+def register_patient():
+    return
