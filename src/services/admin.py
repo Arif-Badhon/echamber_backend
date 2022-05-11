@@ -34,7 +34,7 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
 
         return ServiceResult(AppException.ServerError('Admin exist'))
 
-    def signup_moderator(self, db: Session, data_in: UserCreate):
+    def signup_employee(self, db: Session, data_in: UserCreate):
 
         sginup_data = UserCreate(
             name=data_in.name,
@@ -43,13 +43,13 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
             sex=data_in.sex,
             is_active=True,
             password=data_in.password,
-            role_name='moderator'
+            role_name=data_in.role_name
         )
 
-        signup_moderator = users_service.signup(
+        signup_employee = users_service.signup(
             db, data_in=sginup_data, flush=False)
 
-        return signup_moderator
+        return signup_employee
 
     def all_moderator(self, db: Session):
         moderators = self.repo.all_moderators(db)
