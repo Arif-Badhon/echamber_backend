@@ -1,8 +1,9 @@
+from exceptions.service_result import handle_result
 from services import BaseService
 from .users import users_service
-from schemas import UserCreate, UserUpdate
+from schemas import UserCreate, UserUpdate, AdminPanelActivityIn
 from models import User
-from repositories import admin_repo, roles_repo
+from repositories import admin_repo, roles_repo, admin_panel_activity_repo
 from sqlalchemy.orm import Session
 from exceptions import ServiceResult, AppException
 from fastapi import status
@@ -34,7 +35,7 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
 
         return ServiceResult(AppException.ServerError('Admin exist'))
 
-    def signup_employee(self, db: Session, data_in: UserCreate):
+    def signup_employee(self, db: Session, data_in: UserCreate, creator_id: int):
 
         sginup_data = UserCreate(
             name=data_in.name,
@@ -47,12 +48,27 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
         )
 
         signup_employee = users_service.signup(
-            db, data_in=sginup_data, flush=False)
+            db, data_in=sginup_data, flush=True)
+        
+        created_by_employee_data = AdminPanelActivityIn(
+            user_id=creator_id,
+            service_name="employee_register",
+            service_recived_id=handle_result(signup_employee).id,
+            remark=""
+        )
 
-        return signup_employee
+        created_by_employee = admin_panel_activity_repo.create(db=db, data_in=created_by_employee_data)
 
-    def all_moderator(self, db: Session):
-        moderators = self.repo.all_moderators(db)
+
+        if not created_by_employee:
+            return ServiceResult(AppException.ServerError(
+                "Problem with patient registration."))
+        else:
+            return ServiceResult(created_by_employee, status_code=status.HTTP_201_CREATED)
+
+
+    def all_employee(self, db: Session, skip: int=0, limit: int=10):
+        moderators = self.repo.all_employee(db, skip, limit)
         if not moderators:
             return ServiceResult([], status_code=status.HTTP_200_OK)
         else:

@@ -56,6 +56,14 @@ class UserDetail(BaseModel):
 
     user = relationship("User", back_populates="user_details")
 
+# admin panel
+
+class AdminPanelActivity(BaseModel):
+    __tablename__ = "admin_panel_activity"
+    user_id = Column(Integer, ForeignKey("users.id"))
+    service_name = Column(String(100), nullable=True)
+    service_recived_id = Column(Integer, nullable=True)
+    remark = Column(String(255), nullable=True)
 
 # Doctor related models
 

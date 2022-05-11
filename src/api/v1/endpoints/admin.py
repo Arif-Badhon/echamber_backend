@@ -2,7 +2,7 @@ from typing import List
 from fastapi import APIRouter, Depends
 from db import get_db
 from exceptions.service_result import handle_result
-from schemas import UserOut, UserOutAuth, UserCreate, UserDoctorOut, DoctorChamberOut, UserCreateWitoutRole
+from schemas import UserOut, UserCreate, UserDoctorOut, DoctorChamberOut, UserCreateWitoutRole, AdminPanelActivityOut
 from sqlalchemy.orm import Session
 from services import admin_service, doctor_chambers_service
 from api.v1.auth_dependcies import logged_in_admin, logged_in_admin_moderator, logged_in_moderator
@@ -11,9 +11,9 @@ from api.v1.auth_dependcies import logged_in_admin, logged_in_admin_moderator, l
 router = APIRouter()
 
 
-@router.get('/auth', response_model=UserOutAuth)
-def auth(auth: Session = Depends(logged_in_admin_moderator)):
-    return auth
+# @router.get('/auth', response_model=UserOutAuth)
+# def auth(auth: Session = Depends(logged_in_admin_moderator)):
+#     return auth
 
 # @router.get('/auth/admin', response_model=UserOutAuth)
 # def admin_auth(admin: Session = Depends(logged_in_admin)):
@@ -26,9 +26,9 @@ def signup(data_in: UserCreateWitoutRole, db: Session = Depends(get_db)):
     return handle_result(admn)
 
 
-@router.get('/all/moderator', response_model=List[UserOut])
-def all_moderators(db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin_moderator)):
-    all = admin_service.all_moderator(db)
+@router.get('/all/employee', response_model=List[UserOut])
+def all_employee(skip:int=0, limit:int=10, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin_moderator)):
+    all = admin_service.all_employee(db, skip=skip, limit=limit)
     return handle_result(all)
 
 
@@ -37,11 +37,13 @@ def all_moderators(db: Session = Depends(get_db), current_user: Session = Depend
 #     return moderator
 
 
-@router.post('/create/employee', response_model=UserOut)
+@router.post('/create/employee', response_model=AdminPanelActivityOut)
 def empployee_create(data_in: UserCreate, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin_moderator)):
-    moderator = admin_service.signup_employee(db, data_in=data_in)
-    return handle_result(moderator)
+    employee_created = admin_service.signup_employee(db, data_in=data_in, creator_id=current_user.id)
+    return handle_result(employee_created)
 
+
+# Admin for doctors
 
 @router.get('/active/doctors', response_model=List[UserDoctorOut])
 def doctors_active_list(db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin_moderator)):

@@ -1,0 +1,5 @@
+from models import AdminPanelActivity
+from repositories import BaseRepo
+from schemas import AdminPanelActivityIn, AdminPanelActivityUpdate
+
+admin_panel_activity_repo = BaseRepo[AdminPanelActivity, AdminPanelActivityIn, AdminPanelActivityUpdate](AdminPanelActivity)

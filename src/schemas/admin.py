@@ -12,3 +12,26 @@ class UserDoctorOut(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+
+class AdminPanelActivityBase(BaseModel):
+    user_id: int
+    service_name: str
+    service_recived_id: int
+    remark: str
+
+class AdminPanelActivityIn(AdminPanelActivityBase):
+    pass
+
+class AdminPanelActivityUpdate(AdminPanelActivityBase):
+    pass
+
+class AdminPanelActivityOut(BaseModel):
+    user_id: int
+    service_name: str
+    service_recived_id: int
+    remark: str
+
+    class Config:
+        orm_mode = True

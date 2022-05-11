@@ -1,3 +1,4 @@
+from sqlalchemy import or_
 from sqlalchemy.orm import Session
 from repositories import BaseRepo
 from .roles import roles_repo
@@ -10,10 +11,10 @@ class AdminRepo(BaseRepo[User, UserCreate, UserUpdate]):
     def search_by_role_id(self, db: Session, id: int):
         return db.query(self.model).filter(self.model.role_id == id).all()
 
-    def all_moderators(self, db: Session):
-        moderator_id = roles_repo.search_name_id(db, name='moderator')
-        query = db.query(self.model).filter(
-            self.model.role_id == moderator_id).all()
+    def all_employee(self, db: Session, skip: int = 0, limit: int = 10):
+        doctor_id = roles_repo.search_name_id(db, name='doctor')
+        patient_id = roles_repo.search_name_id(db, name='patient')
+        query = db.query(self.model).filter(self.model.role_id != doctor_id).filter(self.model.role_id != patient_id).offset(skip).limit(limit).all()
         return query
 
     def doctors_active_list(self, db: Session):
