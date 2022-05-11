@@ -5,7 +5,7 @@ from exceptions.service_result import handle_result
 from schemas import UserOut, UserOutAuth, UserCreate, UserDoctorOut, DoctorChamberOut, UserCreateWitoutRole, AdminPanelActivityOut
 from sqlalchemy.orm import Session
 from services import admin_service, doctor_chambers_service
-from api.v1.auth_dependcies import logged_in_admin, logged_in_admin_moderator, logged_in_moderator
+from api.v1.auth_dependcies import logged_in, logged_in_admin, logged_in_admin_moderator, logged_in_moderator
 
 
 router = APIRouter()
@@ -71,6 +71,7 @@ def chamber_list(user_id :int,db: Session = Depends(get_db), current_user: Sessi
 
 # Admin for patient
 
-@router.post('/create/patient', response_model="")
-def register_patient():
-    return
+@router.post('/create/patient', response_model=AdminPanelActivityOut)
+def register_patient(data_in: UserCreate, db: Session = Depends(get_db), current_user: Session = Depends(logged_in)):
+    patient_created = admin_service.signup_patient(db=db, data_in=data_in, creator_id=current_user.id)
+    return handle_result(patient_created)
