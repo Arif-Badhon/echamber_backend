@@ -27,7 +27,7 @@ def signup(data_in: UserCreateWitoutRole, db: Session = Depends(get_db)):
 
 
 @router.get('/all/employee', response_model=List[UserOutAuth])
-def all_employee(skip:int=0, limit:int=10, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin_moderator)):
+def all_employee(skip:int=0, limit:int=10, db: Session = Depends(get_db), current_user: Session = Depends(logged_in)):
     all = admin_service.all_employee(db, skip=skip, limit=limit)
     return handle_result(all)
 
