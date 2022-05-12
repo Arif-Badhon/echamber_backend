@@ -6,7 +6,6 @@ from services import BaseService, ModelType
 from models import PatientIndicator
 from schemas import PatientIndicatorIn, PatientIndicatorUpdate
 from sqlalchemy.orm import Session
-from typing import List
 
 
 class PatientService(BaseService[PatientIndicator, PatientIndicatorIn, PatientIndicatorUpdate]):

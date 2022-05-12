@@ -2,7 +2,8 @@ from exceptions.service_result import handle_result
 from services import BaseService
 from .users import users_service
 from .user_details import user_details_service
-from schemas import UserCreate, UserUpdate, AdminPanelActivityIn, UserDetailIn
+from .patient_indicators import patient_indicators_service
+from schemas import UserCreate, UserUpdate, AdminPanelActivityIn, UserDetailIn, PatientIndicatorIn
 from models import User
 from repositories import admin_repo, roles_repo, admin_panel_activity_repo
 from sqlalchemy.orm import Session
@@ -139,7 +140,7 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
             created_by_employee = admin_panel_activity_repo.create(db=db, data_in=created_by_employee_data)
 
             if not created_by_employee:
-                return ServiceResult(AppException.ServerError("Problem with patient by employee registration."))
+                return ServiceResult(AppException.ServerError("Problem with patient by patient registration."))
             else:
                 return ServiceResult(created_by_employee, status_code=status.HTTP_201_CREATED)
 
@@ -152,6 +153,28 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
             return ServiceResult(AppException.ServerError("Problem with patient search..."))
         else:
             return ServiceResult(patients, status_code=status.HTTP_201_CREATED)
+
+    
+    def patient_indicators(self, db: Session, user_id: int, data_in: PatientIndicatorIn, creator_id: int):
+        data = patient_indicators_service.create_by_user_id(db, user_id, data_in)
+
+        if not data:
+            return ServiceResult(AppException.ServerError(
+                "Problem with patient indicators."))
+        else:
+            created_by_employee_data = AdminPanelActivityIn(
+                user_id=creator_id,
+                service_name="patient_indicator_input",
+                service_recived_id=handle_result(data).user_id,
+                remark=""
+            )
+
+            created_by_employee = admin_panel_activity_repo.create(db=db, data_in=created_by_employee_data)
+
+            if not created_by_employee:
+                return ServiceResult(AppException.ServerError("Problem with patient by indicator."))
+            else:
+                return ServiceResult(created_by_employee, status_code=status.HTTP_201_CREATED)
 
 
 admin_service = Admin(User, admin_repo)

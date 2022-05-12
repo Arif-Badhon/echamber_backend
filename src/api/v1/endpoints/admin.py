@@ -2,7 +2,7 @@ from typing import List
 from fastapi import APIRouter, Depends
 from db import get_db
 from exceptions.service_result import handle_result
-from schemas import UserOut, UserOutAuth, UserCreate, UserDoctorOut, DoctorChamberOut, UserCreateWitoutRole, AdminPanelActivityOut
+from schemas import UserOut, UserOutAuth, UserCreate, UserDoctorOut, DoctorChamberOut, UserCreateWitoutRole, AdminPanelActivityOut, PatientIndicatorBase
 from sqlalchemy.orm import Session
 from services import admin_service, doctor_chambers_service
 from api.v1.auth_dependcies import logged_in, logged_in_admin, logged_in_admin_moderator, logged_in_moderator
@@ -46,7 +46,7 @@ def empployee_create(data_in: UserCreate, db: Session = Depends(get_db), current
 # Admin for doctors
 
 @router.get('/active/doctors', response_model=List[UserDoctorOut])
-def doctors_active_list(db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin_moderator)):
+def doctors_active_list(db: Session = Depends(get_db), current_user: Session = Depends(logged_in)):
     docs = admin_service.doctor_active_list(db)
     return handle_result(docs)
 
@@ -81,3 +81,9 @@ def register_patient(data_in: UserCreate, db: Session = Depends(get_db), current
 def all_patients(phone_number: str, skip:int=0, limit:int=15,  db:Session=Depends(get_db), current_user:Session=Depends(logged_in)):
     patients = admin_service.all_patient(db=db, phone_number=phone_number, skip=skip, limit=limit)
     return handle_result(patients)
+
+
+@router.post('/patient/indicator', response_model=AdminPanelActivityOut)
+def patient_indicator(user_id: int, data_in: PatientIndicatorBase, db:Session=Depends(get_db), current_user:Session=Depends(logged_in)):
+    indicator = admin_service.patient_indicators(db=db, user_id=user_id, data_in=data_in, creator_id=current_user.id)
+    return handle_result(indicator)
