@@ -7,4 +7,9 @@ permissions:
   - object: /var/www/echamber/
     owner: ec2-user
     group: www
+hooks:
+  AfterInstall:
+    - location: scripts/after_install.sh
+      timeout: 300
+      runas: root
 
