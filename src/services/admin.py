@@ -1,4 +1,3 @@
-from sqlalchemy import null
 from exceptions.service_result import handle_result
 from services import BaseService
 from .users import users_service
@@ -68,6 +67,38 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
         else:
             return ServiceResult(created_by_employee, status_code=status.HTTP_201_CREATED)
 
+    
+
+    def all_employee(self, db: Session, skip: int=0, limit: int=10):
+        all_emp = self.repo.all_employee(db, skip, limit)
+        for i in all_emp:
+            i.role_name = roles_repo.get_one(db=db, id=i.role_id).name 
+        if not all_emp:
+            return ServiceResult([], status_code=status.HTTP_200_OK)
+        else:
+            return ServiceResult(all_emp, status_code=status.HTTP_200_OK)
+
+    def doctor_active_list(self, db: Session):
+        all_doc = self.repo.doctors_active_list(db)
+        if not all_doc:
+            return ServiceResult([], status_code=status.HTTP_200_OK)
+        else:
+            return ServiceResult(all_doc, status_code=status.HTTP_200_OK)
+
+    def doctor_inactive_list(self, db: Session):
+        all_doc = self.repo.doctors_inactive_list(db)
+        if not all_doc:
+            return ServiceResult([], status_code=status.HTTP_200_OK)
+        else:
+            return ServiceResult(all_doc, status_code=status.HTTP_200_OK)
+
+    def doctor_active_id(self, db: Session, id: int):
+        active = self.repo.doctor_active_by_id(db, id)
+
+        return self.get_one(db, id)
+
+
+
     def signup_patient(self, db: Session, data_in:UserCreate, creator_id: int):
         singnup_data = UserCreate(
             name=data_in.name,
@@ -113,33 +144,14 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
                 return ServiceResult(created_by_employee, status_code=status.HTTP_201_CREATED)
 
 
-    def all_employee(self, db: Session, skip: int=0, limit: int=10):
-        all_emp = self.repo.all_employee(db, skip, limit)
-        for i in all_emp:
-            i.role_name = roles_repo.get_one(db=db, id=i.role_id).name 
-        if not all_emp:
-            return ServiceResult([], status_code=status.HTTP_200_OK)
+
+    def all_patient(self, db: Session, phone_number:str, skip:int, limit: int):
+        patients = admin_repo.all_patient(db=db, phone_number=phone_number, skip=skip, limit=limit)
+
+        if not patients:
+            return ServiceResult(AppException.ServerError("Problem with patient search..."))
         else:
-            return ServiceResult(all_emp, status_code=status.HTTP_200_OK)
-
-    def doctor_active_list(self, db: Session):
-        all_doc = self.repo.doctors_active_list(db)
-        if not all_doc:
-            return ServiceResult([], status_code=status.HTTP_200_OK)
-        else:
-            return ServiceResult(all_doc, status_code=status.HTTP_200_OK)
-
-    def doctor_inactive_list(self, db: Session):
-        all_doc = self.repo.doctors_inactive_list(db)
-        if not all_doc:
-            return ServiceResult([], status_code=status.HTTP_200_OK)
-        else:
-            return ServiceResult(all_doc, status_code=status.HTTP_200_OK)
-
-    def doctor_active_id(self, db: Session, id: int):
-        active = self.repo.doctor_active_by_id(db, id)
-
-        return self.get_one(db, id)
+            return ServiceResult(patients, status_code=status.HTTP_201_CREATED)
 
 
 admin_service = Admin(User, admin_repo)

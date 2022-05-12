@@ -1,4 +1,3 @@
-from sqlalchemy import or_
 from sqlalchemy.orm import Session
 from repositories import BaseRepo
 from .roles import roles_repo
@@ -16,6 +15,9 @@ class AdminRepo(BaseRepo[User, UserCreate, UserUpdate]):
         patient_id = roles_repo.search_name_id(db, name='patient')
         query = db.query(self.model).filter(self.model.role_id != doctor_id).filter(self.model.role_id != patient_id).offset(skip).limit(limit).all()
         return query
+
+
+    # all doctor repo
 
     def doctors_active_list(self, db: Session):
         doctor_role_id = roles_repo.search_name_id(db, name='doctor')
@@ -39,5 +41,11 @@ class AdminRepo(BaseRepo[User, UserCreate, UserUpdate]):
         db.commit()
         return self.get_one(db, id)
 
+    
+    # all patient repo
+    def all_patient(self, db:Session, phone_number: str = "0", skip:int=0, limit:int=15):
+        patient_role = roles_repo.search_name_id(db=db, name='patient')
+        query = db.query(self.model).filter(self.model.role_id==patient_role).filter(self.model.phone.like(f"%{phone_number}%")).offset(skip).limit(limit).all()
+        return query
 
 admin_repo = AdminRepo(User)

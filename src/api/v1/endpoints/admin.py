@@ -75,3 +75,9 @@ def chamber_list(user_id :int,db: Session = Depends(get_db), current_user: Sessi
 def register_patient(data_in: UserCreate, db: Session = Depends(get_db), current_user: Session = Depends(logged_in)):
     patient_created = admin_service.signup_patient(db=db, data_in=data_in, creator_id=current_user.id)
     return handle_result(patient_created)
+
+
+@router.get('/all/patients', response_model=List[UserOut])
+def all_patients(phone_number: str, skip:int=0, limit:int=15,  db:Session=Depends(get_db), current_user:Session=Depends(logged_in)):
+    patients = admin_service.all_patient(db=db, phone_number=phone_number, skip=skip, limit=limit)
+    return handle_result(patients)
