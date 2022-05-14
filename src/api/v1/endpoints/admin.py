@@ -28,6 +28,12 @@ def activity_log(skip:int=0, limit:int=15, db:Session = Depends(get_db), current
     return handle_result(activity)
 
 
+@router.get('/activity/log/{user_id}}', response_model=List[AdminPanelActivityOut])
+def activity_log( user_id: int, skip:int=0, limit:int=15, db:Session = Depends(get_db), current_user: Session = Depends(logged_in)):
+    activity = admin_service.activity_log(db=db, user_id=user_id, skip=skip, limit=limit)
+    return handle_result(activity)
+
+
 # Admin for employee
 
 @router.get('/employee/all', response_model=List[UserOutAuth])
