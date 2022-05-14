@@ -1,3 +1,4 @@
+from datetime import datetime
 from pydantic import BaseModel
 from .doctors import DoctorOut
 from .users import UserOut
@@ -32,6 +33,7 @@ class AdminPanelActivityOut(BaseModel):
     service_name: str
     service_recived_id: int
     remark: str
+    created_at: datetime = None
 
     class Config:
         orm_mode = True

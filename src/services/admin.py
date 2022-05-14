@@ -3,6 +3,7 @@ from services import BaseService
 from .users import users_service
 from .user_details import user_details_service
 from .patient_indicators import patient_indicators_service
+from .users import users_service 
 from schemas import UserCreate, UserUpdate, AdminPanelActivityIn, UserDetailIn, PatientIndicatorIn
 from models import User
 from repositories import admin_repo, roles_repo, admin_panel_activity_repo
@@ -36,6 +37,38 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
             return signup_admin
 
         return ServiceResult(AppException.ServerError('Admin exist'))
+
+    def password_changed_by_admin(self, db: Session, user_id: int, password: str, changer_id):
+        pass_change =  users_service.new_password(db=db,user_id=user_id, data_update=password)
+
+        if not pass_change:
+            return ServiceResult(AppException.ServerError(
+                "Problem with password change."))
+        else:
+            pass_change_data = AdminPanelActivityIn(
+                user_id=changer_id,
+                service_name="password_change",
+                service_recived_id=user_id,
+                remark=""
+            )
+
+            created_by_employee = admin_panel_activity_repo.create(db=db, data_in=pass_change_data)
+
+            if not created_by_employee:
+                return ServiceResult(AppException.ServerError("Problem with patient by patient registration."))
+            else:
+                return ServiceResult(created_by_employee, status_code=status.HTTP_201_CREATED)
+
+
+    def activity_log(self, db: Session, user_id:int, skip: int = 0, limit: int = 15 ):
+        activity = admin_panel_activity_repo.activity_log(db=db, user_id=user_id,skip=skip, limit=limit)
+
+        if not activity:
+            return ServiceResult([], status_code=status.HTTP_200_OK)
+        else:
+            return ServiceResult(activity, status_code=status.HTTP_201_CREATED) 
+
+
 
     def signup_employee(self, db: Session, data_in: UserCreate, creator_id: int):
 

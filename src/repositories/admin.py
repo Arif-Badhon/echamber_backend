@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 from repositories import BaseRepo
 from .roles import roles_repo
 from schemas import UserCreate, UserUpdate
-from models import User, Doctor, DoctorQualification, DoctorSpeciality
+from models import User, Doctor, DoctorQualification, DoctorSpeciality, AdminPanelActivity
 
 
 class AdminRepo(BaseRepo[User, UserCreate, UserUpdate]):
