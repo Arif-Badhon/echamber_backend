@@ -150,7 +150,7 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
         patients = admin_repo.all_patient(db=db, phone_number=phone_number, skip=skip, limit=limit)
 
         if not patients:
-            return ServiceResult(AppException.ServerError("Problem with patient search..."))
+            return ServiceResult([], status_code=status.HTTP_200_OK)
         else:
             return ServiceResult(patients, status_code=status.HTTP_201_CREATED)
 
