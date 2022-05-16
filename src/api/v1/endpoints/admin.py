@@ -2,9 +2,9 @@ from typing import List
 from fastapi import APIRouter, Depends
 from db import get_db
 from exceptions.service_result import handle_result
-from schemas import UserOut, UserOutAuth, UserCreate, UserDoctorOut, DoctorChamberOut, UserCreateWitoutRole, AdminPanelActivityOut, PatientIndicatorBase, NewPasswordIn, AdminPanelActivityOut
+from schemas import UserOut, UserOutAuth, UserCreate, UserDoctorOut, DoctorChamberOut, UserCreateWitoutRole, AdminPanelActivityOut, PatientIndicatorBase, NewPasswordIn, AdminPanelActivityOut, PatientIndicatorOut
 from sqlalchemy.orm import Session
-from services import admin_service, doctor_chambers_service
+from services import admin_service, doctor_chambers_service, patient_indicators_service
 from api.v1.auth_dependcies import logged_in, logged_in_admin, logged_in_admin_moderator, logged_in_moderator
 
 
@@ -92,3 +92,10 @@ def all_patients(phone_number: str, skip:int=0, limit:int=15,  db:Session=Depend
 def patient_indicator(user_id: int, data_in: PatientIndicatorBase, db:Session=Depends(get_db), current_user:Session=Depends(logged_in)):
     indicator = admin_service.patient_indicators(db=db, user_id=user_id, data_in=data_in, creator_id=current_user.id)
     return handle_result(indicator)
+
+@router.get('/patient/indicator/{key}/{user_id}', response_model=List[PatientIndicatorOut])
+def patient_indicator_get(key:str, user_id: int, db: Session = Depends(get_db), current_user:Session = Depends(logged_in)):
+    indicators = patient_indicators_service.get_by_key(db=db, key=key, user_id=user_id)
+    return handle_result(indicators)
+
+
