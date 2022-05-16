@@ -20,9 +20,12 @@ class PatientIndicatorRepo(BaseRepo[PatientIndicator,
             slot_int1=data_in.slot_int1,
             slot_int2=data_in.slot_int2,
             slot_int3=data_in.slot_int3,
-            slot_str1=data_in.slot_str1,
-            slot_str2=data_in.slot_str2,
-            slot_str3=data_in.slot_str3
+            slot_flt4=data_in.slot_flt4,
+            slot_flt5=data_in.slot_flt5,
+            slot_flt6=data_in.slot_flt6,
+            slot_str7=data_in.slot_str7,
+            slot_str8=data_in.slot_str8,
+            slot_str9=data_in.slot_str9
         )
 
         return self.create(db, data_for_db)
