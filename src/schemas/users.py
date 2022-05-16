@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel
 from pydantic.types import constr
@@ -5,7 +6,7 @@ from pydantic.types import constr
 
 class UserBase(BaseModel):
     name: str
-    email: str
+    email: Optional[str] = None
     phone: constr(
         min_length=11, max_length=14, regex=r"(\+880)?[0-9]{11}"
     )
@@ -38,7 +39,8 @@ class UserUpdate(BaseModel):
 
 class UserOut(UserBase):
     id: int
-    role_id: int 
+    role_id: int
+    created_at: Optional[datetime] = None
 
     class Config:
         orm_mode = True
