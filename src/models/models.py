@@ -1,4 +1,4 @@
-from sqlalchemy import Column, ForeignKey, Integer, Boolean, String, Text, Date
+from sqlalchemy import Column, ForeignKey, Integer, Boolean, String, Text, Date, Float
 from models import BaseModel
 from sqlalchemy.orm import relationship
 
@@ -141,9 +141,12 @@ class PatientIndicator(BaseModel):
     slot_int1 = Column(Integer, nullable=True)
     slot_int2 = Column(Integer, nullable=True)
     slot_int3 = Column(Integer, nullable=True)
-    slot_str1 = Column(String(255), nullable=True)
-    slot_str2 = Column(String(255), nullable=True)
-    slot_str3 = Column(String(255), nullable=True)
+    slot_flt4 = Column(Float, nullable=True)
+    slot_flt5 = Column(Float, nullable=True)
+    slot_flt6 = Column(Float, nullable=True)
+    slot_str7 = Column(String(255), nullable=True)
+    slot_str8 = Column(String(255), nullable=True)
+    slot_str9 = Column(String(255), nullable=True)
 
 
     user_patient_indicator = relationship("User", back_populates="patient_indicator")
