@@ -21,7 +21,7 @@ class PatientService(BaseService[PatientIndicator, PatientIndicatorIn, PatientIn
         data = self.repo.get_by_key(db, key, user_id)
 
         if not data:
-            return ServiceResult(AppException.NotAccepted())
+            return ServiceResult([], status_code=status.HTTP_200_OK)
         return ServiceResult(data, status_code=status.HTTP_200_OK)
 
     def get_last_item(self, db: Session, key: str, user_id: int):
