@@ -10,9 +10,12 @@ class PatientIndicatorBase(BaseModel):
     slot_int1: Optional[int] = None
     slot_int2: Optional[int] = None
     slot_int3: Optional[int] = None
-    slot_str1: Optional[str] = None
-    slot_str2: Optional[str] = None
-    slot_str3: Optional[str] = None
+    slot_flt4: Optional[float] = None
+    slot_flt5: Optional[float] = None
+    slot_flt6: Optional[float] = None
+    slot_str7: Optional[str] = None
+    slot_str8: Optional[str] = None
+    slot_str9: Optional[str] = None
 
     class Config:
         arbitrary_types_allowed = True
