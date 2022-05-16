@@ -40,7 +40,21 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
             return ServiceResult(AppException.ServerError("Something went wrong!"))
         return ServiceResult(data, status_code=status.HTTP_201_CREATED)
 
-    # Need this for Deps
+    
+    def user_update(self, db: Session, id:int,  data_update:UserUpdate):
+
+        # Email and phone check
+        if self.repo.search_by_email(db, data_update.email):
+            return ServiceResult(AppException.BadRequest("Email already exist."))
+        if self.repo.search_by_phone(db, data_update.phone):
+            return ServiceResult(AppException.BadRequest("Phone number already exist."))
+
+        data = self.repo.update(db, id, data_update)
+        if not data:
+            return ServiceResult(AppException.NotAccepted())
+        return ServiceResult(data, status_code=status.HTTP_202_ACCEPTED)
+
+
 
     def search_by_email_service(self, db: Session, email_in: str):
         data = self.repo.search_by_email(db, email_in)
