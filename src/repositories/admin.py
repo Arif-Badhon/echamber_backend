@@ -28,10 +28,10 @@ class AdminRepo(BaseRepo[User, UserCreate, UserUpdate]):
 
 
 
-    def doctors_inactive_list(self, db: Session):
+    def doctors_inactive_list(self, db: Session, skip: int = 0, limit: int = 10):
         doctor_role_id = roles_repo.search_name_id(db, name='doctor')
         query = db.query(User, Doctor,DoctorQualification, DoctorSpeciality).join(Doctor).filter(
-            User.role_id == doctor_role_id).order_by(desc(self.model.created_at)).filter(User.is_active == False).filter(User.id == DoctorQualification.user_id).filter(User.id==DoctorSpeciality.user_id).all()
+            User.role_id == doctor_role_id).order_by(desc(self.model.created_at)).filter(User.is_active == False).filter(User.id == DoctorQualification.user_id).filter(User.id==DoctorSpeciality.user_id).offset(skip).limit(limit).all()
         return query
     
 

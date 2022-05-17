@@ -51,14 +51,14 @@ def empployee_create(data_in: UserCreate, db: Session = Depends(get_db), current
 # Admin for doctors
 
 @router.get('/doctors/active', response_model=List[UserDoctorOut])
-def doctors_active_list(db: Session = Depends(get_db), current_user: Session = Depends(logged_in)):
-    docs = admin_service.doctor_active_list(db)
+def doctors_active_list(skip:int = 0, limit:int = 10, db: Session = Depends(get_db), current_user: Session = Depends(logged_in)):
+    docs = admin_service.doctor_active_list(db, skip=skip, limit=limit)
     return handle_result(docs)
 
 
 @router.get('/doctors/inactive', response_model=List[UserDoctorOut])
-def doctors_inactive_list(db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin_moderator)):
-    docs = admin_service.doctor_inactive_list(db)
+def doctors_inactive_list(skip:int = 0, limit:int = 10, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin_moderator)):
+    docs = admin_service.doctor_inactive_list(db, skip=skip, limit=limit)
     return handle_result(docs)
 
 

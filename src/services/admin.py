@@ -112,15 +112,15 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
         else:
             return ServiceResult(all_emp, status_code=status.HTTP_200_OK)
 
-    def doctor_active_list(self, db: Session):
-        all_doc = self.repo.doctors_active_list(db)
+    def doctor_active_list(self, db: Session, skip: int = 0, limit: int = 10):
+        all_doc = self.repo.doctors_active_list(db, skip, limit)
         if not all_doc:
             return ServiceResult([], status_code=status.HTTP_200_OK)
         else:
             return ServiceResult(all_doc, status_code=status.HTTP_200_OK)
 
-    def doctor_inactive_list(self, db: Session):
-        all_doc = self.repo.doctors_inactive_list(db)
+    def doctor_inactive_list(self, db: Session, skip: int = 0, limit: int = 10):
+        all_doc = self.repo.doctors_inactive_list(db, skip, limit)
         if not all_doc:
             return ServiceResult([], status_code=status.HTTP_200_OK)
         else:
