@@ -43,12 +43,6 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
     
     def user_update(self, db: Session, id:int,  data_update:UserUpdate):
 
-        # Email and phone check
-        if self.repo.search_by_email(db, data_update.email):
-            return ServiceResult(AppException.BadRequest("Email already exist."))
-        if self.repo.search_by_phone(db, data_update.phone):
-            return ServiceResult(AppException.BadRequest("Phone number already exist."))
-
         data = self.repo.update(db, id, data_update)
         if not data:
             return ServiceResult(AppException.NotAccepted())
