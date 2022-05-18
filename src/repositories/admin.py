@@ -47,6 +47,8 @@ class AdminRepo(BaseRepo[User, UserCreate, UserUpdate]):
     def all_patient(self, db:Session, phone_number: str = "0", skip:int=0, limit:int=15):
         patient_role = roles_repo.search_name_id(db=db, name='patient')
         query = db.query(self.model).filter(self.model.role_id==patient_role).order_by(desc(self.model.created_at)).filter(self.model.phone.like(f"%{phone_number}%")).offset(skip).limit(limit).all()
-        return query
+        results = len(query)
+
+        return [{"results": results}, query]
 
 admin_repo = AdminRepo(User)
