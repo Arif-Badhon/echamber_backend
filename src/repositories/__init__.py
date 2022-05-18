@@ -1,6 +1,7 @@
 from .base import *
 from .admin import *
 from .admin_panel_activity import *
+from .health_partner import *
 from .users import *
 from .user_details import *
 from .roles import *

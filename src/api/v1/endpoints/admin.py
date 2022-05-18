@@ -2,9 +2,9 @@ from typing import List
 from fastapi import APIRouter, Depends
 from db import get_db
 from exceptions.service_result import handle_result
-from schemas import UserOut, UserOutAuth, UserCreate, UserDoctorOut, DoctorChamberOut, UserCreateWitoutRole, AdminPanelActivityOut, PatientIndicatorBase, NewPasswordIn, AdminPanelActivityOut, PatientIndicatorOut
+from schemas import UserOut, UserOutAuth, UserCreate, UserDoctorOut, DoctorChamberOut, UserCreateWitoutRole, AdminPanelActivityOut, PatientIndicatorBase, NewPasswordIn, AdminPanelActivityOut, PatientIndicatorOut, HealthPartnerIn, HealthPartnerOut
 from sqlalchemy.orm import Session
-from services import admin_service, doctor_chambers_service, patient_indicators_service
+from services import admin_service, doctor_chambers_service, patient_indicators_service, health_partner_service
 from api.v1.auth_dependcies import logged_in, logged_in_admin, logged_in_admin_moderator, logged_in_moderator
 
 
@@ -47,6 +47,23 @@ def empployee_create(data_in: UserCreate, db: Session = Depends(get_db), current
     employee_created = admin_service.signup_employee(db, data_in=data_in, creator_id=current_user.id)
     return handle_result(employee_created)
 
+
+
+# Admin for health partner
+@router.get('/health-partner/all', response_model=List[HealthPartnerOut])
+def health_partner_all(db: Session = Depends(get_db), current_user: Session = Depends(logged_in)):
+    health_partner = health_partner_service.get(db=db)
+    return handle_result(health_partner)
+
+@router.get('/health-partner/{id}', response_model=HealthPartnerOut)
+def health_partner(id: int, db: Session = Depends(get_db), current_user: Session = Depends(logged_in)):
+    health_partner = health_partner_service.get_one(db=db, id=id)
+    return handle_result(health_partner)
+
+@router.post('/health-partner/create', response_model=HealthPartnerOut)
+def health_partner_create(data_in: HealthPartnerIn ,db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin)):
+    health_partner = health_partner_service.create(db=db, data_in=data_in)
+    return handle_result(health_partner)
 
 # Admin for doctors
 

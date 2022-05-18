@@ -65,6 +65,23 @@ class AdminPanelActivity(BaseModel):
     service_recived_id = Column(Integer, nullable=True)
     remark = Column(String(255), nullable=True)
 
+
+
+# health partner
+
+class HealthPartner(BaseModel):
+    __tablename__ = "health_partners"
+    name = Column(String(255), nullable=False)
+    type = Column(String(100), nullable=False)
+    district = Column(String(50), nullable=False)
+    detail_address = Column(String(255), nullable=True)
+    detail = Column(String(255), nullable=True)
+    phone = Column(String(255), nullable=False)
+    email = Column(String(255), nullable=True)
+    contact_person = Column(String(255), nullable= False)
+    contact_person_phone = Column(String(100), nullable= False)
+    contact_person_email = Column(String(100), nullable= True)
+
 # Doctor related models
 
 class Doctor(BaseModel):
