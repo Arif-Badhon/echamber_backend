@@ -80,7 +80,7 @@ def doctors_active_list(skip:int = 0, limit:int = 10, db: Session = Depends(get_
 
 
 @router.get('/doctors/inactive', response_model=List[Union[ResultInt, List[UserDoctorOut]]])
-def doctors_inactive_list(skip:int = 0, limit:int = 10, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin_moderator)):
+def doctors_inactive_list(skip:int = 0, limit:int = 10, db: Session = Depends(get_db), current_user: Session = Depends(logged_in)):
     docs = admin_service.doctor_inactive_list(db, skip=skip, limit=limit)
     return handle_result(docs)
 
