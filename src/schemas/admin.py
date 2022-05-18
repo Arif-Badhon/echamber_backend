@@ -37,3 +37,22 @@ class AdminPanelActivityOut(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class AdminPanelActivityAllOut(BaseModel):
+    user_id: int
+    user_name: str
+    user_phone: str
+    service_name: str
+    service_recived_id: int
+    remark: str
+    created_at: datetime = None
+
+    class Config:
+        orm_mode = True
+
+class ResultInt(BaseModel):
+    results: int
+
+    class Config:
+        orm_mode = True

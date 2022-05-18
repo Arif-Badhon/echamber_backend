@@ -69,6 +69,14 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
             return ServiceResult(activity, status_code=status.HTTP_201_CREATED) 
 
 
+    def activity_log_all(self, db: Session, skip: int = 0, limit: int = 15):
+        activity_all = admin_panel_activity_repo.actiity_log_all(db=db, skip=skip, limit=limit)
+
+        if not activity_all:
+            return ServiceResult([], status_code=status.HTTP_200_OK)
+        else:
+            return ServiceResult(activity_all, status_code=status.HTTP_201_CREATED) 
+
 
     def signup_employee(self, db: Session, data_in: UserCreate, creator_id: int):
 

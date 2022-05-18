@@ -1,8 +1,8 @@
-from typing import List
+from typing import List, Union
 from fastapi import APIRouter, Depends
 from db import get_db
 from exceptions.service_result import handle_result
-from schemas import UserOut, UserOutAuth, UserCreate, UserDoctorOut, DoctorChamberOut, UserCreateWitoutRole, AdminPanelActivityOut, PatientIndicatorBase, NewPasswordIn, AdminPanelActivityOut, PatientIndicatorOut, HealthPartnerIn, HealthPartnerOut
+from schemas import UserOut, UserOutAuth, UserCreate, UserDoctorOut, DoctorChamberOut, UserCreateWitoutRole, AdminPanelActivityOut, AdminPanelActivityAllOut, PatientIndicatorBase, NewPasswordIn, AdminPanelActivityOut, PatientIndicatorOut, HealthPartnerIn, HealthPartnerOut, ResultInt
 from sqlalchemy.orm import Session
 from services import admin_service, doctor_chambers_service, patient_indicators_service, health_partner_service
 from api.v1.auth_dependcies import logged_in, logged_in_admin, logged_in_admin_moderator, logged_in_moderator
@@ -31,6 +31,12 @@ def activity_log(skip:int=0, limit:int=15, db:Session = Depends(get_db), current
 @router.get('/activity/log/{user_id}}', response_model=List[AdminPanelActivityOut])
 def activity_log( user_id: int, skip:int=0, limit:int=15, db:Session = Depends(get_db), current_user: Session = Depends(logged_in)):
     activity = admin_service.activity_log(db=db, user_id=user_id, skip=skip, limit=limit)
+    return handle_result(activity)
+
+# response_model=List[Union[ResultInt, List[AdminPanelActivityOut]]]
+@router.get('/activity/log/all', response_model=List[Union[ResultInt, List[AdminPanelActivityAllOut]]])
+def activity_log( skip:int=0, limit:int=15, db:Session = Depends(get_db), current_user: Session = Depends(logged_in)):
+    activity = admin_service.activity_log_all(db=db, skip=skip, limit=limit)
     return handle_result(activity)
 
 
