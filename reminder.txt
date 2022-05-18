@@ -1,0 +1,56 @@
+service_name            : int
+patient_id              : int
+
+order_placement         : date
+order_completion        : date
+order_status            : str
+
+order_value             : int
+discount_percent        : int
+payable_amount          : int
+
+payment_by_customer     : int
+payment_pending         : int
+payment_date            : date
+payment_method          : str
+
+
+service_provider_type           : str
+service_provider_id             : int
+service_provider_fee            : int
+service_provider_fee_paid       : int
+service_provider_fee_pending    : int
+service_provider_fee_status     : str
+
+referral_type                   : str
+referral_id                     : int 
+referral_provider_fee           : int
+referral_provider_fee_paid      : int
+referral_provider_fee_pending   : int
+referral_provider_fee_status    : str
+
+current_address         : str
+remarks                 : str
+
+
+
+========================================
+
+health_partner
+
+
+name        : str
+type        : str
+
+district        : str
+detail_address  : str
+
+detail      : str
+
+phone       : str
+email       : str
+
+contact_person  : str
+phone       : str
+email       : str
+
