@@ -24,7 +24,9 @@ class AdminRepo(BaseRepo[User, UserCreate, UserUpdate]):
         doctor_role_id = roles_repo.search_name_id(db, name='doctor')
         query = db.query(User, Doctor,DoctorQualification, DoctorSpeciality).join(Doctor).filter(
             User.role_id == doctor_role_id).order_by(desc(self.model.created_at)).filter(User.is_active == True).filter(User.id == DoctorQualification.user_id).filter(User.id==DoctorSpeciality.user_id).offset(skip).limit(limit).all()
-        results = len(query)
+        query_all = db.query(User, Doctor,DoctorQualification, DoctorSpeciality).join(Doctor).filter(
+            User.role_id == doctor_role_id).order_by(desc(self.model.created_at)).filter(User.is_active == True).filter(User.id == DoctorQualification.user_id).filter(User.id==DoctorSpeciality.user_id).all()            
+        results = len(query_all)
         return [{"results": results}, query]
 
 
@@ -33,7 +35,9 @@ class AdminRepo(BaseRepo[User, UserCreate, UserUpdate]):
         doctor_role_id = roles_repo.search_name_id(db, name='doctor')
         query = db.query(User, Doctor,DoctorQualification, DoctorSpeciality).join(Doctor).filter(
             User.role_id == doctor_role_id).order_by(desc(self.model.created_at)).filter(User.is_active == False).filter(User.id == DoctorQualification.user_id).filter(User.id==DoctorSpeciality.user_id).offset(skip).limit(limit).all()
-        results = len(query)
+        query_all = db.query(User, Doctor,DoctorQualification, DoctorSpeciality).join(Doctor).filter(
+            User.role_id == doctor_role_id).order_by(desc(self.model.created_at)).filter(User.is_active == False).filter(User.id == DoctorQualification.user_id).filter(User.id==DoctorSpeciality.user_id).all()
+        results = len(query_all)
         return [{"results": results}, query]
     
 
@@ -49,7 +53,9 @@ class AdminRepo(BaseRepo[User, UserCreate, UserUpdate]):
     def all_patient(self, db:Session, phone_number: str = "0", skip:int=0, limit:int=15):
         patient_role = roles_repo.search_name_id(db=db, name='patient')
         query = db.query(self.model).filter(self.model.role_id==patient_role).order_by(desc(self.model.created_at)).filter(self.model.phone.like(f"%{phone_number}%")).offset(skip).limit(limit).all()
-        results = len(query)
+        query_all = db.query(self.model).filter(self.model.role_id==patient_role).order_by(desc(self.model.created_at)).filter(self.model.phone.like(f"%{phone_number}%")).all()
+        
+        results = len(query_all)
 
         return [{"results": results}, query]
 
