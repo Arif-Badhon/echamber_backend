@@ -1,3 +1,4 @@
+from exceptions.service_result import handle_result
 from schemas.users import NewPasswordIn
 from utils import Token
 from sqlalchemy.orm import Session
@@ -5,6 +6,7 @@ from exceptions import ServiceResult
 from exceptions import AppException
 from repositories import users_repo, roles_repo, UpdateSchemaType
 from services import BaseService
+from .roles import roles_service
 from models import User
 from schemas import UserCreate, UserUpdate, UserDBIn
 from utils import password_hash, verify_password
@@ -47,6 +49,15 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
         if not data:
             return ServiceResult(AppException.NotAccepted())
         return ServiceResult(data, status_code=status.HTTP_202_ACCEPTED)
+
+
+    def user_id(self, db: Session, id: int):
+        data = self.get_one(db=id,id=id)
+        role_name = roles_service.get_one(db=db, id=handle_result(data).role_id).name
+        data.role_name = role_name
+        if not data:
+            return ServiceResult(AppException.ServerError("Something went wrong!"))
+        return ServiceResult(data, status_code=status.HTTP_201_CREATED)
 
 
 
