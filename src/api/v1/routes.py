@@ -1,13 +1,14 @@
 from fastapi import APIRouter
-from .endpoints import admin, doctor_chambers, doctors_search, doctor_schedules, users, roles, doctors, patients, user_details, patient_indicators, ep_medicines, ep_chief_complaints, ep_investigations, ep_advices
+from .endpoints import admin, service_order, doctor_chambers, doctors_search, doctor_schedules, users, roles, doctors, patients, user_details, patient_indicators, ep_medicines, ep_chief_complaints, ep_investigations, ep_advices
 
 api_router = APIRouter()
 
 # fmt: off
 api_router.include_router(users.router, prefix='', tags=['Users'])
-api_router.include_router(admin.router, prefix='/admin', tags=['Admin'])
 api_router.include_router(user_details.router, prefix='/user/details', tags=['User Details'])
 api_router.include_router(roles.router, prefix='/roles', tags=['Roles'])
+api_router.include_router(admin.router, prefix='/admin', tags=['Admin'])
+api_router.include_router(service_order.router, prefix='/service/order', tags=['Service Order'])
 api_router.include_router(doctors.router, prefix='/doctors', tags=['Doctors'])
 api_router.include_router(doctor_chambers.router, prefix='/doctors/chamber', tags=['Doctor\'s Chamber'])
 api_router.include_router(doctors_search.router, prefix='/doctors/search', tags=['Doctor Search'])

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, ForeignKey, Integer, Boolean, String, Text, Date, Float
+from sqlalchemy import Column, ForeignKey, Integer, Boolean, String, Text, Date, Float, DateTime
 from models import BaseModel
 from sqlalchemy.orm import relationship
 
@@ -71,26 +71,28 @@ class ServiceOrder(BaseModel):
     __tablename__ = "service_orders"
     service_name = Column(String(100), nullable=False)
     patient_id = Column(Integer, nullable=False)
-    order_placement = Column(Date, nullable=False)
-    order_completion = Column(Date, nullable=False)
+    order_placement = Column(DateTime, nullable=False)
+    order_completion = Column(DateTime, nullable=False)
     order_value = Column(Integer, nullable=True)
     discount_percent = Column(Integer, nullable=True)
     payable_amount = Column(Integer, nullable=False)
     payment_customer = Column(Integer, nullable=False)
     payment_pending = Column(Integer, nullable=False)
-    payment_date = Column(Date, nullable=False)
+    payment_date = Column(DateTime, nullable=False)
     payment_method = Column(String(100), nullable=True)
     service_provider_type = Column(String(100), nullable=True)
     service_provider_id = Column(Integer, nullable=True)
     service_provider_fee = Column(Integer, nullable=True)
     service_provider_fee_paid = Column(Integer, nullable=True)
     service_provider_fee_pending = Column(Integer, nullable=True)
+    service_provider_fee_last_update = Column(DateTime, nullable=True)
     service_provider_fee_status = Column(String(100), nullable=True)
     referral_type = Column(String(100), nullable=True)
     referral_id = Column(Integer, nullable=True) 
     referral_provider_fee = Column(Integer, nullable=True)
     referral_provider_fee_paid = Column(Integer, nullable=True)
     referral_provider_fee_pending = Column(Integer, nullable=True)
+    referral_provider_fee_last_update = Column(DateTime, nullable=True)
     referral_provider_fee_status = Column(String(100), nullable=True)
     current_address = Column(String(255), nullable=True)
     remarks = Column(String(255), nullable=True)
