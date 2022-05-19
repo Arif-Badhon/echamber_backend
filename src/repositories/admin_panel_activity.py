@@ -10,7 +10,8 @@ class AdminPanelActivityRepo(BaseRepo[AdminPanelActivity, AdminPanelActivityIn, 
 
     def activity_log(self, db: Session, user_id:int, skip: int = 0, limit: int = 15):
         activity = db.query(self.model).filter(self.model.user_id == user_id).order_by(desc(self.model.created_at)).offset(skip).limit(limit).all()
-        return activity
+        activity_all = db.query(self.model).filter(self.model.user_id == user_id).order_by(desc(self.model.created_at)).all()
+        return [{"results": len(activity_all)}, activity]
 
     def actiity_log_all(self, db: Session, skip: int = 0, limit: int = 15):
         activity_all = db.query(self.model).order_by(desc(self.model.created_at)).all()

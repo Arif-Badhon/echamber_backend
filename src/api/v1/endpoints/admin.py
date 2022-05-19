@@ -16,24 +16,25 @@ def signup(data_in: UserCreateWitoutRole, db: Session = Depends(get_db)):
     admn = admin_service.signup_admin(db, data_in=data_in)
     return handle_result(admn)
 
+
 @router.post('/password', response_model=AdminPanelActivityOut)
 def password_change_by_admin(user_id:int, password: NewPasswordIn ,db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin_moderator)):
     change_password = admin_service.password_changed_by_admin(db=db, user_id=user_id, password=password, changer_id=current_user.id)
     return handle_result(change_password)
 
 
-@router.get('/activity/log', response_model=List[AdminPanelActivityOut])
+@router.get('/activity/log', response_model=List[Union[ResultInt, List[AdminPanelActivityOut]]])
 def activity_log(skip:int=0, limit:int=15, db:Session = Depends(get_db), current_user: Session = Depends(logged_in)):
     activity = admin_service.activity_log(db=db, user_id=current_user.id, skip=skip, limit=limit)
     return handle_result(activity)
 
 
-@router.get('/activity/log/{user_id}}', response_model=List[AdminPanelActivityOut])
+@router.get('/activity/log/{user_id}}', response_model=List[Union[ResultInt, List[AdminPanelActivityOut]]])
 def activity_log( user_id: int, skip:int=0, limit:int=15, db:Session = Depends(get_db), current_user: Session = Depends(logged_in)):
     activity = admin_service.activity_log(db=db, user_id=user_id, skip=skip, limit=limit)
     return handle_result(activity)
 
-# response_model=List[Union[ResultInt, List[AdminPanelActivityOut]]]
+
 @router.get('/activity/log/all', response_model=List[Union[ResultInt, List[AdminPanelActivityAllOut]]])
 def activity_log( skip:int=0, limit:int=15, db:Session = Depends(get_db), current_user: Session = Depends(logged_in)):
     activity = admin_service.activity_log_all(db=db, skip=skip, limit=limit)
