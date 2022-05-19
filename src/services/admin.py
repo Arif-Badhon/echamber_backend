@@ -113,7 +113,7 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
 
     def all_employee(self, db: Session, skip: int=0, limit: int=10):
         all_emp = self.repo.all_employee(db, skip, limit)
-        for i in all_emp:
+        for i in all_emp[1]:
             i.role_name = roles_repo.get_one(db=db, id=i.role_id).name 
         if not all_emp:
             return ServiceResult([], status_code=status.HTTP_200_OK)

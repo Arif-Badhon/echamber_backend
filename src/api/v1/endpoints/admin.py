@@ -42,7 +42,7 @@ def activity_log( skip:int=0, limit:int=15, db:Session = Depends(get_db), curren
 
 # Admin for employee
 
-@router.get('/employee/all', response_model=List[UserOutAuth])
+@router.get('/employee/all', response_model=List[Union[ResultInt, List[UserOutAuth]]])
 def all_employee(skip:int=0, limit:int=10, db: Session = Depends(get_db), current_user: Session = Depends(logged_in)):
     all = admin_service.all_employee(db, skip=skip, limit=limit)
     return handle_result(all)

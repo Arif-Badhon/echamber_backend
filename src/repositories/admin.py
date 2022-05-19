@@ -14,8 +14,11 @@ class AdminRepo(BaseRepo[User, UserCreate, UserUpdate]):
     def all_employee(self, db: Session, skip: int = 0, limit: int = 10):
         doctor_id = roles_repo.search_name_id(db, name='doctor')
         patient_id = roles_repo.search_name_id(db, name='patient')
+        
         query = db.query(self.model).filter(self.model.role_id != doctor_id).filter(self.model.role_id != patient_id).offset(skip).limit(limit).all()
-        return query
+        query_all = db.query(self.model).filter(self.model.role_id != doctor_id).filter(self.model.role_id != patient_id).all()
+
+        return [{"results":len(query_all)}, query]
 
 
     # all doctor repo
