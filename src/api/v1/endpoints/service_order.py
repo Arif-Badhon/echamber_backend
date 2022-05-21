@@ -2,7 +2,7 @@ from typing import List, Union
 from sqlalchemy.orm import Session
 from fastapi import APIRouter, Depends
 from exceptions.service_result import handle_result
-from schemas import ServiceOrderIn, ServiceOrderOut, ResultInt, ServiceOrderUpdate
+from schemas import ServiceOrderIn, ServiceOrderOut, ResultInt, ServiceOrderUpdate, AdminPanelActivityOut
 from api.v1.auth_dependcies import get_db, logged_in_employee
 from services import service_order_service
 
@@ -15,9 +15,9 @@ def all_service_order():
     return
 
 
-@router.post('/', response_model=ServiceOrderOut)
+@router.post('/', response_model=AdminPanelActivityOut)
 def service_order_in(data_in:ServiceOrderIn, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_employee)):
-    service = service_order_service.create(db=db, data_in=data_in)
+    service = service_order_service.created_by_employee(db=db, data_in=data_in, employee_id=current_user.id)
     return handle_result(service)
 
 @router.patch('/{id}', response_model=ServiceOrderOut)
