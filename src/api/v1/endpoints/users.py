@@ -1,3 +1,4 @@
+from typing import List
 from schemas import Token
 from fastapi import APIRouter, Depends, UploadFile
 from sqlalchemy.orm import Session
@@ -53,6 +54,11 @@ def user_by_id(id: int, db: Session = Depends(get_db), current_user: Session = D
     user = users_service.get_one(db=db, id=id)
     return handle_result(user)
 
+
+@router.get('/user/phone/{number}', response_model=List[UserOutAuth])
+def user_by_phone(number: str, skip:int=0, limit:int=10,  db: Session = Depends(get_db), current_user: Session = Depends(logged_in)):
+    users = users_service.user_search_by_phone(db=db, phone_in=number, skip=skip, limit=limit)
+    return handle_result(users)
 
 @router.post('/uploadimage')
 async def create_upload_file(file: UploadFile, db: Session = Depends(get_db), current_user: User = Depends(logged_in)):
