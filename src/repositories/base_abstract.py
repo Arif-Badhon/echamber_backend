@@ -19,6 +19,10 @@ class ABSRepo(ABC):
         pass
 
     @abstractmethod
+    def create_with_flush(self, db: Session, data_in: CreateSchemaType):
+        pass
+    
+    @abstractmethod
     def get(self, db: Session) -> List[ModelType]:
         pass
 

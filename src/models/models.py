@@ -80,6 +80,7 @@ class ServiceOrder(BaseModel):
     payment_pending = Column(Integer, nullable=False)
     payment_date = Column(DateTime, nullable=False)
     payment_method = Column(String(100), nullable=True)
+    payment_status = Column(String(100), nullable=True)
     service_provider_type = Column(String(100), nullable=True)
     service_provider_id = Column(Integer, nullable=True)
     service_provider_fee = Column(Integer, nullable=True)
