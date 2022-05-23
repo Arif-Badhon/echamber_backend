@@ -1,10 +1,12 @@
 from exceptions.service_result import handle_result
 from services import BaseService
-from .users import users_service
 from .user_details import user_details_service
+from .doctors import doctors_service
+from .doctor_qualifications import doctor_qualifications_service
+from .doctor_specialities import doctor_specialities_service
 from .patient_indicators import patient_indicators_service
 from .users import users_service 
-from schemas import UserCreate, UserUpdate, AdminPanelActivityIn, UserDetailIn, PatientIndicatorIn
+from schemas import UserCreate, UserUpdate, AdminPanelActivityIn, UserDetailIn, PatientIndicatorIn, DoctorSignup, DoctorIn, DoctorQualilficationIn, DoctorSpecialityIn
 from models import User
 from repositories import admin_repo, roles_repo, admin_panel_activity_repo
 from sqlalchemy.orm import Session
@@ -120,6 +122,59 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
         else:
             return ServiceResult(all_emp, status_code=status.HTTP_200_OK)
 
+
+    def doctor_register(self, db: Session, data_in: DoctorSignup, creator_id: int):
+        sginup_data = UserCreate(
+            name=data_in.name,
+            email=data_in.email,
+            phone=data_in.phone,
+            sex=data_in.sex,
+            is_active=False,
+            password=data_in.password,
+            role_name='doctor'
+        )
+
+        signup_user = users_service.signup(db, data_in=sginup_data, flush=True)
+
+        doctor_data = DoctorIn(
+            user_id=handle_result(signup_user).id,
+            bmdc=data_in.bmdc
+        )
+
+        doctor_user =doctors_service.create_with_flush(db, data_in=doctor_data)
+
+        qualification_data = DoctorQualilficationIn(
+            user_id=handle_result(signup_user).id,
+            qualification=data_in.qualification
+        )
+
+        qualification_user = doctor_qualifications_service.create_with_flush(
+            db, data_in=qualification_data)
+
+        specialities_data = DoctorSpecialityIn(
+            user_id=handle_result(signup_user).id,
+            speciality=data_in.speciality
+        )
+
+        specialities_user = doctor_specialities_service.create_with_flush(
+            db, data_in=specialities_data)
+
+        created_by_employee_data = AdminPanelActivityIn(
+                user_id=creator_id,
+                service_name="doctor_register",
+                service_recived_id=handle_result(signup_user).id,
+                remark=""
+            )
+
+        created_by_employee = admin_panel_activity_repo.create(db=db, data_in=created_by_employee_data)
+
+        if not created_by_employee:
+            return ServiceResult(AppException.ServerError("Problem with doctor registration."))
+        else:
+            return ServiceResult(created_by_employee, status_code=status.HTTP_201_CREATED)
+        
+        
+
     def doctor_active_list(self, db: Session, skip: int = 0, limit: int = 10):
         all_doc = self.repo.doctors_active_list(db, skip, limit)
         if not all_doc:
@@ -181,7 +236,7 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
             created_by_employee = admin_panel_activity_repo.create(db=db, data_in=created_by_employee_data)
 
             if not created_by_employee:
-                return ServiceResult(AppException.ServerError("Problem with patient by patient registration."))
+                return ServiceResult(AppException.ServerError("Problem with patient registration."))
             else:
                 return ServiceResult(created_by_employee, status_code=status.HTTP_201_CREATED)
 

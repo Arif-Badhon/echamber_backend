@@ -2,7 +2,8 @@ from schemas import DoctorIn, DoctorUpdate, UserCreate
 from models import Doctor
 from schemas import DoctorSignup, DoctorQualilficationIn
 from schemas.doctor_specialities import DoctorSpecialityIn
-from services import BaseService, users_service
+from services import BaseService
+from .users import users_service
 from services.doctor_qualifications import doctor_qualifications_service
 from services.doctor_specialities import doctor_specialities_service
 from repositories import doctors_repo

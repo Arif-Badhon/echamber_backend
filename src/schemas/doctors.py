@@ -35,7 +35,6 @@ class DoctorSignup(BaseModel):
     )
     sex: str
     password: str
-    role_name: str
     speciality: str
     qualification: str
     bmdc: str

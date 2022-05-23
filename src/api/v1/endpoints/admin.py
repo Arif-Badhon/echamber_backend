@@ -2,10 +2,10 @@ from typing import List, Union
 from fastapi import APIRouter, Depends
 from db import get_db
 from exceptions.service_result import handle_result
-from schemas import UserOut, UserOutAuth, UserCreate, UserDoctorOut, DoctorChamberOut, UserCreateWitoutRole, AdminPanelActivityOut, AdminPanelActivityAllOut, PatientIndicatorBase, NewPasswordIn, AdminPanelActivityOut, PatientIndicatorOut, HealthPartnerIn, HealthPartnerOut, ResultInt
+from schemas import UserOut, UserOutAuth, UserCreate, UserDoctorOut,  DoctorSignup, DoctorChamberOut, UserCreateWitoutRole, AdminPanelActivityOut, AdminPanelActivityAllOut, PatientIndicatorBase, NewPasswordIn, AdminPanelActivityOut, PatientIndicatorOut, HealthPartnerIn, HealthPartnerOut, ResultInt
 from sqlalchemy.orm import Session
 from services import admin_service, doctor_chambers_service, patient_indicators_service, health_partner_service
-from api.v1.auth_dependcies import logged_in, logged_in_admin, logged_in_admin_moderator, logged_in_moderator
+from api.v1.auth_dependcies import logged_in, logged_in_admin, logged_in_admin_moderator, logged_in_moderator, logged_in_admin_medical_affairs
 
 
 router = APIRouter()
@@ -75,6 +75,11 @@ def health_partner_create(data_in: HealthPartnerIn ,db: Session = Depends(get_db
     return handle_result(health_partner)
 
 # Admin for doctors
+
+@router.post('/doctor/register', response_model=AdminPanelActivityOut, description='<b>access:</b> admin and medical affairs')
+def doctor_register(data_in: DoctorSignup, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin_medical_affairs)):
+    doctor_reg = admin_service.doctor_register(db=db, data_in=data_in, creator_id=current_user.id)
+    return handle_result(doctor_reg)
 
 @router.get('/doctors/active', response_model=List[Union[ResultInt, List[UserDoctorOut]]])
 def doctors_active_list(skip:int = 0, limit:int = 10, db: Session = Depends(get_db), current_user: Session = Depends(logged_in)):
