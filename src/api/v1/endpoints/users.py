@@ -1,16 +1,15 @@
 from typing import List
 from schemas import Token
-from fastapi import APIRouter, Depends, UploadFile
+from fastapi import APIRouter, Depends, UploadFile, File, HTTPException, status
 from sqlalchemy.orm import Session
 from db import get_db
 from exceptions import handle_result
-from schemas import UserCreate, UserOut, UserOutAuth, UserLogin, Token
-from schemas.users import NewPasswordIn, UserUpdate
-from services import users_service
+from schemas import UserCreate, UserOut, UserOutAuth, UserLogin, NewPasswordIn, UserUpdate, Token, ImageLogOut, ImageLogIn
+from services import users_service, image_log_service
 from fastapi.security import HTTPBasic
 from models import User
 from api.v1.auth_dependcies import logged_in
-
+from utils import UploadFileUtils
 
 router = APIRouter()
 
@@ -60,6 +59,24 @@ def user_by_phone(number: str, skip:int=0, limit:int=10,  db: Session = Depends(
     users = users_service.user_search_by_phone(db=db, phone_in=number, skip=skip, limit=limit)
     return handle_result(users)
 
-@router.post('/uploadimage')
-async def create_upload_file(file: UploadFile, db: Session = Depends(get_db), current_user: User = Depends(logged_in)):
-    return {"filename": file.filename, "id": current_user.id}
+
+
+
+@router.get('/profile-pic', response_model= ImageLogOut, description='<h2>Alert: files/(image url)</b>')
+def get_profile_pic(db:Session = Depends(get_db), current_user:Session = Depends(logged_in)):
+    pp = image_log_service.last_profile_pic(db=db, user_id=current_user.id)
+    return handle_result(pp)
+
+@router.post('/profile-pic', response_model= ImageLogOut, description='<h2>Alert: </h2> <b>image should be < 300 kb</b>')
+async def upload_image(file: UploadFile = File(...), db:Session = Depends(get_db), current_user:Session = Depends(logged_in)):
+
+    up_img = UploadFileUtils(file=file)
+    
+    # prefix is the short service name
+    new_image_name = up_img.upload_image(prefix='propic', accepted_extensions=['jpg', 'jpeg', 'png'])
+
+    # save in db
+    image_in_db = image_log_service.create(db=db, data_in=ImageLogIn(user_id=current_user.id, service_name='propic', image_string=new_image_name))
+    
+
+    return handle_result(image_in_db)

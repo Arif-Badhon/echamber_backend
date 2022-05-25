@@ -36,7 +36,7 @@ remarks                 : str
 
 ========================================
 
-health_partner
+health_partner / insurance
 
 
 name        : str
@@ -44,6 +44,10 @@ type        : str
 
 district        : str
 detail_address  : str
+
++ offer_detail: str
++ agreemnet_starts:  date
++ agreement_validaty:  date
 
 detail      : str
 
@@ -54,3 +58,34 @@ contact_person  : str
 phone       : str
 email       : str
 
+=========================================
+
+service: medicine
+-----------------
+brand name, strength, pack size, unit prize, quantity, mrp
+per discount, total, total discount, subtotal, remarks
+
+
+service: pathology
+------------------
+lab test list
+indivisual lab price
+need 2 table for list and indivisual price
+
+
+service: health plane (hx)
+--------------------------
+single and group
+
+
+service: insurance
+----------------------
+crm select the insurance partner
+
+
+
+=========================================
+
+image prefix -
+
+profile picture - propic

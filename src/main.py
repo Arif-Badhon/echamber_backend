@@ -8,6 +8,7 @@ from db import settings
 from exceptions import AppExceptionCase, AppException, app_exception_handler, generic_exception_handler
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 
 app = FastAPI(title='E-Chamber')
@@ -59,6 +60,9 @@ def custom_generic_exception_handler(request: Request, exc: Exception):
 @app.get('/')
 def root():
     return {'msg': 'Hello E-Chamber'}
+
+
+app.mount('/files/', StaticFiles(directory='assets/img'), name='img')
 
 
 app.include_router(api_router, prefix=settings.API_V1_STR)

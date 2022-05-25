@@ -17,7 +17,6 @@ class User(BaseModel):
     role_id = Column(Integer, ForeignKey("roles.id"))
 
     role = relationship("Role", back_populates="user")
-    propic = relationship("ProfilePic", back_populates= "user_pic")
     user_details = relationship("UserDetail", back_populates="user")
     doctor = relationship("Doctor", back_populates="user_doctor")
     doctors_chamber =  relationship("DoctorChamber", back_populates="user_doctors_chamber")
@@ -25,14 +24,6 @@ class User(BaseModel):
     doctor_speciality = relationship("DoctorSpeciality", back_populates="user_doctor_speciality")
     patient = relationship("Patient", back_populates="user_patient")
     patient_indicator = relationship("PatientIndicator", back_populates="user_patient_indicator")
-
-
-class ProfilePic(BaseModel):
-    __tablename__ = "profile_pic"
-    img_name =  Column(String(100), nullable=False)
-    user_id =  Column(Integer, ForeignKey("users.id"))
-
-    user_pic = relationship("User", back_populates="propic")
 
 
 class Role(BaseModel):
@@ -55,6 +46,16 @@ class UserDetail(BaseModel):
     blood_group = Column(String(5), nullable=True)
 
     user = relationship("User", back_populates="user_details")
+
+
+
+class ImagesLog(BaseModel):
+    __tablename__ = "image_log"
+    user_id = Column(Integer, ForeignKey("users.id"))
+    service_name = Column(String(100))
+    image_string = Column(String(255))
+
+
 
 # admin panel
 

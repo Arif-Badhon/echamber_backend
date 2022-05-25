@@ -1,5 +1,6 @@
 from .base import *
 from .admin import *
+from .image_log import *
 from .admin_panel_activity import *
 from .service_order import *
 from .health_partner import *
