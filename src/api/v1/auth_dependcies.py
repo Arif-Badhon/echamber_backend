@@ -9,7 +9,13 @@ from utils import Token
 
 security = HTTPBearer()
 
-
+    # "name": "admin"
+    # "name": "moderator"
+    # "name": "doctor"
+    # "name": "patient"
+    # "name": "sales"
+    # "name": "medical_affairs"
+ 
 def logged_in(credentials: HTTPBasicCredentials = Depends(security), db: Session = Depends(get_db)):
     token = credentials.credentials
     token_data = Token.validate_token(token)
