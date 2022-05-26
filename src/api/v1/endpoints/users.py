@@ -62,7 +62,7 @@ def user_by_phone(number: str, skip:int=0, limit:int=10,  db: Session = Depends(
 
 
 
-@router.get('/profile-pic', response_model= ImageLogOut, description='<h2>Alert: files/(image url)</b>')
+@router.get('/profile-pic', response_model= ImageLogOut, description='<h2>Alert: images/profile/(image url)</b>')
 def get_profile_pic(db:Session = Depends(get_db), current_user:Session = Depends(logged_in)):
     pp = image_log_service.last_profile_pic(db=db, user_id=current_user.id)
     return handle_result(pp)
@@ -73,7 +73,7 @@ async def upload_image(file: UploadFile = File(...), db:Session = Depends(get_db
     up_img = UploadFileUtils(file=file)
     
     # prefix is the short service name
-    new_image_name = up_img.upload_image(prefix='propic', accepted_extensions=['jpg', 'jpeg', 'png'])
+    new_image_name = up_img.upload_image(prefix='propic', path='./assets/img/profile', accepted_extensions=['jpg', 'jpeg', 'png'])
 
     # save in db
     image_in_db = image_log_service.create(db=db, data_in=ImageLogIn(user_id=current_user.id, service_name='propic', image_string=new_image_name))
