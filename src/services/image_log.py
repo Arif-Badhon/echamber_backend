@@ -13,7 +13,7 @@ class ImageLogService(BaseService[ImagesLog, ImageLogIn, ImageLogUpdate]):
         last_pp = self.repo.last_profile_pic(db=db, user_id=user_id)
 
         if not last_pp:
-            return ServiceResult(AppException.NotFound("Patient not found"))
+            return ServiceResult(AppException.NotFound("Image not found"))
         else:
             return ServiceResult(last_pp, status_code=status.HTTP_200_OK)
 
