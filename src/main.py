@@ -4,13 +4,14 @@ from pydantic import ValidationError
 import uvicorn
 import os
 from fastapi import FastAPI, Request, status
+from fastapi.responses import HTMLResponse
 from api.v1.routes import api_router
 from db import settings
 from exceptions import AppExceptionCase, AppException, app_exception_handler, generic_exception_handler
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-
+from fastapi.templating import Jinja2Templates
 
 app = FastAPI(title='E-Chamber')
 
@@ -58,16 +59,22 @@ def custom_generic_exception_handler(request: Request, exc: Exception):
     return generic_exception_handler(request, exc)
 
 
+
+
+
 # parent path for static file
 parent_path = os.path.dirname(os.path.realpath(__file__))
 
 
-@app.get('/')
-def root():
-    return {'msg': 'Hello E-Chamber'}
+app.mount('/static/', StaticFiles(directory=f'{parent_path}/static'), name='static')
+app.mount('/images/', StaticFiles(directory=f'{parent_path}/assets/img'), name='img')
 
+templates = Jinja2Templates(directory='templates')
 
-app.mount('/files/', StaticFiles(directory=f'{parent_path}/assets/img'), name='img')
+@app.get('/', response_class=HTMLResponse)
+async def index(request: Request):
+    return templates.TemplateResponse('index.html', {"request": request})
+
 
 
 app.include_router(api_router, prefix=settings.API_V1_STR)
