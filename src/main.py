@@ -2,6 +2,7 @@ from fastapi.exceptions import RequestValidationError, ValidationError
 from fastapi.encoders import jsonable_encoder
 from pydantic import ValidationError
 import uvicorn
+import os
 from fastapi import FastAPI, Request, status
 from api.v1.routes import api_router
 from db import settings
@@ -62,7 +63,9 @@ def root():
     return {'msg': 'Hello E-Chamber'}
 
 
-app.mount('/files/', StaticFiles(directory='assets/img'), name='img')
+path = os.path.dirname(os.path.realpath(__file__))
+
+app.mount('/files/', StaticFiles(directory=f'{path}/assets/img'), name='img')
 
 
 app.include_router(api_router, prefix=settings.API_V1_STR)
