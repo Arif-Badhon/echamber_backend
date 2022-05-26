@@ -52,6 +52,7 @@ class UserDetail(BaseModel):
 class ImagesLog(BaseModel):
     __tablename__ = "image_log"
     user_id = Column(Integer, ForeignKey("users.id"))
+    name = Column(String(100))
     service_name = Column(String(100))
     image_string = Column(String(255))
 
@@ -66,6 +67,15 @@ class AdminPanelActivity(BaseModel):
     service_recived_id = Column(Integer, nullable=True)
     remark = Column(String(255), nullable=True)
 
+
+class Notice(BaseModel):
+    __tablename__ = "notice"
+    user_id = Column(Integer, ForeignKey("users.id"))
+    cover_img_id = Column(Integer)
+    title = Column(String(100), nullable=False)
+    body = Column(Text, nullable=False)    
+    portal = Column(String(100), nullable=False)
+    priority = Column(Integer, nullable=False)
 
 # service order dashboard
 class ServiceOrder(BaseModel):
