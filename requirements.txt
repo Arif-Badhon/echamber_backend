@@ -26,10 +26,14 @@ importlib-metadata==4.11.1
     # via alembic
 importlib-resources==5.4.0
     # via alembic
+jinja2===3.1.2
+    # via -r requirements.in
 mako==1.1.6
     # via alembic
 markupsafe==2.1.0
-    # via mako
+    # via
+    #   jinja2
+    #   mako
 mysql-connector-python==8.0.28
     # via -r requirements.in
 passlib==1.7.4
