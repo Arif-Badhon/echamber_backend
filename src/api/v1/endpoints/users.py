@@ -61,11 +61,12 @@ def user_by_phone(number: str, skip:int=0, limit:int=10,  db: Session = Depends(
 
 
 
-
 @router.get('/profile-pic', response_model= ImageLogOut, description='<h2>Alert: images/profile/(image url)</b>')
 def get_profile_pic(db:Session = Depends(get_db), current_user:Session = Depends(logged_in)):
     pp = image_log_service.last_profile_pic(db=db, user_id=current_user.id)
     return handle_result(pp)
+
+
 
 @router.post('/profile-pic', response_model= ImageLogOut, description='<h2>Alert: </h2> <b>image should be < 300 kb</b>')
 async def upload_image(file: UploadFile = File(...), db:Session = Depends(get_db), current_user:Session = Depends(logged_in)):

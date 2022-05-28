@@ -71,7 +71,6 @@ class DoctorService(BaseService[Doctor, DoctorIn, DoctorUpdate]):
             return ServiceResult(AppException.ServerError(
                 "Problem with Doctor registration."))
         else:
-
             return ServiceResult(handle_result(specialities_user), status_code=status.HTTP_201_CREATED)
 
 

@@ -1,3 +1,4 @@
+from email.policy import default
 from sqlalchemy import Column, ForeignKey, Integer, Boolean, String, Text, Date, Float, DateTime
 from models import BaseModel
 from sqlalchemy.orm import relationship
@@ -76,6 +77,9 @@ class Notice(BaseModel):
     body = Column(Text, nullable=False)    
     portal = Column(String(100), nullable=False)
     priority = Column(Integer, nullable=False)
+    status = Column(Boolean, default=True)
+
+
 
 # service order dashboard
 class ServiceOrder(BaseModel):
