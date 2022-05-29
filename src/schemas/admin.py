@@ -4,6 +4,8 @@ from .doctors import DoctorOut
 from .users import UserOut
 from .doctor_qualifications import DoctorQualificationOut
 from .doctor_specialities import DoctorSpecialityOut
+from typing import Optional
+
 
 class UserDoctorOut(BaseModel):
     User: UserOut
@@ -53,6 +55,23 @@ class AdminPanelActivityAllOut(BaseModel):
 
 class ResultInt(BaseModel):
     results: int
+
+    class Config:
+        orm_mode = True
+
+
+
+class AdminPatientsOut(BaseModel):
+    id: int
+    name: str
+    email: Optional[str] = None
+    phone: str
+    sex: str
+    is_active: bool
+    created_at: datetime
+    register_by_id: Optional[int] = None 
+    register_by_name: Optional[str] = None
+    register_by_role: Optional[str] = None
 
     class Config:
         orm_mode = True

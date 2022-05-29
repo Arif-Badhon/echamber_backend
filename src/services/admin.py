@@ -8,7 +8,7 @@ from .patient_indicators import patient_indicators_service
 from .users import users_service 
 from schemas import UserCreate, UserUpdate, AdminPanelActivityIn, UserDetailIn, PatientIndicatorIn, DoctorSignup, DoctorIn, DoctorQualilficationIn, DoctorSpecialityIn
 from models import User
-from repositories import admin_repo, roles_repo, admin_panel_activity_repo
+from repositories import admin_repo, roles_repo, admin_panel_activity_repo, users_repo
 from sqlalchemy.orm import Session
 from exceptions import ServiceResult, AppException
 from fastapi import status
@@ -244,6 +244,27 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
 
     def all_patient(self, db: Session, phone_number:str, skip:int, limit: int):
         patients = admin_repo.all_patient(db=db, phone_number=phone_number, skip=skip, limit=limit)
+
+        
+        new_patients_list = []
+
+        for i in patients[1]:
+        
+            register_by = admin_repo.patient_register_by_whome(db=db, patient_id=i.id)
+
+            if register_by:
+                register_detail = users_repo.get_one(db=db, id=register_by.user_id)
+                i.register_by_id = register_by.user_id
+                i.register_by_name = register_detail.name
+                i.register_by_role = roles_repo.get_one(db=db, id=register_detail.role_id).name
+            else:
+                i.register_by_id = None
+                i.register_by_name = None
+                i.register_by_role = None
+
+            new_patients_list.append(i)
+
+            patients[1] = new_patients_list
 
         if not patients:
             return ServiceResult([], status_code=status.HTTP_200_OK)

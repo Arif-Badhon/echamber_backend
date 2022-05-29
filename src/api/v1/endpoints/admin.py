@@ -2,7 +2,7 @@ from typing import List, Union
 from fastapi import APIRouter, Depends
 from db import get_db
 from exceptions.service_result import handle_result
-from schemas import UserOut, UserOutAuth, UserCreate, UserDoctorOut,  DoctorSignup, DoctorChamberOut, UserCreateWitoutRole, AdminPanelActivityOut, AdminPanelActivityAllOut, PatientIndicatorBase, NewPasswordIn, AdminPanelActivityOut, PatientIndicatorOut, HealthPartnerIn, HealthPartnerOut, ResultInt
+from schemas import UserOut, UserOutAuth, UserCreate, UserDoctorOut,  DoctorSignup, DoctorChamberOut, UserCreateWitoutRole, AdminPanelActivityOut, AdminPanelActivityAllOut, PatientIndicatorBase, NewPasswordIn, AdminPanelActivityOut, PatientIndicatorOut, HealthPartnerIn, HealthPartnerOut, ResultInt, AdminPatientsOut
 from sqlalchemy.orm import Session
 from services import admin_service, doctor_chambers_service, patient_indicators_service, health_partner_service
 from api.v1.auth_dependcies import logged_in, logged_in_admin, logged_in_admin_moderator, logged_in_moderator, logged_in_admin_medical_affairs
@@ -112,8 +112,8 @@ def register_patient(data_in: UserCreate, db: Session = Depends(get_db), current
     patient_created = admin_service.signup_patient(db=db, data_in=data_in, creator_id=current_user.id)
     return handle_result(patient_created)
 
-
-@router.get('/patient/all', response_model=List[Union[ResultInt ,List[UserOut]]])
+# , response_model=List[Union[ResultInt ,List[AdminPatientsOut]]]
+@router.get('/patient/all', response_model=List[Union[ResultInt ,List[AdminPatientsOut]]])
 def all_patients(phone_number: str, skip:int=0, limit:int=15,  db:Session=Depends(get_db), current_user:Session=Depends(logged_in)):
     patients = admin_service.all_patient(db=db, phone_number=phone_number, skip=skip, limit=limit)
     return handle_result(patients)
