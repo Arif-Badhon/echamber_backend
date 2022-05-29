@@ -11,9 +11,10 @@ from services import image_log_service
 
 router = APIRouter()
 
-# @router.get('/', response_model=List[NoticeOut])
-# def all_notice(skip: int, limit: int, db: Session, current_user: Session = Depends(logged_in_admin_moderator)):
-#     return
+@router.get('/', response_model=List[NoticeOut])
+def all_notice(skip: int = 0, limit: int = 10, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin_moderator)):
+    all = notice_service.all_notice(db=db, skip=skip, limit=limit)
+    return handle_result(all)
 
 
 @router.post('/', response_model=NoticeOut)
@@ -21,7 +22,16 @@ def create_notice( data_in:NoticeBase ,db: Session = Depends(get_db), current_us
     notice = notice_service.create_with_user(db=db, data_in=data_in, user_id=current_user.id)
     return handle_result(notice)
 
+@router.get('/portal', response_model=List[NoticeOut])
+def get_by_portal(portal:str, skip:int = 0, limit:int = 10, db:Session = Depends(get_db), current_user: Session = Depends(logged_in)):
+    portal = notice_service.notice_by_portal(db=db, portal=portal, skip=skip, limit=limit)
+    return handle_result(portal)
 
+
+@router.get('/active-switch', response_model=NoticeOut)
+def active_switch(id: int, db: Session = Depends(get_db), current_user:Session = Depends(logged_in_admin)):
+    notice = notice_service.active_switch(db=db, id=id)
+    return handle_result(notice)
 
 @router.post('/notice-cover', response_model= ImageLogOut, description='<h2>Alert: </h2> <b>image should be < 300 kb</b>')
 async def upload_image(file: UploadFile = File(...), db:Session = Depends(get_db), current_user:Session = Depends(logged_in)):
@@ -33,6 +43,5 @@ async def upload_image(file: UploadFile = File(...), db:Session = Depends(get_db
 
     # save in db
     image_in_db = image_log_service.create(db=db, data_in=ImageLogIn(user_id=current_user.id, service_name='notice', image_string=new_image_name))
-    
 
     return handle_result(image_in_db)
