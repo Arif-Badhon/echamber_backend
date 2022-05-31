@@ -14,6 +14,7 @@ from .doctor_specialities import *
 from .doctors_search import *
 from .doctor_schedules import *
 from .patients import *
+from .patient_families import *
 from .patient_indicators import *
 from .ep_chief_complaints import *
 from .ep_investigations import *

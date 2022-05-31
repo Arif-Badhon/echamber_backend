@@ -217,6 +217,16 @@ class PatientIndicator(BaseModel):
 
 
 
+class PatientFamily(BaseModel):
+    __tablename__ = "patient_families"
+    user_id = Column(Integer, ForeignKey("users.id"))
+    relation_with = Column(Integer, nullable=False)
+    relation_from = Column(String(100))
+    relation_to = Column(String(100))
+    relationship_status = Column(String(100), nullable= False)
+    message = Column(String(255), nullable=True)
+
+
 # E-prescription related models
 
 class EpMedicineList(BaseModel):
