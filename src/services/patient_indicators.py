@@ -17,8 +17,8 @@ class PatientService(BaseService[PatientIndicator, PatientIndicatorIn, PatientIn
             return ServiceResult(AppException.NotAccepted())
         return ServiceResult(data, status_code=status.HTTP_202_ACCEPTED)
 
-    def get_by_key(self, db: Session, key: str, user_id: int):
-        data = self.repo.get_by_key(db, key, user_id)
+    def get_by_key(self, db: Session, key: str, user_id: int, skip: int, limit: int):
+        data = self.repo.get_by_key(db, key, user_id, skip, limit)
 
         if not data:
             return ServiceResult([], status_code=status.HTTP_200_OK)
