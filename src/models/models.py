@@ -58,6 +58,13 @@ class ImagesLog(BaseModel):
     image_string = Column(String(255))
 
 
+class PdfLog(BaseModel):
+    __tablename__ = "pdf_log"
+    user_id = Column(Integer, ForeignKey("users.id"))
+    name = Column(String(100))
+    service_name = Column(String(100))
+    pdf_string = Column(String(255))
+
 
 # admin panel
 
