@@ -18,9 +18,8 @@ def create(data_in: PatientIndicatorBase, db: Session = Depends(get_db), current
 
 
 @router.get('/{key}', response_model=List[PatientIndicatorOut])
-def get_by_key(key: str, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_patient)):
-    indicators = patient_indicators_service.get_by_key(
-        db, key, user_id=current_user.id)
+def get_by_key(key: str, skip:int=0, limit:int=10, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_patient)):
+    indicators = patient_indicators_service.get_by_key(db=db, key=key, user_id=current_user.id, skip=skip, limit=limit)
     return handle_result(indicators)
 
 
