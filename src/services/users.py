@@ -60,7 +60,7 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
         return ServiceResult(data, status_code=status.HTTP_201_CREATED)
 
 
-    def user_search_by_phone(self, db: Session, phone_in: str, skip: int=0, limit:int = 10):
+    def user_search_by_phone(self, db: Session, phone_in: str='0', skip: int=0, limit:int = 10):
         data_all = users_repo.search_by_phone_all(db=db, phone_in=phone_in, skip=skip, limit=limit)
         data = []
 
@@ -69,7 +69,7 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
             i.role_name = handle_result(role_name).name
             data.append(i)
         if not data:
-            return ServiceResult(AppException.ServerError("Something went wrong!"))
+            return ServiceResult([], status_code=status.HTTP_200_OK)
         return ServiceResult(data, status_code=status.HTTP_200_OK)
 
 
