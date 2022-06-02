@@ -153,7 +153,7 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
             email=data_in.email,
             phone=data_in.phone,
             sex=data_in.sex,
-            is_active=False,
+            is_active=True,
             password=data_in.password,
             role_name='doctor'
         )
