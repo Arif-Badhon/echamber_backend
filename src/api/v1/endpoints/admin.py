@@ -129,8 +129,8 @@ def patient_indicator(user_id: int, data_in: PatientIndicatorBase, db:Session=De
     return handle_result(indicator)
 
 @router.get('/patient/indicator/{key}/{user_id}', response_model=List[PatientIndicatorOut])
-def patient_indicator_get(key:str, user_id: int, db: Session = Depends(get_db), current_user:Session = Depends(logged_in)):
-    indicators = patient_indicators_service.get_by_key(db=db, key=key, user_id=user_id)
+def patient_indicator_get(key:str, user_id: int, skip:int=0, limit:int=10, db: Session = Depends(get_db), current_user:Session = Depends(logged_in)):
+    indicators = patient_indicators_service.get_by_key(db=db, key=key, user_id=user_id, skip=skip, limit=limit)
     return handle_result(indicators)
 
 
