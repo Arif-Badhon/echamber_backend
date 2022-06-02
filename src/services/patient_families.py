@@ -1,8 +1,7 @@
 from sqlalchemy.orm import Session
-import db
 from exceptions.app_exceptions import AppException
 from exceptions.service_result import ServiceResult, handle_result
-from services import BaseService
+from services import BaseService, users_service
 from models import PatientFamily
 from schemas import PatientFamilyIn, PatientFamilyUpdate
 from repositories import patient_families_repo
@@ -14,6 +13,14 @@ class PatientFamilyService(BaseService[PatientFamily, PatientFamilyIn, PatientFa
     
     def search_by_user_id(self, db: Session, user_id:int):
         data = self.repo.search_by_user_id(db=db, user_id=user_id)
+
+
+        data_with_name = []
+        # here name merge by their user id
+        for i in data:
+            i.relation_from_name = handle_result(users_service.get_one(db=db,id=i.user_id)).name
+            i.relation_with_name = handle_result(users_service.get_one(db=db,id=i.relation_with)).name
+            data_with_name.append(i)
 
         if not data:
             return ServiceResult(AppException.NotAccepted())

@@ -32,6 +32,8 @@ class PatientFamilyUpdate(PatientFamilyBase):
 class PatientFamilyOut(PatientFamilyBase):
     id: int 
     created_at: datetime
+    relation_from_name: Optional[str]
+    relation_with_name: Optional[str]
 
     class Config:
         orm_mode = True
