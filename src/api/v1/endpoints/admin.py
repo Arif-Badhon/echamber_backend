@@ -23,6 +23,10 @@ def password_change_by_admin(user_id:int, password: NewPasswordIn ,db: Session =
     return handle_result(change_password)
 
 
+@router.patch('/role-change', response_model=AdminPanelActivityOut)
+def role_change_by_admin(id:int, role_name:str,  db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin)):
+    change = admin_service.role_change(db=db, id=id, user_id=current_user.id, role_name=role_name)
+    return handle_result(change)
 
 
 @router.get('/activity/log/all', response_model=List[Union[ResultInt, List[AdminPanelActivityAllOut]]])

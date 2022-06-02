@@ -31,10 +31,11 @@ class UserDBIn(UserBase):
 class UserUpdate(BaseModel):
     name: Optional[str]
     email: Optional[str]
-    phone: constr(
+    phone: Optional[constr(
         min_length=11, max_length=14, regex=r"(\+880)?[0-9]{11}"
-    )
+    )]
     sex: Optional[str]
+    role_id: Optional[int]
 
 
 class UserOut(UserBase):

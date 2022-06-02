@@ -1,3 +1,4 @@
+from re import L
 from exceptions.service_result import handle_result
 from services import BaseService
 from .user_details import user_details_service
@@ -60,6 +61,29 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
                 return ServiceResult(AppException.ServerError("Problem with patient by patient registration."))
             else:
                 return ServiceResult(created_by_employee, status_code=status.HTTP_201_CREATED)
+
+
+    def role_change(self, db:Session, id:int, user_id: int, role_name: str):
+        role_id = roles_repo.search_name_id(db=db, name=role_name)
+        user_role = users_repo.update(db=db, id=id, data_update=UserUpdate(role_id=role_id))
+
+        if not user_role:
+            return ServiceResult(AppException.NotAccepted())
+        else:
+            role_change_data = AdminPanelActivityIn(
+                user_id=user_id,
+                service_name="role_change",
+                service_recived_id=id,
+                remark=f"role change into - {role_name}"
+            )
+
+            created_by_admin = admin_panel_activity_repo.create(db=db, data_in=role_change_data)
+
+            if not created_by_admin:
+                return ServiceResult(AppException.ServerError("Problem with role change activity"))
+            else:
+                return ServiceResult(created_by_admin, status_code=status.HTTP_201_CREATED)
+
 
 
     def activity_log(self, db: Session, user_id:int, skip: int = 0, limit: int = 15 ):

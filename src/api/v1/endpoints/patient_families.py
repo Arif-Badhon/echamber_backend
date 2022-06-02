@@ -27,7 +27,7 @@ def pending_request(db: Session=Depends(get_db), current_user: Session = Depends
     data = patient_families_service.member_status(db=db, user_id=current_user.id, relationship_status='pending')
     return handle_result(data)
 
-@router.patch('/accept', response_model=PatientFamilyOut, description="<b>Accepted relationship_status: </b>accept, pending, reject")
+@router.patch('/accept', response_model=PatientFamilyOut, description="<b>Accepted relationship_status: </b>accepted, pending, reject")
 def update_relationship_status(id: int, relationship_status: str, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_patient)):
     update = patient_families_service.update_relationship_status(db=db, id=id, user_id=current_user.id, relationship_status=relationship_status)
     return handle_result(update)
