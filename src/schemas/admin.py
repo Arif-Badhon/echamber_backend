@@ -72,6 +72,7 @@ class AdminPatientsOut(BaseModel):
     register_by_id: Optional[int] = None 
     register_by_name: Optional[str] = None
     register_by_role: Optional[str] = None
+    company_name: Optional[str] = None
 
     class Config:
         orm_mode = True

@@ -121,6 +121,27 @@ class ServiceOrder(BaseModel):
     remarks = Column(String(255), nullable=True)
 
 
+# corporate partner
+
+class CorporatePartner(BaseModel):
+    __tablename__ = "corporate_partners"
+    name = Column(String(255), nullable=False)
+    type = Column(String(100), nullable=False)
+    district = Column(String(50), nullable=False)
+    detail_address = Column(String(255), nullable=True)
+    detail = Column(String(255), nullable=True)
+    phone = Column(String(255), nullable=False)
+    email = Column(String(255), nullable=True)
+    contact_person = Column(String(255), nullable= False)
+    contact_person_phone = Column(String(100), nullable= False)
+    contact_person_email = Column(String(100), nullable= True)
+
+class CorporatePartnerUsers(BaseModel):
+    __tablename__ = "corporate_partner_users"
+    corporate_id = Column(Integer, nullable=False)
+    users_id = Column(Integer, nullable=False)
+    department = Column(String(100), nullable=True)
+
 # health partner
 
 class HealthPartner(BaseModel):

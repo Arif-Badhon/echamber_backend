@@ -9,7 +9,7 @@ from .patient_indicators import patient_indicators_service
 from .users import users_service 
 from schemas import UserCreate, UserUpdate, AdminPanelActivityIn, UserDetailIn, PatientIndicatorIn, DoctorSignup, DoctorIn, DoctorQualilficationIn, DoctorSpecialityIn
 from models import User
-from repositories import admin_repo, roles_repo, admin_panel_activity_repo, users_repo
+from repositories import admin_repo, roles_repo, admin_panel_activity_repo, users_repo, corporate_partner_user_repo, corporate_partners_repo
 from sqlalchemy.orm import Session
 from exceptions import ServiceResult, AppException
 from fastapi import status
@@ -285,6 +285,14 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
                 i.register_by_id = None
                 i.register_by_name = None
                 i.register_by_role = None
+
+            # is he/she corporate
+            corporate = corporate_partner_user_repo.search_user_id(db=db, id=i.id)
+            if corporate:
+                comp_name = corporate_partners_repo.get_one(db=db, id= corporate.corporate_id)
+                i.company_name = comp_name.name
+            else:
+                i.company_name = None
 
             new_patients_list.append(i)
 
