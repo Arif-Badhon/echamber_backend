@@ -54,8 +54,9 @@ def user_by_id(id: int, db: Session = Depends(get_db), current_user: Session = D
     return handle_result(user)
 
 
-@router.get('/user/phone', response_model=List[UserOutAuth])
+@router.get('/user-search/phone', response_model=List[UserOutAuth])
 def user_by_phone(number: str, skip:int=0, limit:int=10,  db: Session = Depends(get_db), current_user: Session = Depends(logged_in)):
+    print(number)
     users = users_service.user_search_by_phone(db=db, phone_in=number, skip=skip, limit=limit)
     return handle_result(users)
 
