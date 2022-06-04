@@ -54,7 +54,7 @@ class AdminRepo(BaseRepo[User, UserCreate, UserUpdate]):
     
     # all patient repo
 
-    def patient_register_by_whome(self, db: Session, patient_id: int):
+    def patient_register_by_whom(self, db: Session, patient_id: int):
         """ This method reveal who registered a patient """
         query = db.query(AdminPanelActivity).filter(AdminPanelActivity.service_name == 'patient_register').filter(AdminPanelActivity.service_recived_id == patient_id).first()
         return query

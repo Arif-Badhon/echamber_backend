@@ -274,7 +274,7 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
 
         for i in patients[1]:
         
-            register_by = admin_repo.patient_register_by_whome(db=db, patient_id=i.id)
+            register_by = admin_repo.patient_register_by_whom(db=db, patient_id=i.id)
 
             if register_by:
                 register_detail = users_repo.get_one(db=db, id=register_by.user_id)

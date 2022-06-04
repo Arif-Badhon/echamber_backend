@@ -72,7 +72,7 @@ class AdminPanelActivity(BaseModel):
     __tablename__ = "admin_panel_activity"
     user_id = Column(Integer, ForeignKey("users.id"))
     service_name = Column(String(100), nullable=True)
-    service_recived_id = Column(Integer, nullable=True)
+    service_recived_id = Column(Integer, nullable=True)  # careful to change recived into received
     remark = Column(String(255), nullable=True)
 
 
@@ -177,16 +177,7 @@ class DoctorChamber(BaseModel):
 
 # Schedule
 # 0 means empty
-class DocotorSchedule(BaseModel):
-    __tablename__ = "doctor_schedules"
-    doctor_user_id = Column(Integer, ForeignKey("users.id"))
-    patient_id = Column(Integer, nullable=False)
-    chamber_id = Column(Integer, nullable=False)
-    service_order_id = Column(Integer, nullable=False)
-    booked = Column(Boolean, nullable=False)
-    date = Column(String(255), nullable=False)
-    time =  Column(Integer, nullable=False)
-    others = Column(Text, nullable=True)
+# doctor schedule delete here
 
 
 
@@ -247,7 +238,7 @@ class EpMedicineList(BaseModel):
 
 class EpChiefComplaintsList(BaseModel):
     __tablename__ = "ep_chief_complaints_list"
-    cc = Column(String(255), nullable=False)
+    chief_complaints = Column(String(255), nullable=False)
     inserted_by = Column(String(255), nullable= True)
 
 

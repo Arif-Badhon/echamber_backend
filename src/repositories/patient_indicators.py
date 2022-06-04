@@ -21,7 +21,7 @@ class PatientIndicatorRepo(BaseRepo[PatientIndicator,
         return self.create(db, data_for_db)
 
     def get_by_key(self, db: Session, key: str, user_id: int, skip: int, limit: int):
-        return db.query(self.model).filter(self.model.key == key).filter(self.model.user_id == user_id).offset(skip).limit(limit).all()
+        return db.query(self.model).filter(self.model.key == key).filter(self.model.user_id == user_id).order_by(desc(self.model.created_at)).offset(skip).limit(limit).all()
 
     def get_last_item(self, db: Session, key: str, user_id: int):
         last_single = db.query(self.model).filter(self.model.key == key).filter(self.model.user_id == user_id).order_by(desc(self.model.created_at)).first()
