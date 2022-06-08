@@ -6,7 +6,6 @@ from .notice import *
 from .admin_panel_activity import *
 from .corporate_partners import *
 from .corporate_partner_users import *
-from .service_order import *
 from .health_partner import *
 from .users import *
 from .user_details import *

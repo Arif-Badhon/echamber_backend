@@ -2,7 +2,7 @@ from pydantic import BaseModel
 
 
 class CcBase(BaseModel):
-    cc: str
+    chief_complaints: str
 
 
 class CcIn(CcBase):
@@ -15,7 +15,7 @@ class CcUpdate(CcBase):
 
 class CcOut(BaseModel):
     id: int
-    cc: str
+    chief_complaints: str
 
     class Config:
         orm_mode = True
