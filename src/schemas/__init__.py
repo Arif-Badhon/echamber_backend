@@ -17,6 +17,7 @@ from .doctor_schedules import *
 from .patients import *
 from .patient_families import *
 from .patient_indicators import *
+from .eprescription import *
 from .ep_chief_complaints import *
 from .ep_investigations import *
 from .ep_advices import *

@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
 from schemas import notice
-from .endpoints import admin, corporate_partners, notice, doctor_chambers, doctors_search, doctor_schedules, users, roles, doctors, patients, user_details, patient_indicators, patient_reports, patient_families, ep_medicines, ep_chief_complaints, ep_investigations, ep_advices
+from .endpoints import admin, corporate_partners, notice, doctor_chambers, doctors_search, doctor_schedules, users, roles, doctors, patients, user_details, patient_indicators, patient_reports, patient_families, eprescription, ep_medicines, ep_chief_complaints, ep_investigations, ep_advices
 
 api_router = APIRouter()
 
@@ -20,6 +20,7 @@ api_router.include_router(patients.router, prefix='/patients', tags=['Patients']
 api_router.include_router(patient_indicators.router, prefix='/patient/indicators', tags=['Patient Indicators'])
 api_router.include_router(patient_reports.router, prefix='/patient/reports', tags=['Patients Report'])
 api_router.include_router(patient_families.router, prefix='/patient/family', tags=['Patient\'s family'])
+api_router.include_router(eprescription.router, prefix='/ep', tags=['E-Prescription'])
 api_router.include_router(ep_medicines.router, prefix='/medicines', tags=['Medicines'])
 api_router.include_router(ep_chief_complaints.router, prefix='/chief-complaints', tags=['Chief Complaints'])
 api_router.include_router(ep_investigations.router, prefix='/investigations', tags=['Investigations'])

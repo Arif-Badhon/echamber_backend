@@ -17,6 +17,28 @@ class PatientService(BaseService[Patient, PatientIn, PatientUpdate]):
             return ServiceResult(AppException.NotFound("Patient not found"))
         else:
             return ServiceResult(patient_detail, status_code=status.HTTP_200_OK)
+    
+    def search_by_patient_name(self, db: Session, name: str, skip:int, limit: int):
+        patients = self.repo.search_by_patient_name(db=db, name=name, skip=skip, limit=limit)
+
+        data = []
+
+        for i in patients:
+            detail = user_details_service.get_by_user_id(db=db, id=i.id)
+            if not detail:
+                i.dob = None
+                i.division = None 
+                # i.blood_group = None
+            else:
+                i.dob = handle_result(detail).dob
+                i.division = handle_result(detail).division
+                i.blood_group = handle_result(detail).blood_group
+            data.append(i)
+
+        if not data:
+            return ServiceResult([], status_code=status.HTTP_200_OK)
+        else:
+            return ServiceResult(data, status_code=status.HTTP_200_OK)
 
     def update_by_user_id(self, db: Session, user_id: int, data_update: UpdateSchemaType):
         exist = self.repo.get_by_user_id(db, user_id)
