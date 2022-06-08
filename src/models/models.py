@@ -87,8 +87,42 @@ class Notice(BaseModel):
     status = Column(Boolean, default=True)
 
 
+###########################
+# service order dashboard #
+###########################
 
-# service order dashboard
+class ServiceOrder(BaseModel):
+    __tablename__ = "service_order"
+    service_name: Column(String(100), nullable=False)
+    service_id: Column(Integer, nullable=True)
+    patient_id: Column(Integer, nullable=False)
+    order_placement: Column(DateTime, nullable=True)
+    order_completion: Column(DateTime, nullable=True)
+    order_value: Column(Integer, nullable=False)
+    discount_percent = Column(Integer, nullable=False)
+    payable_amount: Column(Integer, nullable=False)
+    payment_by_customer: Column(Integer, nullable=False)
+    payment_pending: Column(Integer, nullable=False)
+    paymet_method: Column(String(100), nullable=True)
+    payment_status: Column(String(100), nullable=True)
+    last_payment_date: Column(DateTime, nullable=True)
+    service_provider_type = Column(String(100), nullable=True)
+    service_provider_id = Column(Integer, nullable=True)
+    service_provider_fee = Column(Integer, nullable=True)
+    service_provider_fee_paid = Column(Integer, nullable=True)
+    service_provider_fee_pending = Column(Integer, nullable=True)
+    service_provider_fee_last_update = Column(DateTime, nullable=True)
+    service_provider_fee_status = Column(String(100), nullable=True)
+    referral_type = Column(String(100), nullable=True)
+    referral_id = Column(Integer, nullable=True) 
+    referral_provider_fee = Column(Integer, nullable=True)
+    referral_provider_fee_paid = Column(Integer, nullable=True)
+    referral_provider_fee_pending = Column(Integer, nullable=True)
+    referral_provider_fee_last_update = Column(DateTime, nullable=True)
+    referral_provider_fee_status = Column(String(100), nullable=True)
+    current_address = Column(String(255), nullable=True)
+    remarks = Column(String(255), nullable=True)
+
 
 
 
