@@ -23,11 +23,23 @@ class ABSRepo(ABC):
         pass
     
     @abstractmethod
+    def create_commit_after_flush(self, db: Session, data_obj: ModelType):
+        pass
+
+    @abstractmethod
     def get(self, db: Session) -> List[ModelType]:
         pass
 
     @abstractmethod
     def get_one(self, db: Session, id: int) -> ModelType:
+        pass
+
+    @abstractmethod
+    def get_with_pagination(self, db: Session, skip:int, limit: int, descending: bool = False):
+        pass
+
+    @abstractmethod
+    def get_by_key(self, db: Session, skip: int, limit: int, descending: bool, count_results: bool, **kwargs):
         pass
 
     @abstractmethod

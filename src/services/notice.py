@@ -19,16 +19,6 @@ class NoticeService(BaseService[Notice, NoticeIn, NoticeUpdate]):
 
 
 
-    def notice_by_portal(self, db:Session, portal:str,  skip: int, limit: int):
-        portal = self.repo.notice_by_portal(db=db, portal=portal, skip=skip, limit=limit)
-
-        if not portal:
-            return ServiceResult([], status_code=status.HTTP_200_OK)
-        else:
-            return ServiceResult(portal, status_code=status.HTTP_200_OK)
-
-
-
     def create_with_user(self, db: Session, data_in: NoticeBase, user_id: int):
         notice = self.repo.create_with_user(db=db, data_in=data_in,user_id=user_id)
 

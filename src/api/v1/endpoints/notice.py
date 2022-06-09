@@ -13,7 +13,7 @@ router = APIRouter()
 
 @router.get('/', response_model=List[NoticeOut])
 def all_notice(skip: int = 0, limit: int = 10, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin_moderator)):
-    all = notice_service.all_notice(db=db, skip=skip, limit=limit)
+    all = notice_service.get_with_pagination(db=db, skip=skip, limit=limit)
     return handle_result(all)
 
 
@@ -24,7 +24,7 @@ def create_notice( data_in:NoticeBase ,db: Session = Depends(get_db), current_us
 
 @router.get('/portal', response_model=List[NoticeOut])
 def get_by_portal(portal:str, skip:int = 0, limit:int = 10, db:Session = Depends(get_db), current_user: Session = Depends(logged_in)):
-    portal = notice_service.notice_by_portal(db=db, portal=portal, skip=skip, limit=limit)
+    portal = notice_service.get_by_key(db=db, skip=skip, limit=limit, descending=True, count_results=False, portal=portal)
     return handle_result(portal)
 
 
