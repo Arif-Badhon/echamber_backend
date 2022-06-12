@@ -32,8 +32,7 @@ class ServiceOrderService(BaseService[ServiceOrder, ServiceOrderIn, ServiceOrder
         medicine_list_len = len(data_in[1])
         i = 0
         while i < medicine_list_len:
-            c = medicine_order_service.create_with_flush(db=db, data_in=MedicineOrderInWithService(service_order_id=handle_result(service_flash).id, **data_in[1][i].dict()))
-            print(handle_result(c).id)
+            medicine_order_service.create_with_flush(db=db, data_in=MedicineOrderInWithService(service_order_id=handle_result(service_flash).id, **data_in[1][i].dict()))
             i += 1
 
         #activitylog
