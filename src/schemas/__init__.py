@@ -4,6 +4,8 @@ from .image_log import *
 from .pdf_log import *
 from .admin import *
 from .notice import *
+from .service_order import *
+from .medicine_order import *
 from .corporate_partners import *
 from .health_partner import *
 from .user_details import *

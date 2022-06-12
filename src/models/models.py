@@ -92,20 +92,19 @@ class Notice(BaseModel):
 ###########################
 
 class ServiceOrder(BaseModel):
-    __tablename__ = "service_order"
-    service_name: Column(String(100), nullable=False)
-    service_id: Column(Integer, nullable=True)
-    patient_id: Column(Integer, nullable=False)
-    order_placement: Column(DateTime, nullable=True)
-    order_completion: Column(DateTime, nullable=True)
-    order_value: Column(Integer, nullable=False)
+    __tablename__ = "service_orders"
+    service_name = Column(String(100), nullable=False)
+    patient_id = Column(Integer, nullable=False)
+    order_placement = Column(DateTime, nullable=True)
+    order_completion = Column(DateTime, nullable=True)
+    order_value = Column(Integer, nullable=False)
     discount_percent = Column(Integer, nullable=False)
-    payable_amount: Column(Integer, nullable=False)
-    payment_by_customer: Column(Integer, nullable=False)
-    payment_pending: Column(Integer, nullable=False)
-    paymet_method: Column(String(100), nullable=True)
-    payment_status: Column(String(100), nullable=True)
-    last_payment_date: Column(DateTime, nullable=True)
+    payable_amount = Column(Integer, nullable=False)
+    payment_by_customer = Column(Integer, nullable=False)
+    payment_pending = Column(Integer, nullable=False)
+    payment_method = Column(String(100), nullable=True)
+    payment_status = Column(String(100), nullable=True)
+    last_payment_date = Column(DateTime, nullable=True)
     service_provider_type = Column(String(100), nullable=True)
     service_provider_id = Column(Integer, nullable=True)
     service_provider_fee = Column(Integer, nullable=True)
@@ -124,6 +123,24 @@ class ServiceOrder(BaseModel):
     remarks = Column(String(255), nullable=True)
 
 
+
+class MedicineOrder(BaseModel):
+    __tablename__ = "medicine_orders"
+    service_order_id = Column(Integer, nullable=False)
+    name = Column(String(100), nullable=True)
+    generic = Column(String(100), nullable=True)
+    strength = Column(String(100), nullable=True)
+    pharmaceuticals = Column(String(100), nullable=True)
+    quantity = Column(Integer, nullable=False)
+    unit_price_tp = Column(Integer, nullable=True)
+    unit_price_mrp = Column(Integer, nullable=False)
+    unit_discount_percent = Column(Integer, nullable=False)
+    total = Column(Integer, nullable=False)
+
+
+################
+#   Partners   #
+################
 
 
 # corporate partner

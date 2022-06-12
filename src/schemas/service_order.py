@@ -11,11 +11,11 @@ class ServiceOrderBase(BaseModel):
     order_value: Optional[int] = None
     discount_percent: Optional[int] = None
     payable_amount: Optional[int] = None
-    payment_customer: Optional[int] = None
+    payment_by_customer: Optional[int] = None
     payment_pending: Optional[int] = None
-    payment_date: Optional[datetime] = None
     payment_method: Optional[str] = None
     payment_status: Optional[str] = None
+    last_payment_date: Optional[datetime] = None
     service_provider_type: Optional[str] = None
     service_provider_id: Optional[int] = None
     service_provider_fee: Optional[int] = None
@@ -35,6 +35,7 @@ class ServiceOrderBase(BaseModel):
 
 class ServiceOrderIn(ServiceOrderBase):
     pass 
+
 
 class ServiceOrderUpdate(ServiceOrderBase):
     pass

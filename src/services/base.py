@@ -29,6 +29,12 @@ class BaseService(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         return ServiceResult(data, status_code=status.HTTP_201_CREATED)
 
 
+    def create_with_flush(self, db: Session, data_in: CreateSchemaType):
+        data = self.repo.create(db, data_in)
+        if not data:
+            return ServiceResult(AppException.ServerError("Something went wrong!"))
+        return ServiceResult(data, status_code=status.HTTP_201_CREATED)
+
 
     def get(self, db: Session):
         data = self.repo.get(db)

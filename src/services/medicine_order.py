@@ -1,0 +1,6 @@
+from models import MedicineOrder
+from schemas import MedicineOrderIn, MedicineOrderInWithService, MedicineOrderUpdate
+from repositories import medicine_order_repo
+from services import BaseService
+
+medicine_order_service = BaseService[MedicineOrder, MedicineOrderInWithService, MedicineOrderUpdate](MedicineOrder,medicine_order_repo)
