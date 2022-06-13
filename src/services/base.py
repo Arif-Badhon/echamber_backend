@@ -53,10 +53,9 @@ class BaseService(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
 
 
 
-    def get_with_pagination(self, db:Session, skip:int, limit:int, descending:bool = False):
-        data = self.repo.get_with_pagination(db=db, skip=skip, limit=limit, descending=descending)
+    def get_with_pagination(self, db:Session, skip:int, limit:int, descending:bool = False, count_results: bool = False):
+        data = self.repo.get_with_pagination(db=db, skip=skip, limit=limit, descending=descending, count_results=count_results)
 
-        data = self.repo.get(db)
         if not data:
             data = []
         return ServiceResult(data, status_code=status.HTTP_200_OK)
