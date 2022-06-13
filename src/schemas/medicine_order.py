@@ -6,6 +6,7 @@ from pydantic import BaseModel
 class MedicineOrderBase(BaseModel):
     name: Optional[str] = None
     generic: Optional[str] = None
+    form: Optional[str] = None
     strength: Optional[str] = None
     pharmaceuticals: Optional[str] = None
     quantity: Optional[int] = None
@@ -18,6 +19,7 @@ class MedicineOrderBase(BaseModel):
 class MedicineOrderIn(MedicineOrderBase):
     name: Optional[str] = None
     generic: Optional[str] = None
+    form: Optional[str] = None
     strength: Optional[str] = None
     pharmaceuticals: Optional[str] = None
     quantity: Optional[int] = None
@@ -30,6 +32,7 @@ class MedicineOrderInWithService(MedicineOrderBase):
     service_order_id: Optional[int] = None
     name: Optional[str] = None
     generic: Optional[str] = None
+    form: Optional[str] = None
     strength: Optional[str] = None
     pharmaceuticals: Optional[str] = None
     quantity: Optional[int] = None

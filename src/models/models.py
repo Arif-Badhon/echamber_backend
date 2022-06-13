@@ -129,6 +129,7 @@ class MedicineOrder(BaseModel):
     service_order_id = Column(Integer, nullable=False)
     name = Column(String(100), nullable=True)
     generic = Column(String(100), nullable=True)
+    form = Column(String(100), nullable=True)
     strength = Column(String(100), nullable=True)
     pharmaceuticals = Column(String(100), nullable=True)
     quantity = Column(Integer, nullable=False)
