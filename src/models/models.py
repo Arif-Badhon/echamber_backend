@@ -278,6 +278,8 @@ class EpMedicineList(BaseModel):
     form = Column(String(255), nullable=False)
     strength = Column(String(255), nullable=False)
     pharmaceuticals = Column(String(255), nullable=False)
+    unit_type = Column(String(100), nullable=True)
+    unit_price = Column(Float, nullable=True)
 
 
 class EpChiefComplaintsList(BaseModel):
