@@ -9,11 +9,11 @@ class MedicineOrderBase(BaseModel):
     form: Optional[str] = None
     strength: Optional[str] = None
     pharmaceuticals: Optional[str] = None
-    quantity: Optional[int] = None
-    unit_price_tp: Optional[int] = None
-    unit_price_mrp: Optional[int] = None
-    unit_discount_percent: Optional[int] = None
-    total: Optional[int] = None
+    quantity: Optional[float] = None
+    unit_price_tp: Optional[float] = None
+    unit_price_mrp: Optional[float] = None
+    unit_discount_percent: Optional[float] = None
+    total: Optional[float] = None
 
 
 class MedicineOrderIn(MedicineOrderBase):
@@ -22,11 +22,11 @@ class MedicineOrderIn(MedicineOrderBase):
     form: Optional[str] = None
     strength: Optional[str] = None
     pharmaceuticals: Optional[str] = None
-    quantity: Optional[int] = None
-    unit_price_tp: Optional[int] = None
-    unit_price_mrp: Optional[int] = None
-    unit_discount_percent: Optional[int] = None
-    total: Optional[int] = None
+    quantity: Optional[float] = None
+    unit_price_tp: Optional[float] = None
+    unit_price_mrp: Optional[float] = None
+    unit_discount_percent: Optional[float] = None
+    total: Optional[float] = None
 
 class MedicineOrderInWithService(MedicineOrderBase):
     service_order_id: Optional[int] = None
@@ -35,11 +35,11 @@ class MedicineOrderInWithService(MedicineOrderBase):
     form: Optional[str] = None
     strength: Optional[str] = None
     pharmaceuticals: Optional[str] = None
-    quantity: Optional[int] = None
-    unit_price_tp: Optional[int] = None
-    unit_price_mrp: Optional[int] = None
-    unit_discount_percent: Optional[int] = None
-    total: Optional[int] = None
+    quantity: Optional[float] = None
+    unit_price_tp: Optional[float] = None
+    unit_price_mrp: Optional[float] = None
+    unit_discount_percent: Optional[float] = None
+    total: Optional[float] = None
 
 
 class MedicineOrderUpdate(MedicineOrderBase):
