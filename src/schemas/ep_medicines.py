@@ -1,3 +1,4 @@
+from typing import Optional
 from pydantic import BaseModel
 
 
@@ -7,6 +8,8 @@ class MedicineBase(BaseModel):
     form: str
     strength: str
     pharmaceuticals: str
+    unit_type: Optional[str] = None
+    unit_price: Optional[float] = None
 
 
 class MedicineIn(MedicineBase):
