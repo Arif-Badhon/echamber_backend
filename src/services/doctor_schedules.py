@@ -1,12 +1,7 @@
-# from models import DocotorSchedule
-# from schemas import DoctorScheduleIn, DoctorScheduleUpdate
-# from services import BaseService
-# from repositories import doctor_schedules_repo
+from models import DoctorSchedule
+from schemas import DoctorScheduleIn, DoctorScheduleUpdate
+from services import BaseService
+from repositories import doctor_schedule_repo
 
 
-# class DoctorScheduleService(BaseService[DocotorSchedule, DoctorScheduleIn, DoctorScheduleUpdate]):
-#     def nothing():
-#         return 
-
-
-# doctor_schedules_service = DoctorScheduleService(DocotorSchedule, doctor_schedules_repo)
+doctor_schedule_service = BaseService[DoctorSchedule, DoctorScheduleIn, DoctorScheduleUpdate](DoctorSchedule, doctor_schedule_repo)

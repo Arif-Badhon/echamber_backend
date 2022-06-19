@@ -1,5 +1,5 @@
 from email.policy import default
-from sqlalchemy import Column, ForeignKey, Integer, Boolean, String, Text, Date, Float, DateTime
+from sqlalchemy import Column, ForeignKey, Integer, Boolean, String, Text, Date, Float, DateTime, Time
 from models import BaseModel
 from sqlalchemy.orm import relationship
 
@@ -219,10 +219,13 @@ class DoctorChamber(BaseModel):
     user_doctors_chamber = relationship("User", back_populates="doctors_chamber")
 
 
-# Schedule
-# 0 means empty
-# doctor schedule delete here
-
+class DoctorSchedule(BaseModel):
+    __tablename__ = "doctor_schedules"
+    user_id = Column(Integer, ForeignKey("users.id"))
+    day = Column(Integer, nullable=False)
+    hours = Column(Integer, nullable=False)
+    minutes =  Column(Integer, nullable=False)
+    am_pm = Column(String(100), nullable=False)
 
 
 # Patient related models

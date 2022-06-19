@@ -1,11 +1,5 @@
-# from repositories import BaseRepo
-# from schemas import DoctorScheduleIn, DoctorChamberUpdate
-# from models import DocotorSchedule
+from models import DoctorSchedule
+from schemas import DoctorScheduleIn, DoctorScheduleUpdate
+from repositories import BaseRepo
 
-# class DoctorScheduleRepo(BaseRepo[DocotorSchedule, DoctorScheduleIn, DoctorChamberUpdate]):
-#     def nothing():
-#         return
-
-
-
-# doctor_schedules_repo = DoctorScheduleRepo(DocotorSchedule)
+doctor_schedule_repo = BaseRepo[DoctorSchedule, DoctorScheduleIn, DoctorScheduleUpdate](DoctorSchedule)
