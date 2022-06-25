@@ -1,0 +1,6 @@
+from repositories import health_plan_for_patient_repo
+from services import BaseService
+from models import HealthPlanForPatient
+from schemas import HealthPlanForPatientIn, HealthPlanForPatientUpdate
+
+health_plan_for_patient_service = BaseService[HealthPlanForPatient, HealthPlanForPatientIn, HealthPlanForPatientUpdate](HealthPlanForPatient, health_plan_for_patient_repo)

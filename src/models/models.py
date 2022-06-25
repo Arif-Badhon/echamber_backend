@@ -139,6 +139,27 @@ class MedicineOrder(BaseModel):
     total = Column(Float, nullable=False)
 
 
+
+class HealthPlanList(BaseModel):
+    __tablename__ = "health_plan_list"
+    name = Column(String(255), nullable=False)
+    details = Column(Text, nullable=True)
+    voucher_code = Column(String(100), nullable=True)
+    total_patients = Column(Integer, nullable=False)
+    expire_status = Column(Boolean, nullable=True)
+    expire_date = Column(Date, nullable=True)
+
+
+class HealthPlanForPatient(BaseModel):
+    __tablename__ = "health_plan_for_patient"
+    health_plan_id = Column(Integer, nullable=False)
+    user_id = Column(Integer, nullable=False)
+    register_by = Column(Integer, nullable=False)
+    discount_percent = Column(Integer, nullable=True)
+    days = Column(Integer, nullable=True)
+
+
+
 ################
 #   Partners   #
 ################

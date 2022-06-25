@@ -5,6 +5,8 @@ from .image_log import *
 from .pdf_log import *
 from .notice import *
 from .service_order import *
+from .health_plan_list import *
+from .health_plan_for_patient import *
 from .medicine_order import *
 from .corporate_partners import * 
 from .corporate_partner_users import *
