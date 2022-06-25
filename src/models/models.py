@@ -97,6 +97,7 @@ class ServiceOrder(BaseModel):
     patient_id = Column(Integer, nullable=False)
     order_placement = Column(DateTime, nullable=True)
     order_completion = Column(DateTime, nullable=True)
+    order_status = Column(String(100), nullable=True)
     order_value = Column(Integer, nullable=False)
     discount_percent = Column(Integer, nullable=False)
     payable_amount = Column(Integer, nullable=False)
@@ -135,6 +136,7 @@ class MedicineOrder(BaseModel):
     quantity = Column(Float, nullable=False)
     unit_price_tp = Column(Float, nullable=True)
     unit_price_mrp = Column(Float, nullable=False)
+    total_mrp = Column(Float, nullable=False)
     unit_discount_percent = Column(Float, nullable=False)
     total = Column(Float, nullable=False)
 

@@ -8,6 +8,7 @@ class ServiceOrderBase(BaseModel):
     patient_id: Optional[int] = None
     order_placement: Optional[datetime] = None
     order_completion: Optional[datetime] = None
+    order_status: Optional[str] = None
     order_value: Optional[int] = None
     discount_percent: Optional[int] = None
     payable_amount: Optional[int] = None
