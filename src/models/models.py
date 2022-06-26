@@ -125,6 +125,16 @@ class ServiceOrder(BaseModel):
 
 
 
+class FollowUp(BaseModel):
+    __tablename__ = "follow_up"
+    service_id = Column(Integer, nullable=True)
+    title = Column(String(100), nullable=True)
+    remarks = Column(String(255), nullable=True)
+    status = Column(String(100), nullable=True)
+    followup_date = Column(Date, nullable=True)
+
+
+
 class MedicineOrder(BaseModel):
     __tablename__ = "medicine_orders"
     service_order_id = Column(Integer, nullable=False)
