@@ -12,7 +12,7 @@ router = APIRouter()
 
 @router.get('/', response_model=List[Union[ResultInt,List[ServiceOrderOut]]], description='Access: employee')
 def all_service_order(skip:int = 0, limit:int=15 ,db: Session = Depends(get_db), current_user: Session = Depends(logged_in_employee)):
-    data = service_order_service.get_with_pagination(db=db, skip=skip, limit=limit, descending=True, count_results=True)
+    data = service_order_service.all_service_order(db=db, skip=skip, limit=limit)
     return handle_result(data)
     
 

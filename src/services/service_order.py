@@ -6,10 +6,31 @@ from schemas import ServiceOrderIn, ServiceOrderUpdate, MedicineOrderIn, Medicin
 from repositories import service_order_repo, medicine_order_repo, admin_panel_activity_repo
 from services import BaseService
 from .medicine_order import medicine_order_service
+from .users import users_service
 from sqlalchemy.orm import Session
 
 class ServiceOrderService(BaseService[ServiceOrder, ServiceOrderIn, ServiceOrderUpdate]):
 
+    # All Service order with detail
+    #------------------------------
+
+    def all_service_order(self, db: Session, skip:int, limit:int):
+        data = service_order_repo.get_with_pagination(db=db, skip=skip, limit=limit, descending=True, count_results=True)
+
+        final_data = [data[0]]
+        
+        new_data = []
+        for i in data[1]:
+            i.patient_name = handle_result(users_service.get_one(db=db, id=i.patient_id)).name
+            i.patient_phone = handle_result(users_service.get_one(db=db, id=i.patient_id)).phone
+            new_data.append(i)
+        
+        final_data.append(new_data)
+
+        if not final_data:
+            [{"results":0}, []]
+        else:
+            return ServiceResult(final_data, status_code=status.HTTP_201_CREATED)
     # order keyword
     #--------------
     # medicine order = medicine_order
