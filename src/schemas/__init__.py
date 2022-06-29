@@ -7,6 +7,7 @@ from .notice import *
 from .service_order import *
 from .health_plan import *
 from .medicine_order import *
+from .follow_up import *
 from .corporate_partners import *
 from .health_partner import *
 from .user_details import *

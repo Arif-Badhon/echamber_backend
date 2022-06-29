@@ -1,10 +1,10 @@
 from datetime import date, datetime
-from typing import Optional
+from typing import Literal, Optional
 from pydantic import BaseModel
 
 class FollowUpBase(BaseModel):
     # service_id: int
-    status: str
+    status: Literal['pending', 'done']
     title: str
     remarks: str
     followup_date: date
@@ -19,7 +19,7 @@ class FollowUpInWithServiceId(FollowUpBase):
 
 
 class FollowUpUpdate(BaseModel):
-    status: Optional[str] = None
+    status: Literal['pending', 'done'] = None
     title: Optional[str] = None
     remarks: Optional[str] = None
     followup_date: Optional[date] = None
@@ -28,6 +28,10 @@ class FollowUpUpdate(BaseModel):
 class FollowUpOut(FollowUpBase):
     id: int
     service_id: int
+    status: str
+    title: str
+    remarks: str
+    followup_date: date
     created_at: datetime
 
     class Config:

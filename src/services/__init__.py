@@ -8,6 +8,7 @@ from .service_order import *
 from .health_plan_list import *
 from .health_plan_for_patient import *
 from .medicine_order import *
+from .follow_up import *
 from .corporate_partners import * 
 from .corporate_partner_users import *
 from .health_partner import *

@@ -84,6 +84,23 @@ def logged_in_admin_medical_affairs(credentials: HTTPBasicCredentials = Depends(
         raise AppException.Unauthorized()
 
 
+
+def logged_in_admin_crm(credentials: HTTPBasicCredentials = Depends(security), db: Session = Depends(get_db)):
+    user = logged_in(credentials, db)
+
+    role_name = roles_service.get_one(db, user.role_id)
+    role_name_obj = handle_result(role_name)
+
+    if(role_name_obj.name == 'admin' or role_name_obj.name == 'crm'):
+        if not user:
+            raise AppException.Unauthorized()
+        return user
+    else:
+        raise AppException.Unauthorized()
+
+
+
+
 def logged_in_employee(credentials: HTTPBasicCredentials = Depends(security), db: Session = Depends(get_db)):
     user = logged_in(credentials, db)
 
