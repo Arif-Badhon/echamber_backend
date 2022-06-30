@@ -59,7 +59,6 @@ class BaseRepo(Generic[ModelType, CreateSchemaType, UpdateSchemaType], ABSRepo):
     def get_with_pagination(self, db: Session, skip:int, limit: int, descending: bool = False, count_results: bool = False):
 
         query = db.query(self.model).all()
-        print(count_results)
 
         if descending == True:
             data = db.query(self.model).order_by(desc(self.model.created_at)).offset(skip).limit(limit).all()
