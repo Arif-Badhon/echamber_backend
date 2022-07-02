@@ -2,10 +2,11 @@ from typing import List
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from exceptions.service_result import handle_result
-from services import healtth_plan_list_service
-from schemas import HealthPlanListIn, HealthPlanListOut
+from schemas.health_plan import HealthPlanForPatientWithoutHealthPlanId
+from services import healtth_plan_list_service, health_plan_for_patient_service
+from schemas import HealthPlanListIn, HealthPlanListOut, HealthPlanForPatientIn, HealthPlanForPatientOut, AdminPanelActivityOut
 from db import get_db
-from api.v1.auth_dependcies import logged_in_admin
+from api.v1.auth_dependcies import logged_in, logged_in_admin, logged_in_employee
 
 router = APIRouter()
 
@@ -20,3 +21,15 @@ def get(db:Session = Depends(get_db)):
 def post(data_in: HealthPlanListIn, db: Session = Depends(get_db), current_user:Session = Depends(logged_in_admin)):
     health_plan = healtth_plan_list_service.create(db=db, data_in=data_in)
     return handle_result(health_plan)
+
+
+@router.get('/sbscribe/{id}', response_model=HealthPlanForPatientOut)
+def single_subscription(id: int, db: Session = Depends(get_db), current_user: Session=Depends(logged_in)):
+    hp = health_plan_for_patient_service.get_one(db=db, id=id)
+    return handle_result(hp)
+
+
+@router.post('/subscribe', response_model=AdminPanelActivityOut)
+def subscribe_plan(data_in:HealthPlanForPatientWithoutHealthPlanId, voucher_code:str, db: Session = Depends(get_db), current_user:Session=Depends(logged_in_employee)):
+    hp = health_plan_for_patient_service.subscribe_plan(db=db, data_in=data_in, voucher_code=voucher_code, employee_id=current_user.id)
+    return handle_result(hp)

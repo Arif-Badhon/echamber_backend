@@ -166,9 +166,12 @@ class HealthPlanForPatient(BaseModel):
     __tablename__ = "health_plan_for_patient"
     health_plan_id = Column(Integer, nullable=False)
     user_id = Column(Integer, nullable=False)
-    register_by = Column(Integer, nullable=False)
-    discount_percent = Column(Integer, nullable=True)
+    register_by_id = Column(Integer, nullable=False)
+    registered_date = Column(Date, nullable=True)
     days = Column(Integer, nullable=True)
+    fixed_amount = Column(Boolean, nullable=False)
+    amount = Column(Integer, nullable=True)
+    discount_percent = Column(Integer, nullable=True)
 
 
 
