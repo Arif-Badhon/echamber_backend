@@ -10,6 +10,10 @@ anyio==3.5.0
     # via starlette
 asgiref==3.5.0
     # via uvicorn
+bcrypt==3.2.2
+    # via -r requirements.in
+cffi==1.15.1
+    # via bcrypt
 click==8.0.4
     # via uvicorn
 ecdsa==0.17.0
@@ -44,6 +48,8 @@ pyasn1==0.4.8
     # via
     #   python-jose
     #   rsa
+pycparser==2.21
+    # via cffi
 pydantic==1.9.0
     # via fastapi
 python-dotenv==0.19.2
