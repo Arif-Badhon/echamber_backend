@@ -26,7 +26,7 @@ def single_service(id: int, db: Session = Depends(get_db), current_user: Session
 
 
 @router.get('/patient/{id}', response_model=List[Union[ResultInt, List[ServiceOrderOut]]])
-def patient_services(id: int, skip: int = 0, limit: int = 15, db: Session = Depends(get_db)):
+def patient_services(id: int, skip: int = 0, limit: int = 15, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_employee)):
     pt = service_order_service.get_by_key(
         db=db, skip=skip, limit=limit, descending=True, count_results=True, patient_id=id)
     return handle_result(pt)
