@@ -34,8 +34,9 @@ class ServiceOrderBase(BaseModel):
     current_address: Optional[str] = None
     remarks: Optional[str] = None
 
+
 class ServiceOrderIn(ServiceOrderBase):
-    pass 
+    pass
 
 
 class ServiceOrderUpdate(ServiceOrderBase):
@@ -46,6 +47,7 @@ class ServiceOrderOut(ServiceOrderBase):
     id: int
     patient_name: Optional[str] = None
     patient_phone: Optional[str] = None
+    followup: Optional[bool] = None
     created_at: date
     updated_at: Optional[date] = None
 

@@ -1,4 +1,3 @@
-from email.policy import default
 from sqlalchemy import Column, ForeignKey, Integer, Boolean, String, Text, Date, Float, DateTime, Time
 from models import BaseModel
 from sqlalchemy.orm import relationship

@@ -27,7 +27,7 @@ class Settings(BaseSettings):
             return v
         raise ValueError(v)
 
-    PROJECT_NAME: str = "E-Pharmacy"
+    PROJECT_NAME: str = "E-Chamber"
     SENTRY_DSN: Optional[HttpUrl] = None
 
     class Config:
