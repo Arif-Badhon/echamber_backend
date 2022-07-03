@@ -5,6 +5,7 @@ from .pdf_log import *
 from .admin import *
 from .notice import *
 from .service_order import *
+from .telemedicine_orders import *
 from .health_plan import *
 from .medicine_order import *
 from .follow_up import *

@@ -24,6 +24,7 @@ class ServiceOrderService(BaseService[ServiceOrder, ServiceOrderIn, ServiceOrder
         new_data = []
         for i in data[1]:
 
+            # Those are only bind here
             # for follow up flag
             fl = follow_up_repo.get_by_key(
                 db=db, skip=0, limit=100, descending=False, count_results=True, service_id=i.id)

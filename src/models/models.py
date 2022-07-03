@@ -136,8 +136,12 @@ class FollowUp(BaseModel):
 
 class TeleMedicineOrder(BaseModel):
     __tablename__ = "telemedicine_orders"
-    patient_id = Column(Integer, nullable=False)
-    doctor_id = Column(Integer, nullable=False)
+    service_order_id = Column(Integer, nullable=False)
+    health_plan_id = Column(Integer, nullable=True)
+    patient_id = Column(Integer, ForeignKey("users.id"))
+    doctor_id = Column(Integer, ForeignKey("users.id"))
+    schedule_id = Column(Integer, nullable=True)
+    date = Column(Date, nullable=True)
 
 
 class MedicineOrder(BaseModel):
