@@ -4,9 +4,10 @@ from db import get_db
 from exceptions.service_result import handle_result
 from schemas import ServiceOrderIn, MedicineOrderIn, AdminPanelActivityOut, ServiceOrderOut, ResultInt, MedicineOrderOut
 from sqlalchemy.orm import Session
-from api.v1.auth_dependcies import logged_in_admin_crm, logged_in_admin_moderator, logged_in_employee
+from api.v1.auth_dependcies import logged_in_admin, logged_in_admin_crm, logged_in_admin_moderator, logged_in_employee
 from schemas.medicine_order import MedicineOrderUpdate
 from schemas.service_order import ServiceOrderUpdate
+from schemas.telemedicine_orders import TelemedicineIn
 from services import service_order_service, medicine_order_service
 
 router = APIRouter()
@@ -36,6 +37,12 @@ def patient_services(id: int, skip: int = 0, limit: int = 15, db: Session = Depe
 def update_service(id: int, data_update: ServiceOrderUpdate, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin_crm)):
     up = service_order_service.update(db=db, id=id, data_update=data_update)
     return handle_result(up)
+
+
+@router.post('/telemedicine', response_model=AdminPanelActivityOut)
+def telemedicine_order(data_in: List[Union[ServiceOrderIn, TelemedicineIn]], db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin)):
+
+    return
 
 
 @router.post('/medicine', response_model=AdminPanelActivityOut, description='Access: admin and moderator')

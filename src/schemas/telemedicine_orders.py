@@ -3,7 +3,7 @@ from datetime import date
 from typing import Optional
 
 
-class TelemedicieBase(BaseModel):
+class TelemedicineBase(BaseModel):
     health_plan_id: Optional[int] = None
     patient_id: Optional[int] = None
     doctor_id: Optional[int] = None
@@ -11,11 +11,11 @@ class TelemedicieBase(BaseModel):
     date: date
 
 
-class TelemedicineIn(TelemedicieBase):
+class TelemedicineIn(TelemedicineBase):
     pass
 
 
-class TelemedicineInWithService(TelemedicieBase):
+class TelemedicineInWithService(TelemedicineBase):
     service_id: int
 
 
@@ -27,7 +27,7 @@ class TelemedicineUpdate(BaseModel):
     date: Optional[date] = None
 
 
-class TelemedicineOut(TelemedicieBase):
+class TelemedicineOut(TelemedicineBase):
     id: int
     service_id: Optional[int] = None
     created_at: int
