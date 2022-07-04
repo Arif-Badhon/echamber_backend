@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from api.v1.auth_dependcies import logged_in_patient
 from exceptions import handle_result
-from schemas import PatientOut, PatientSignup, UserDetailOut, NewPasswordIn, Token, ServiceOrderOut, ResultInt
+from schemas import PatientOut, PatientSignup, UserDetailOut, NewPasswordIn, Token, ServiceOrderOut, ResultInt, AdminPanelActivityOut, ServiceOrderIn, MedicineOrderIn
 from db import get_db
 from schemas import PatientBase, UserOut, UserOutAuth
 from services import patients_service, service_order_service
@@ -40,3 +40,10 @@ def all_services(skip: int = 0, limit: int = 15, db: Session = Depends(get_db), 
     services = service_order_service.get_by_key(
         db=db, skip=skip, limit=limit, descending=True, count_results=True, patient_id=current_user.id)
     return handle_result(services)
+
+
+@router.post('/service/medicines', response_model=AdminPanelActivityOut)
+def medicine_order(data_in: List[Union[ServiceOrderIn, List[MedicineOrderIn]]], db: Session = Depends(get_db), current_user: Session = Depends(logged_in_patient)):
+    medicine_order = service_order_service.medicine_order(
+        db=db, data_in=data_in, user_id=current_user.id)
+    return handle_result(medicine_order)
