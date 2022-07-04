@@ -2,7 +2,7 @@
 
 :root {
     --primary: #457dc3;
-    --secondary: #4885cf;
+    --secondary: #5a96df;
     --white: #fff;
     --grey: #dee6ee;
     --dark: #444;
@@ -38,8 +38,14 @@ h1{
 .hero a{
     color: var(--white);
     font-family: 'Roboto', sans-serif;
-    background: var(--primary);
+    font-weight: 500;
+    background-image: linear-gradient(to bottom, var(--secondary), var(--primary));
+    border: 1px solid var(--primary);
     padding: 17px 40px;
     border-radius: 5px;
     text-decoration: none;
+    transition: 500ms;
+}
+.hero a:hover{
+    background-image: linear-gradient(to bottom, var(--secondary), var(--primary), var(--primary));
 }
