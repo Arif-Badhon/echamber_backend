@@ -9,20 +9,21 @@ from utils import Token
 
 security = HTTPBearer()
 
-    # "name": "admin"
-    # "name": "moderator"
-    # "name": "doctor"
-    # "name": "patient"
-    # "name": "sales"
-    # "name": "medical_affairs"
- 
+# "name": "admin"
+# "name": "moderator"
+# "name": "doctor"
+# "name": "patient"
+# "name": "sales"
+# "name": "medical_affairs"
+
+
 def logged_in(credentials: HTTPBasicCredentials = Depends(security), db: Session = Depends(get_db)):
     token = credentials.credentials
     token_data = Token.validate_token(token)
     user = handle_result(users_service.get_one(db, id=token_data.user_id))
     role_name = roles_service.get_one(db, id=user.role_id)
     user.role_name = handle_result(role_name).name
-    
+
     if not user:
         raise AppException.Unauthorized()
     return user
@@ -84,7 +85,6 @@ def logged_in_admin_medical_affairs(credentials: HTTPBasicCredentials = Depends(
         raise AppException.Unauthorized()
 
 
-
 def logged_in_admin_crm(credentials: HTTPBasicCredentials = Depends(security), db: Session = Depends(get_db)):
     user = logged_in(credentials, db)
 
@@ -99,20 +99,18 @@ def logged_in_admin_crm(credentials: HTTPBasicCredentials = Depends(security), d
         raise AppException.Unauthorized()
 
 
-
-
 def logged_in_employee(credentials: HTTPBasicCredentials = Depends(security), db: Session = Depends(get_db)):
     user = logged_in(credentials, db)
 
     role_name = roles_service.get_one(db, user.role_id)
     role_name_obj = handle_result(role_name)
 
-    if(role_name_obj.name != 'doctor' or role_name_obj.name != 'patient'):
+    if(role_name_obj.name == 'doctor' or role_name_obj.name == 'patient'):
+        raise AppException.Unauthorized()
+    else:
         if not user:
             raise AppException.Unauthorized()
         return user
-    else:
-        raise AppException.Unauthorized()
 
 
 def logged_in_doctor(credentials: HTTPBasicCredentials = Depends(security), db: Session = Depends(get_db)):

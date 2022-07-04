@@ -21,7 +21,7 @@ class ABSRepo(ABC):
     @abstractmethod
     def create_with_flush(self, db: Session, data_in: CreateSchemaType):
         pass
-    
+
     @abstractmethod
     def create_commit_after_flush(self, db: Session, data_obj: ModelType):
         pass
@@ -35,7 +35,7 @@ class ABSRepo(ABC):
         pass
 
     @abstractmethod
-    def get_with_pagination(self, db: Session, skip:int, limit: int, descending: bool = False):
+    def get_with_pagination(self, db: Session, skip: int, limit: int, descending: bool = False):
         pass
 
     @abstractmethod

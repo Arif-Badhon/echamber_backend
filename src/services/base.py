@@ -4,7 +4,6 @@ from fastapi import status
 from db import Base
 from pydantic import BaseModel
 from repositories import BaseRepo
-from repositories import BaseRepo
 from exceptions import AppException, ServiceResult
 
 
@@ -20,21 +19,17 @@ class BaseService(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         self.model = model
         self.repo = repo
 
-
-
     def create(self, db: Session, data_in: CreateSchemaType):
         data = self.repo.create(db, data_in)
         if not data:
             return ServiceResult(AppException.ServerError("Something went wrong!"))
         return ServiceResult(data, status_code=status.HTTP_201_CREATED)
 
-
     def create_with_flush(self, db: Session, data_in: CreateSchemaType):
         data = self.repo.create(db, data_in)
         if not data:
             return ServiceResult(AppException.ServerError("Something went wrong!"))
         return ServiceResult(data, status_code=status.HTTP_201_CREATED)
-
 
     def get(self, db: Session):
         data = self.repo.get(db)
@@ -43,40 +38,33 @@ class BaseService(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
             # return ServiceResult(AppException.NotFound(f"No {self.model.__name__.lower}s found."))
         return ServiceResult(data, status_code=status.HTTP_200_OK)
 
-
-
     def get_one(self, db: Session, id: int):
         data = self.repo.get_one(db, id)
         if not data:
             return ServiceResult(AppException.NotFound(f"No {self.model.__name__.lower}s found."))
         return ServiceResult(data, status_code=status.HTTP_200_OK)
 
-
-
-    def get_with_pagination(self, db:Session, skip:int, limit:int, descending:bool = False, count_results: bool = False):
-        data = self.repo.get_with_pagination(db=db, skip=skip, limit=limit, descending=descending, count_results=count_results)
-
-        if not data:
-            data = []
-        return ServiceResult(data, status_code=status.HTTP_200_OK)
-
-    
-
-    def get_by_key(self, db: Session, skip: int, limit: int, descending: bool, count_results:bool, **kwargs):
-        data = self.repo.get_by_key(db=db, skip=skip, limit=limit, descending=descending, count_results=count_results, **kwargs)
+    def get_with_pagination(self, db: Session, skip: int, limit: int, descending: bool = False, count_results: bool = False):
+        data = self.repo.get_with_pagination(
+            db=db, skip=skip, limit=limit, descending=descending, count_results=count_results)
 
         if not data:
             data = []
         return ServiceResult(data, status_code=status.HTTP_200_OK)
 
+    def get_by_key(self, db: Session, skip: int, limit: int, descending: bool, count_results: bool, **kwargs):
+        data = self.repo.get_by_key(
+            db=db, skip=skip, limit=limit, descending=descending, count_results=count_results, **kwargs)
+
+        if not data:
+            data = []
+        return ServiceResult(data, status_code=status.HTTP_200_OK)
 
     def update(self, db: Session, id: int, data_update: UpdateSchemaType):
         data = self.repo.update(db, id, data_update)
         if not data:
             return ServiceResult(AppException.NotAccepted())
         return ServiceResult(data, status_code=status.HTTP_202_ACCEPTED)
-
-
 
     def delete(self, db: Session, id: int):
         remove = self.repo.delete(db, id)

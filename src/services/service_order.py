@@ -28,7 +28,6 @@ class ServiceOrderService(BaseService[ServiceOrder, ServiceOrderIn, ServiceOrder
             # for follow up flag
             fl = follow_up_repo.get_by_key(
                 db=db, skip=0, limit=100, descending=False, count_results=True, service_id=i.id)
-            print(fl[0]['results'])
             if fl[0]['results'] > 0:
                 i.followup = True
             else:
