@@ -23,7 +23,7 @@ def post(data_in: HealthPlanListIn, db: Session = Depends(get_db), current_user:
     return handle_result(health_plan)
 
 
-@router.patch('/{id}', response_model=HealthPlanForPatientOut)
+@router.patch('/{id}', response_model=HealthPlanListOut)
 def update(id: int, data_update: HealthPlanListUpdate, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin)):
     up = healtth_plan_list_service.update(
         db=db, id=id, data_update=data_update)

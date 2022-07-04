@@ -9,11 +9,12 @@ class HealthPlanListBase(BaseModel):
     voucher_code: str
     total_patients: int
     expire_status: bool
-    expire_date: date
+    expire_date: Optional[date] = None
 
 
 class HealthPlanListIn(HealthPlanListBase):
     pass
+
 
 class HealthPlanListUpdate(HealthPlanListBase):
     name: Optional[str] = None
@@ -43,6 +44,7 @@ class HealthPlanForPatientBase(BaseModel):
     amount: int
     discount_percent: int
 
+
 class HealthPlanForPatientIn(HealthPlanForPatientBase):
     pass
 
@@ -56,6 +58,7 @@ class HealthPlanForPatientWithoutHealthPlanId(BaseModel):
     amount: int
     discount_percent: int
 
+
 class HealthPlanForPatientUpdate(HealthPlanForPatientBase):
     health_plan_id: Optional[int] = None
     user_id: Optional[int] = None
@@ -66,8 +69,9 @@ class HealthPlanForPatientUpdate(HealthPlanForPatientBase):
     amount: Optional[int] = None
     discount_percent: Optional[int] = None
 
+
 class HealthPlanForPatientOut(HealthPlanForPatientBase):
-    id: int 
+    id: int
     created_at: datetime
 
     class Config:
