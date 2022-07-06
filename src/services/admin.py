@@ -95,7 +95,7 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
         activity = admin_panel_activity_repo.get_user_id_service(db=db, user_id=user_id, service_name=service_name, skip=skip, limit=limit)
 
         if not activity[1]:
-            return ServiceResult([], status_code=status.HTTP_200_OK)
+            return ServiceResult([{"results": 0}, []], status_code=status.HTTP_200_OK)
         else:
             return ServiceResult(activity, status_code=status.HTTP_200_OK)
 
