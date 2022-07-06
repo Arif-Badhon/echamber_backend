@@ -11,6 +11,7 @@ security = HTTPBearer()
 
 # "name": "admin"
 # "name": "moderator"
+# "name": "crm"
 # "name": "doctor"
 # "name": "patient"
 # "name": "sales"
@@ -43,20 +44,6 @@ def logged_in_admin(credentials: HTTPBasicCredentials = Depends(security), db: S
     return user
 
 
-def logged_in_moderator(credentials: HTTPBasicCredentials = Depends(security), db: Session = Depends(get_db)):
-    user = logged_in(credentials, db)
-
-    role_name = roles_service.get_one(db, user.role_id)
-    role_name_obj = handle_result(role_name)
-
-    if(role_name_obj.name != 'moderator'):
-        raise AppException.Unauthorized()
-
-    if not user:
-        raise AppException.Unauthorized()
-    return user
-
-
 def logged_in_admin_moderator(credentials: HTTPBasicCredentials = Depends(security), db: Session = Depends(get_db)):
     user = logged_in(credentials, db)
 
@@ -71,13 +58,13 @@ def logged_in_admin_moderator(credentials: HTTPBasicCredentials = Depends(securi
         raise AppException.Unauthorized()
 
 
-def logged_in_admin_medical_affairs(credentials: HTTPBasicCredentials = Depends(security), db: Session = Depends(get_db)):
+def logged_in_admin_moderator_medical_affairs(credentials: HTTPBasicCredentials = Depends(security), db: Session = Depends(get_db)):
     user = logged_in(credentials, db)
 
     role_name = roles_service.get_one(db, user.role_id)
     role_name_obj = handle_result(role_name)
 
-    if(role_name_obj.name == 'admin' or role_name_obj.name == 'medical_affairs'):
+    if(role_name_obj.name == 'admin' or role_name_obj.name == 'moderator' or role_name_obj.name == 'medical_affairs'):
         if not user:
             raise AppException.Unauthorized()
         return user
