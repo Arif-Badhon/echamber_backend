@@ -15,10 +15,10 @@ class TelemedicineService(BaseService[TeleMedicineOrder, TelemedicineInWithServi
     def create_with_service(self, db: Session, user_id, data_in: List[Union[ServiceOrderIn, TelemedicineIn]]):
 
         service = service_order_service.create_with_flush(
-            db=db, data_in=ServiceOrderIn(data_in[0]))
+            db=db, data_in=ServiceOrderIn(**data_in[0].dict()))
 
         telemed = telemedicine_service.create_with_flush(db=db, data_in=TelemedicineInWithService(
-            service_id=handle_result(service).id, **data_in[1].dict()))
+            service_order_id=handle_result(service).id, **data_in[1].dict()))
 
         # activitylog
         created_by_employee_data = AdminPanelActivityIn(

@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
 from schemas import notice
-from .endpoints import admin, corporate_partners, follow_up, notice, service_order, health_plan, doctor_chambers, doctors_search, doctor_schedules, users, roles, doctors, patients, user_details, patient_indicators, patient_reports, patient_families, eprescription, ep_medicines, ep_chief_complaints, ep_investigations, ep_advices
+from .endpoints import admin, corporate_partners, follow_up, notice, service_order, health_plan, telemedicine, doctor_chambers, doctors_search, doctor_schedules, users, roles, doctors, patients, user_details, patient_indicators, patient_reports, patient_families, eprescription, ep_medicines, ep_chief_complaints, ep_investigations, ep_advices
 
 api_router = APIRouter()
 
@@ -15,6 +15,7 @@ api_router.include_router(notice.router, prefix='/notice', tags=['Notice'])
 api_router.include_router(service_order.router, prefix='/service', tags=['Service Order'])
 api_router.include_router(follow_up.router, prefix='/follow-up', tags=['Follow-up'])
 api_router.include_router(health_plan.router, prefix='/health-plan', tags=['Health Plan'])
+api_router.include_router(telemedicine.router, prefix='/telemedicine', tags=['Telemedicine'])
 api_router.include_router(doctors.router, prefix='/doctors', tags=['Doctors'])
 api_router.include_router(doctor_chambers.router, prefix='/doctors/chamber', tags=['Doctor\'s Chamber'])
 api_router.include_router(doctors_search.router, prefix='/doctors/search', tags=['Doctor Search'])

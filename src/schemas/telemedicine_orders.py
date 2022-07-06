@@ -8,7 +8,7 @@ class TelemedicineBase(BaseModel):
     patient_id: Optional[int] = None
     doctor_id: Optional[int] = None
     schedule_id: Optional[int] = None
-    date: date
+    date: Optional[date] = None
 
 
 class TelemedicineIn(TelemedicineBase):
@@ -16,7 +16,7 @@ class TelemedicineIn(TelemedicineBase):
 
 
 class TelemedicineInWithService(TelemedicineBase):
-    service_id: int
+    service_order_id: int
 
 
 class TelemedicineUpdate(BaseModel):
@@ -29,7 +29,7 @@ class TelemedicineUpdate(BaseModel):
 
 class TelemedicineOut(TelemedicineBase):
     id: int
-    service_id: Optional[int] = None
+    service_order_id: Optional[int] = None
     created_at: int
 
     class Config:
