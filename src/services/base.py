@@ -49,7 +49,10 @@ class BaseService(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
             db=db, skip=skip, limit=limit, descending=descending, count_results=count_results)
 
         if not data:
-            data = []
+            if count_results is True:
+                data = [{"results": 0}, []]
+            else:
+                data = []
         return ServiceResult(data, status_code=status.HTTP_200_OK)
 
     def get_by_key(self, db: Session, skip: int, limit: int, descending: bool, count_results: bool, **kwargs):
