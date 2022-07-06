@@ -18,39 +18,45 @@ def signup(data_in: UserCreateWitoutRole, db: Session = Depends(get_db)):
 
 
 @router.post('/password', response_model=AdminPanelActivityOut)
-def password_change_by_admin(user_id:int, password: NewPasswordIn ,db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin_moderator)):
+def password_change_by_admin(user_id: int, password: NewPasswordIn, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin_moderator)):
     change_password = admin_service.password_changed_by_admin(db=db, user_id=user_id, password=password, changer_id=current_user.id)
     return handle_result(change_password)
 
 
 @router.patch('/role-change', response_model=AdminPanelActivityOut)
-def role_change_by_admin(id:int, role_name:str,  db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin)):
+def role_change_by_admin(id: int, role_name: str,  db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin)):
     change = admin_service.role_change(db=db, id=id, user_id=current_user.id, role_name=role_name)
     return handle_result(change)
 
 
 @router.get('/activity/log/all', response_model=List[Union[ResultInt, List[AdminPanelActivityAllOut]]])
-def activity_log( skip:int=0, limit:int=15, db:Session = Depends(get_db), current_user: Session = Depends(logged_in)):
+def activity_log(skip: int = 0, limit: int = 15, db: Session = Depends(get_db), current_user: Session = Depends(logged_in)):
     activity = admin_service.activity_log_all(db=db, skip=skip, limit=limit)
     return handle_result(activity)
 
 
 @router.get('/activity/log/{user_id}', response_model=List[Union[ResultInt, List[AdminPanelActivityOut]]])
-def activity_log( user_id: int, skip:int=0, limit:int=15, db:Session = Depends(get_db), current_user: Session = Depends(logged_in)):
+def activity_log(user_id: int, skip: int = 0, limit: int = 15, db: Session = Depends(get_db), current_user: Session = Depends(logged_in)):
     activity = admin_service.activity_log(db=db, user_id=user_id, skip=skip, limit=limit)
     return handle_result(activity)
 
 
 @router.get('/activity/log', response_model=List[Union[ResultInt, List[AdminPanelActivityOut]]])
-def activity_log(skip:int=0, limit:int=15, db:Session = Depends(get_db), current_user: Session = Depends(logged_in)):
+def activity_log(skip: int = 0, limit: int = 15, db: Session = Depends(get_db), current_user: Session = Depends(logged_in)):
     activity = admin_service.activity_log(db=db, user_id=current_user.id, skip=skip, limit=limit)
     return handle_result(activity)
 
 
+@router.get('activity/log/service/{user_id}/{service_name}', response_model=List[Union[ResultInt, List[AdminPanelActivityOut]]])
+def actirvity_log_service(user_id: int, service_name: str = 'patient_register', skip: int = 0, limit: int = 15, db: Session = Depends(get_db), current_user: Session = Depends(logged_in)):
+    actvity_user_service = admin_service.get_user_id_service(db=db, user_id=user_id, service_name=service_name, skip=skip, limit=limit)
+    return handle_result(actvity_user_service)
+
 # Admin for employee
 
+
 @router.get('/employee/all', response_model=List[Union[ResultInt, List[UserOutAuth]]])
-def all_employee(skip:int=0, limit:int=10, db: Session = Depends(get_db), current_user: Session = Depends(logged_in)):
+def all_employee(skip: int = 0, limit: int = 10, db: Session = Depends(get_db), current_user: Session = Depends(logged_in)):
     all = admin_service.all_employee(db, skip=skip, limit=limit)
     return handle_result(all)
 
@@ -61,38 +67,41 @@ def empployee_create(data_in: UserCreate, db: Session = Depends(get_db), current
     return handle_result(employee_created)
 
 
-
 # Admin for health partner
 @router.get('/health-partner/all', response_model=List[HealthPartnerOut])
 def health_partner_all(db: Session = Depends(get_db), current_user: Session = Depends(logged_in)):
     health_partner = health_partner_service.get(db=db)
     return handle_result(health_partner)
 
+
 @router.get('/health-partner/{id}', response_model=HealthPartnerOut)
 def health_partner(id: int, db: Session = Depends(get_db), current_user: Session = Depends(logged_in)):
     health_partner = health_partner_service.get_one(db=db, id=id)
     return handle_result(health_partner)
 
+
 @router.post('/health-partner/create', response_model=HealthPartnerOut)
-def health_partner_create(data_in: HealthPartnerIn ,db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin)):
+def health_partner_create(data_in: HealthPartnerIn, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin)):
     health_partner = health_partner_service.create(db=db, data_in=data_in)
     return handle_result(health_partner)
 
 # Admin for doctors
+
 
 @router.post('/doctor/register', response_model=AdminPanelActivityOut, description='<b>access:</b> admin and medical affairs')
 def doctor_register(data_in: DoctorSignup, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin_medical_affairs)):
     doctor_reg = admin_service.doctor_register(db=db, data_in=data_in, creator_id=current_user.id)
     return handle_result(doctor_reg)
 
+
 @router.get('/doctors/active', response_model=List[Union[ResultInt, List[UserDoctorOut]]])
-def doctors_active_list(skip:int = 0, limit:int = 10, db: Session = Depends(get_db), current_user: Session = Depends(logged_in)):
+def doctors_active_list(skip: int = 0, limit: int = 10, db: Session = Depends(get_db), current_user: Session = Depends(logged_in)):
     docs = admin_service.doctor_active_list(db, skip=skip, limit=limit)
     return handle_result(docs)
 
 
 @router.get('/doctors/inactive', response_model=List[Union[ResultInt, List[UserDoctorOut]]])
-def doctors_inactive_list(skip:int = 0, limit:int = 10, db: Session = Depends(get_db), current_user: Session = Depends(logged_in)):
+def doctors_inactive_list(skip: int = 0, limit: int = 10, db: Session = Depends(get_db), current_user: Session = Depends(logged_in)):
     docs = admin_service.doctor_inactive_list(db, skip=skip, limit=limit)
     return handle_result(docs)
 
@@ -103,9 +112,9 @@ def doctor_active(id: int, db: Session = Depends(get_db), current_user: Session 
     return handle_result(doc)
 
 
-@router.get('/doctor/chambers/{user_id}',response_model=List[DoctorChamberOut])
-def chamber_list(user_id :int,db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin_moderator)):
-    chambers =  doctor_chambers_service.get_by_user_id(db=db, user_id=user_id)
+@router.get('/doctor/chambers/{user_id}', response_model=List[DoctorChamberOut])
+def chamber_list(user_id: int, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin_moderator)):
+    chambers = doctor_chambers_service.get_by_user_id(db=db, user_id=user_id)
     return handle_result(chambers)
 
 
@@ -117,20 +126,21 @@ def register_patient(data_in: UserCreate, db: Session = Depends(get_db), current
     return handle_result(patient_created)
 
 # , response_model=List[Union[ResultInt ,List[AdminPatientsOut]]]
-@router.get('/patient/all', response_model=List[Union[ResultInt ,List[AdminPatientsOut]]])
-def all_patients(phone_number: str, skip:int=0, limit:int=15,  db:Session=Depends(get_db), current_user:Session=Depends(logged_in)):
+
+
+@router.get('/patient/all', response_model=List[Union[ResultInt, List[AdminPatientsOut]]])
+def all_patients(phone_number: str, skip: int = 0, limit: int = 15,  db: Session = Depends(get_db), current_user: Session = Depends(logged_in)):
     patients = admin_service.all_patient(db=db, phone_number=phone_number, skip=skip, limit=limit)
     return handle_result(patients)
 
 
 @router.post('/patient/indicator', response_model=AdminPanelActivityOut)
-def patient_indicator(user_id: int, data_in: PatientIndicatorBase, db:Session=Depends(get_db), current_user:Session=Depends(logged_in)):
+def patient_indicator(user_id: int, data_in: PatientIndicatorBase, db: Session = Depends(get_db), current_user: Session = Depends(logged_in)):
     indicator = admin_service.patient_indicators(db=db, user_id=user_id, data_in=data_in, creator_id=current_user.id)
     return handle_result(indicator)
 
+
 @router.get('/patient/indicator/{key}/{user_id}', response_model=List[PatientIndicatorOut])
-def patient_indicator_get(key:str, user_id: int, skip:int=0, limit:int=10, db: Session = Depends(get_db), current_user:Session = Depends(logged_in)):
+def patient_indicator_get(key: str, user_id: int, skip: int = 0, limit: int = 10, db: Session = Depends(get_db), current_user: Session = Depends(logged_in)):
     indicators = patient_indicators_service.get_by_key(db=db, key=key, user_id=user_id, skip=skip, limit=limit)
     return handle_result(indicators)
-
-

@@ -6,7 +6,7 @@ from .doctors import doctors_service
 from .doctor_qualifications import doctor_qualifications_service
 from .doctor_specialities import doctor_specialities_service
 from .patient_indicators import patient_indicators_service
-from .users import users_service 
+from .users import users_service
 from schemas import UserCreate, UserUpdate, AdminPanelActivityIn, UserDetailIn, PatientIndicatorIn, DoctorSignup, DoctorIn, DoctorQualilficationIn, DoctorSpecialityIn
 from models import User
 from repositories import admin_repo, roles_repo, admin_panel_activity_repo, users_repo, corporate_partner_user_repo, corporate_partners_repo
@@ -42,7 +42,7 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
         return ServiceResult(AppException.ServerError('Admin exist'))
 
     def password_changed_by_admin(self, db: Session, user_id: int, password: str, changer_id):
-        pass_change =  users_service.new_password(db=db,user_id=user_id, data_update=password)
+        pass_change = users_service.new_password(db=db, user_id=user_id, data_update=password)
 
         if not pass_change:
             return ServiceResult(AppException.ServerError(
@@ -62,8 +62,7 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
             else:
                 return ServiceResult(created_by_employee, status_code=status.HTTP_201_CREATED)
 
-
-    def role_change(self, db:Session, id:int, user_id: int, role_name: str):
+    def role_change(self, db: Session, id: int, user_id: int, role_name: str):
         role_id = roles_repo.search_name_id(db=db, name=role_name)
         user_role = users_repo.update(db=db, id=id, data_update=UserUpdate(role_id=role_id))
 
@@ -84,25 +83,29 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
             else:
                 return ServiceResult(created_by_admin, status_code=status.HTTP_201_CREATED)
 
-
-
-    def activity_log(self, db: Session, user_id:int, skip: int = 0, limit: int = 15 ):
-        activity = admin_panel_activity_repo.activity_log(db=db, user_id=user_id,skip=skip, limit=limit)
+    def activity_log(self, db: Session, user_id: int, skip: int = 0, limit: int = 15):
+        activity = admin_panel_activity_repo.activity_log(db=db, user_id=user_id, skip=skip, limit=limit)
 
         if not activity:
             return ServiceResult([], status_code=status.HTTP_200_OK)
         else:
-            return ServiceResult(activity, status_code=status.HTTP_201_CREATED) 
+            return ServiceResult(activity, status_code=status.HTTP_201_CREATED)
 
+    def get_user_id_service(self, db: Session, user_id: int, service_name: str, skip: int = 0, limit: int = 15):
+        activity = admin_panel_activity_repo.get_user_id_service(db=db, user_id=user_id, service_name=service_name, skip=skip, limit=limit)
+
+        if not activity[1]:
+            return ServiceResult([], status_code=status.HTTP_200_OK)
+        else:
+            return ServiceResult(activity, status_code=status.HTTP_200_OK)
 
     def activity_log_all(self, db: Session, skip: int = 0, limit: int = 15):
         activity_all = admin_panel_activity_repo.actiity_log_all(db=db, skip=skip, limit=limit)
-        
+
         if not activity_all:
             return ServiceResult([], status_code=status.HTTP_200_OK)
         else:
-            return ServiceResult(activity_all, status_code=status.HTTP_201_CREATED) 
-
+            return ServiceResult(activity_all, status_code=status.HTTP_201_CREATED)
 
     def signup_employee(self, db: Session, data_in: UserCreate, creator_id: int):
 
@@ -118,7 +121,7 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
 
         signup_employee = users_service.signup(
             db, data_in=sginup_data, flush=True)
-        
+
         created_by_employee_data = AdminPanelActivityIn(
             user_id=creator_id,
             service_name="employee_register",
@@ -128,24 +131,20 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
 
         created_by_employee = admin_panel_activity_repo.create(db=db, data_in=created_by_employee_data)
 
-
         if not created_by_employee:
             return ServiceResult(AppException.ServerError(
                 "Problem with employee registration."))
         else:
             return ServiceResult(created_by_employee, status_code=status.HTTP_201_CREATED)
 
-    
-
-    def all_employee(self, db: Session, skip: int=0, limit: int=10):
+    def all_employee(self, db: Session, skip: int = 0, limit: int = 10):
         all_emp = self.repo.all_employee(db, skip, limit)
         for i in all_emp[1]:
-            i.role_name = roles_repo.get_one(db=db, id=i.role_id).name 
+            i.role_name = roles_repo.get_one(db=db, id=i.role_id).name
         if not all_emp:
             return ServiceResult([], status_code=status.HTTP_200_OK)
         else:
             return ServiceResult(all_emp, status_code=status.HTTP_200_OK)
-
 
     def doctor_register(self, db: Session, data_in: DoctorSignup, creator_id: int):
         sginup_data = UserCreate(
@@ -165,7 +164,7 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
             bmdc=data_in.bmdc
         )
 
-        doctor_user =doctors_service.create_with_flush(db, data_in=doctor_data)
+        doctor_user = doctors_service.create_with_flush(db, data_in=doctor_data)
 
         qualification_data = DoctorQualilficationIn(
             user_id=handle_result(signup_user).id,
@@ -184,11 +183,11 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
             db, data_in=specialities_data)
 
         created_by_employee_data = AdminPanelActivityIn(
-                user_id=creator_id,
-                service_name="doctor_register",
-                service_recived_id=handle_result(signup_user).id,
-                remark=""
-            )
+            user_id=creator_id,
+            service_name="doctor_register",
+            service_recived_id=handle_result(signup_user).id,
+            remark=""
+        )
 
         created_by_employee = admin_panel_activity_repo.create(db=db, data_in=created_by_employee_data)
 
@@ -196,8 +195,6 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
             return ServiceResult(AppException.ServerError("Problem with doctor registration."))
         else:
             return ServiceResult(created_by_employee, status_code=status.HTTP_201_CREATED)
-        
-        
 
     def doctor_active_list(self, db: Session, skip: int = 0, limit: int = 10):
         all_doc = self.repo.doctors_active_list(db, skip, limit)
@@ -218,9 +215,7 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
 
         return self.get_one(db, id)
 
-
-
-    def signup_patient(self, db: Session, data_in:UserCreate, creator_id: int):
+    def signup_patient(self, db: Session, data_in: UserCreate, creator_id: int):
         singnup_data = UserCreate(
             name=data_in.name,
             email=data_in.email,
@@ -264,16 +259,13 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
             else:
                 return ServiceResult(created_by_employee, status_code=status.HTTP_201_CREATED)
 
-
-
-    def all_patient(self, db: Session, phone_number:str, skip:int, limit: int):
+    def all_patient(self, db: Session, phone_number: str, skip: int, limit: int):
         patients = admin_repo.all_patient(db=db, phone_number=phone_number, skip=skip, limit=limit)
 
-        
         new_patients_list = []
 
         for i in patients[1]:
-        
+
             register_by = admin_repo.patient_register_by_whom(db=db, patient_id=i.id)
 
             if register_by:
@@ -289,7 +281,7 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
             # is he/she corporate
             corporate = corporate_partner_user_repo.search_user_id(db=db, id=i.id)
             if corporate:
-                comp_name = corporate_partners_repo.get_one(db=db, id= corporate.corporate_id)
+                comp_name = corporate_partners_repo.get_one(db=db, id=corporate.corporate_id)
                 i.company_name = comp_name.name
             else:
                 i.company_name = None
@@ -303,7 +295,6 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
         else:
             return ServiceResult(patients, status_code=status.HTTP_201_CREATED)
 
-    
     def patient_indicators(self, db: Session, user_id: int, data_in: PatientIndicatorIn, creator_id: int):
         data = patient_indicators_service.create_by_user_id(db, user_id, data_in)
 
