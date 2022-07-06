@@ -43,6 +43,10 @@ class ABSRepo(ABC):
         pass
 
     @abstractmethod
+    def get_by_two_key(self, db: Session, skip: int, limit: int, descending: bool, count_results: bool, **kwargs):
+        pass
+
+    @abstractmethod
     def update(self, db: Session, id: int,  data_update: UpdateSchemaType) -> ModelType:
         pass
 

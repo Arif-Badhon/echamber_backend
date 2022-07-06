@@ -76,6 +76,29 @@ class BaseRepo(Generic[ModelType, CreateSchemaType, UpdateSchemaType], ABSRepo):
             return [{"results": len(query)}, data]
         return data
 
+    def get_by_two_key(self, db: Session, skip: int, limit: int, descending: bool = False, count_results: bool = False, **kwargs):
+        search_key = list(kwargs.items())[0][0]
+        search_value = list(kwargs.items())[0][1]
+
+        second_search_key = list(kwargs.items())[1][0]
+        second_search_value = list(kwargs.items())[1][1]
+
+        query = db.query(self.model).filter(
+            getattr(self.model, search_key) == search_value).all()
+
+        if descending == True:
+            data = db.query(
+                self.model).filter(
+                getattr(self.model, search_key) == search_value).filter(
+                getattr(self.model, second_search_key) == second_search_value).order_by(
+                desc(self.model.created_at)).offset(skip).limit(limit).all()
+        else:
+            data = db.query(self.model).filter(getattr(self.model, search_key) == search_value).filter(getattr(self.model, search_key) == second_search_value).offset(skip).limit(limit).all()
+
+        if count_results == True:
+            return [{"results": len(query)}, data]
+        return data
+
     def update(self, db: Session, id: int,  data_update: UpdateSchemaType) -> ModelType:
         db.query(self.model).filter(self.model.id == id).update(
             data_update.dict(exclude_unset=True), synchronize_session=False)
