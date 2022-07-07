@@ -141,7 +141,7 @@ class TeleMedicineOrder(BaseModel):
     patient_id = Column(Integer, ForeignKey("users.id"))
     doctor_id = Column(Integer, ForeignKey("users.id"))
     schedule_id = Column(Integer, nullable=True)
-    date = Column(Date, nullable=True)
+    booked_date = Column(Date, nullable=True)
 
 
 class MedicineOrder(BaseModel):

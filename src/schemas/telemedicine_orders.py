@@ -1,5 +1,5 @@
-from pydantic import BaseModel
 from datetime import date, datetime
+from pydantic import BaseModel
 from typing import Optional
 
 
@@ -8,7 +8,7 @@ class TelemedicineBase(BaseModel):
     patient_id: Optional[int] = None
     doctor_id: Optional[int] = None
     schedule_id: Optional[int] = None
-    date: Optional[date] = None
+    booked_date: date
 
 
 class TelemedicineIn(TelemedicineBase):

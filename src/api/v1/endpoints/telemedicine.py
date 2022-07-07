@@ -19,12 +19,6 @@ def all_telemedicine(skip: int = 0, limit: int = 15, db: Session = Depends(get_d
     return handle_result(all)
 
 
-@router.post('/', response_model=AdminPanelActivityOut)
-def create(data_in: List[Union[ServiceOrderIn, TelemedicineIn]], db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin_moderator)):
-    data = telemedicine_service.create_with_service(db=db, user_id=current_user.id, data_in=data_in)
-    return handle_result(data)
-
-
 @router.get('/single/{id}', response_model=TelemedicineOut)
 def single_telemedicine(id: int, db: Session = Depends(get_db), current_user: Session = Depends(logged_in)):
     data = telemedicine_service.get_one(db=db, id=id)
