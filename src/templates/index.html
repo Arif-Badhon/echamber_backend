@@ -11,9 +11,73 @@
 </head>
 <body>
     <div class="hero">
-        <h2>HEALTHx</h2>
-        <h1>Smart Chamber API</h1>
-        <a href="/docs">API DOCS</a>
+        <div class="wrapper">
+            <div>        
+                <h2>HEALTHx</h2>
+                <h1>Smart Chamber API</h1>
+                <a href="/docs" target="_blank">API DOCS</a>
+            </div>
+            <div class="form-div">
+                <div class="form-wrapper">
+                    <h2>Login for Token</h2>
+                    <form>
+                        <label for="user">Email or Phone number</label>
+                        <input type="text" id="user">
+                        <label for="pass">Password</label>
+                        <input type="password" id="pass">
+                        <input type="button" onclick="get()" value='Submit' >
+                    </form>
+                    <textarea id="token" class="token" onclick="cp()" readonly="readonly"></textarea>
+                </div>
+            </div>
+        </div>
     </div>
+    <script>
+        function get(){
+            let user = document.getElementById('user').value
+            let pass = document.getElementById('pass').value
+
+            let funFetch = async ()=>{
+
+                let logFetch = await fetch(`http://localhost:8000/api/v1/login`, {
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    dataType: 'json',
+                    method: 'POST',
+                    body: JSON.stringify({
+                        identifier: user,
+                        password: pass,
+                    }),
+                })
+
+                let log = await logFetch.json()
+
+                if (logFetch.ok) {
+                    document.getElementById('token').value = log.access_token
+                    console.log(log)
+                } else {
+                    document.getElementById('token').value = 'Something went wrong!'
+                }
+            }
+            funFetch()
+
+        }
+
+        function cp(){
+            var copyText = document.getElementById("token");
+
+            /* Select the text field */
+            copyText.select();
+            copyText.setSelectionRange(0, 99999); /* For mobile devices */
+
+            /* Copy the text inside the text field */
+            navigator.clipboard.writeText(copyText.value);
+
+            /* Alert the copied text */
+            alert("Copied the text: " + copyText.value);
+        }
+    </script>
 </body>
 </html>
