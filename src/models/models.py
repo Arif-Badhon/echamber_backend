@@ -169,6 +169,8 @@ class HealthPlanList(BaseModel):
     total_patients = Column(Integer, nullable=False)
     expire_status = Column(Boolean, nullable=True)
     expire_date = Column(Date, nullable=True)
+    days = Column(Integer, nullable=True)
+    fee = Column(Integer, nullable=True)
 
 
 class HealthPlanForPatient(BaseModel):

@@ -10,6 +10,8 @@ class HealthPlanListBase(BaseModel):
     total_patients: int
     expire_status: bool
     expire_date: Optional[date] = None
+    days: Optional[int] = None
+    fee: Optional[int] = None
 
 
 class HealthPlanListIn(HealthPlanListBase):
@@ -23,6 +25,8 @@ class HealthPlanListUpdate(HealthPlanListBase):
     total_patients: Optional[int] = None
     expire_status: Optional[bool] = None
     expire_date: Optional[date] = None
+    days: Optional[int] = None
+    fee: Optional[int] = None
 
 
 class HealthPlanListOut(HealthPlanListBase):
