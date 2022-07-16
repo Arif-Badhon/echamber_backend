@@ -2,7 +2,7 @@ from exceptions.service_result import handle_result
 from services import BaseService
 from repositories import telemedicine_repo, admin_panel_activity_repo
 from models import TeleMedicineOrder
-from schemas import TelemedicineIn, TelemedicineInWithService, TelemedicineUpdate, ServiceOrderIn, AdminPanelActivityIn
+from schemas import TelemedicineIn, TelemedicineInWithService, TelemedicineUpdate, ServiceOrderIn, AdminPanelActivityIn, TelemedicineServiceIn
 from sqlalchemy.orm import Session
 from typing import List, Union
 from .service_order import service_order_service
@@ -12,13 +12,12 @@ from fastapi import status
 
 class TelemedicineService(BaseService[TeleMedicineOrder, TelemedicineInWithService, TelemedicineUpdate]):
 
-    def create_with_service(self, db: Session, user_id, data_in: List[Union[ServiceOrderIn, TelemedicineIn]]):
+    def create_with_service(self, db: Session, user_id, data_in: TelemedicineServiceIn):
 
         service = service_order_service.create_with_flush(
-            db=db, data_in=ServiceOrderIn(**data_in[0].dict()))
+            db=db, data_in=ServiceOrderIn(**data_in.dict()['service']))
 
-        telemed = telemedicine_service.create_with_flush(db=db, data_in=TelemedicineInWithService(
-            service_order_id=handle_result(service).id, **data_in[1].dict()))
+        telemed = telemedicine_service.create_with_flush(db=db, data_in=TelemedicineInWithService(**data_in.dict()['telemedicine'], service_order_id=handle_result(service).id))
 
         # activitylog
         created_by_employee_data = AdminPanelActivityIn(

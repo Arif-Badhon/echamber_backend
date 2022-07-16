@@ -1,6 +1,7 @@
 from datetime import date, datetime
 from pydantic import BaseModel
 from typing import Optional
+from schemas import ServiceOrderIn
 
 
 class TelemedicineBase(BaseModel):
@@ -30,3 +31,8 @@ class TelemedicineOut(TelemedicineBase):
 
     class Config:
         orm_mode = True
+
+
+class TelemedicineServiceIn(BaseModel):
+    service: ServiceOrderIn
+    telemedicine: TelemedicineIn
