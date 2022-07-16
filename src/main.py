@@ -13,6 +13,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
+
 app = FastAPI(title='E-Chamber')
 
 app.add_middleware(
@@ -59,9 +60,6 @@ def custom_generic_exception_handler(request: Request, exc: Exception):
     return generic_exception_handler(request, exc)
 
 
-
-
-
 # parent path for static file
 parent_path = os.path.dirname(os.path.realpath(__file__))
 
@@ -73,10 +71,10 @@ app.mount('/pdf/', StaticFiles(directory=f'{parent_path}/assets/pdf'), name='pdf
 
 templates = Jinja2Templates(directory='templates')
 
+
 @app.get('/', response_class=HTMLResponse)
 async def index(request: Request):
     return templates.TemplateResponse('index.html', {"request": request})
-
 
 
 app.include_router(api_router, prefix=settings.API_V1_STR)
