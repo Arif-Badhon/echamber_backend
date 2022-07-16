@@ -227,6 +227,22 @@ class HealthPartner(BaseModel):
     contact_person_phone = Column(String(100), nullable= False)
     contact_person_email = Column(String(100), nullable= True)
 
+
+############
+#  Review  #
+############
+
+class Review(BaseModel):
+    __tablename__ = "review"
+    user_id = Column(Integer, nullable=False)
+    service_name = Column(String(100), nullable=False)
+    service_id = Column(Integer, nullable=False)
+    rating = Column(Integer, nullable=True)
+    comment = Column(Text, nullable=True)
+    visible = Column(Boolean, nullable=False)
+
+
+
 # Doctor related models
 
 class Doctor(BaseModel):

@@ -13,6 +13,7 @@ from .corporate_partners import *
 from .health_partner import *
 from .user_details import *
 from .token import *
+from .review import *
 from .doctors import *
 from .doctor_chambers import *
 from .doctor_qualifications import *

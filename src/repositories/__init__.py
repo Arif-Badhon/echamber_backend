@@ -3,6 +3,7 @@ from .admin import *
 from .image_log import *
 from .pdf_log import *
 from .notice import *
+from .review import *
 from .service_order import *
 from .telemedicine_orders import *
 from .health_plan_list import *
