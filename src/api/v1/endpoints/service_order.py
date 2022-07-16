@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from typing import List, Union
 from db import get_db
 from exceptions.service_result import handle_result
-from schemas import ServiceOrderIn, MedicineOrderIn, AdminPanelActivityOut, ServiceOrderOut, ResultInt, MedicineOrderOut, TelemedicineServiceIn
+from schemas import ServiceOrderIn, MedicineOrderIn, AdminPanelActivityOut, ServiceOrderOut, ResultInt, MedicineOrderOut, TelemedicineServiceIn, TelemedicineOut
 from sqlalchemy.orm import Session
 from api.v1.auth_dependcies import logged_in_admin_crm, logged_in_admin_moderator, logged_in_employee
 from schemas.medicine_order import MedicineOrderUpdate
@@ -43,6 +43,12 @@ def update_service(id: int, data_update: ServiceOrderUpdate, db: Session = Depen
 def telemedicine_order(data_in: TelemedicineServiceIn, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin_moderator)):
     telemed = telemedicine_service.create_with_service(db=db, user_id=current_user.id, data_in=data_in)
     return handle_result(telemed)
+
+
+@router.get('/telemedicine/{service_id}', response_model=List[TelemedicineOut])
+def telemedicine_by_service_id(service_id: int, db: Session = Depends(get_db), skip: int = 0, limit: int = 10, current_user: Session = Depends(logged_in_employee)):
+    data = telemedicine_service.get_by_two_key(db=db, skip=skip, limit=limit, descending=False, count_results=False, service_order_id=service_id)
+    return handle_result(data)
 
 
 @router.post('/medicine', response_model=AdminPanelActivityOut, description='Access: admin and moderator')
