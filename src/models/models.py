@@ -289,6 +289,7 @@ class DoctorSchedule(BaseModel):
     hours = Column(Integer, nullable=False)
     minutes =  Column(Integer, nullable=False)
     am_pm = Column(String(100), nullable=False)
+    online = Column(Boolean, nullable=False)
 
 
 # Doctor payment 
