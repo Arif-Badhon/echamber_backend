@@ -55,29 +55,32 @@ def user_by_id(id: int, db: Session = Depends(get_db), current_user: Session = D
 
 
 @router.get('/user-search/phone', response_model=List[UserOutAuth])
-def user_by_phone(number: str, skip:int=0, limit:int=10,  db: Session = Depends(get_db), current_user: Session = Depends(logged_in)):
+def user_by_phone(number: str, skip: int = 0, limit: int = 10,  db: Session = Depends(get_db), current_user: Session = Depends(logged_in)):
     users = users_service.user_search_by_phone(db=db, phone_in=number, skip=skip, limit=limit)
     return handle_result(users)
 
 
-
-@router.get('/profile-pic', response_model= ImageLogOut, description='<h2>Alert: images/profile/(image url)</b>')
-def get_profile_pic(db:Session = Depends(get_db), current_user:Session = Depends(logged_in)):
+@router.get('/profile-pic', response_model=ImageLogOut, description='<h2>Alert: images/profile/(image url)</b>')
+def get_profile_pic(db: Session = Depends(get_db), current_user: Session = Depends(logged_in)):
     pp = image_log_service.last_profile_pic(db=db, user_id=current_user.id)
     return handle_result(pp)
 
 
-
-@router.post('/profile-pic', response_model= ImageLogOut, description='<h2>Alert: </h2> <b>image should be < 300 kb</b>')
-async def upload_image(file: UploadFile = File(...), db:Session = Depends(get_db), current_user:Session = Depends(logged_in)):
+@router.post('/profile-pic', response_model=ImageLogOut, description='<h2>Alert: </h2> <b>image should be < 300 kb</b>')
+async def upload_image(file: UploadFile = File(...), db: Session = Depends(get_db), current_user: Session = Depends(logged_in)):
 
     up_img = UploadFileUtils(file=file)
-    
+
     # prefix is the short service name
     new_image_name = up_img.upload_image(prefix='propic', path='./assets/img/profile', accepted_extensions=['jpg', 'jpeg', 'png'])
 
     # save in db
     image_in_db = image_log_service.create(db=db, data_in=ImageLogIn(user_id=current_user.id, service_name='propic', image_string=new_image_name))
-    
 
     return handle_result(image_in_db)
+
+
+@router.get('/profile-pic/{user_id}', response_model=ImageLogOut, description='<h2>Alert: images/profile/(image url)</b>')
+def get_profile_pic(user_id: int, db: Session = Depends(get_db), current_user: Session = Depends(logged_in)):
+    pp = image_log_service.last_profile_pic(db=db, user_id=user_id)
+    return handle_result(pp)
