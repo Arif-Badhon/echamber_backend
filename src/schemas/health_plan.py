@@ -1,6 +1,7 @@
 from datetime import date, datetime
 from typing import Optional
 from pydantic import BaseModel
+from .service_order import ServiceOrderIn
 
 
 class HealthPlanListBase(BaseModel):
@@ -80,3 +81,8 @@ class HealthPlanForPatientOut(HealthPlanForPatientBase):
 
     class Config:
         orm_mode = True
+
+
+class HealthPlanForPatientWithService(BaseModel):
+    service: ServiceOrderIn
+    health_plan: HealthPlanForPatientWithoutHealthPlanId
