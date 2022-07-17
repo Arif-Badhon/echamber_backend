@@ -1,0 +1,5 @@
+from repositories import BaseRepo
+from models import MedivaDeviceCatagory
+from schemas import MedivaDeviceCatagoryIn, MedivaDeviceCatagoryUpdate
+
+mediva_device_catagory_repo = BaseRepo[MedivaDeviceCatagory, MedivaDeviceCatagoryIn, MedivaDeviceCatagoryUpdate](MedivaDeviceCatagory)

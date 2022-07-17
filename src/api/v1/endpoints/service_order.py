@@ -47,7 +47,7 @@ def telemedicine_order(data_in: TelemedicineServiceIn, db: Session = Depends(get
 
 @router.get('/telemedicine/{service_id}', response_model=List[TelemedicineOut])
 def telemedicine_by_service_id(service_id: int, db: Session = Depends(get_db), skip: int = 0, limit: int = 10, current_user: Session = Depends(logged_in_employee)):
-    data = telemedicine_service.get_by_two_key(db=db, skip=skip, limit=limit, descending=False, count_results=False, service_order_id=service_id)
+    data = telemedicine_service.get_by_key(db=db, skip=skip, limit=limit, descending=False, count_results=False, service_order_id=service_id)
     return handle_result(data)
 
 

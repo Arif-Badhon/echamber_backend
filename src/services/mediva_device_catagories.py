@@ -1,0 +1,7 @@
+from services import BaseService
+from schemas import MedivaDeviceCatagoryIn, MedivaDeviceCatagoryUpdate
+from models import MedivaDeviceCatagory
+from repositories import mediva_device_catagory_repo
+
+
+mediva_device_catagory_service = BaseService[MedivaDeviceCatagory, MedivaDeviceCatagoryIn, MedivaDeviceCatagoryUpdate](MedivaDeviceCatagory, mediva_device_catagory_repo)
