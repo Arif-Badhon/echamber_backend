@@ -64,7 +64,7 @@ class BaseService(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         return ServiceResult(data, status_code=status.HTTP_200_OK)
 
     def get_by_two_key(self, db: Session, skip: int, limit: int, descending: bool, count_results: bool, **kwargs):
-        data = self.repo.get_by_key(
+        data = self.repo.get_by_two_key(
             db=db, skip=skip, limit=limit, descending=descending, count_results=count_results, **kwargs)
 
         if not data:
