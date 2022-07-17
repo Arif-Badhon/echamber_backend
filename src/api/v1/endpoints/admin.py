@@ -29,6 +29,12 @@ def role_change_by_admin(id: int, role_name: str,  db: Session = Depends(get_db)
     return handle_result(change)
 
 
+@router.patch('/switch/active/{id}', response_model=UserOut)
+def user_active_switcher(id: int, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin_moderator)):
+    act = admin_service.user_active_switcher(db=db, id=id)
+    return handle_result(act)
+
+
 @router.get('/activity/log/all', response_model=List[Union[ResultInt, List[AdminPanelActivityAllOut]]])
 def activity_log(skip: int = 0, limit: int = 15, db: Session = Depends(get_db), current_user: Session = Depends(logged_in)):
     activity = admin_service.activity_log_all(db=db, skip=skip, limit=limit)

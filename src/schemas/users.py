@@ -36,6 +36,7 @@ class UserUpdate(BaseModel):
     )]
     sex: Optional[str]
     role_id: Optional[int]
+    is_active: Optional[bool] = True
 
 
 class UserOut(UserBase):
@@ -46,9 +47,10 @@ class UserOut(UserBase):
     class Config:
         orm_mode = True
 
+
 class UserOutAuth(UserBase):
     id: int
-    role_name: Optional[str] 
+    role_name: Optional[str]
 
     class Config:
         orm_mode = True

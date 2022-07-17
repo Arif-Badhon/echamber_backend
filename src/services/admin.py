@@ -83,6 +83,16 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
             else:
                 return ServiceResult(created_by_admin, status_code=status.HTTP_201_CREATED)
 
+    def user_active_switcher(self, db: Session, id: int):
+        data = self.repo.user_active_switcher(db=db, id=id)
+
+        if not data:
+            return ServiceResult(AppException.ServerError("User active status not changed"))
+        else:
+            return ServiceResult(data, status_code=status.HTTP_201_CREATED)
+
+
+
     def activity_log(self, db: Session, user_id: int, skip: int = 0, limit: int = 15):
         activity = admin_panel_activity_repo.activity_log(db=db, user_id=user_id, skip=skip, limit=limit)
 
