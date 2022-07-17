@@ -228,6 +228,32 @@ class HealthPartner(BaseModel):
     contact_person_email = Column(String(100), nullable= True)
 
 
+
+
+##########
+# MediVa #
+##########
+
+class MedivaDeviceCatagory(BaseModel):
+    __tablename__ = "mediva_device_catagories"
+    name = Column(String(100), nullable=False)
+    details = Column(Text, nullable=True)
+
+
+class MedivaDevice(BaseModel):
+    __tablename__ = "mediva_devices"
+    name = Column(String(255), nullable=False)
+    brand = Column(String(255), nullable=True)
+    model = Column(String(255), nullable=True)
+    details = Column(Text, nullable=True)
+    catagory_id =  Column(Integer, ForeignKey("mediva_device_catagories.id"))
+    quantity = Column(Integer, nullable=False)
+    trp = Column(Integer, nullable=True)
+    old_mrp = Column(Integer, nullable=True)
+    current_mrp = Column(Integer, nullable=False)
+
+
+
 ############
 #  Review  #
 ############
