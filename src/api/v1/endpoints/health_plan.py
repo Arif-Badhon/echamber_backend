@@ -27,23 +27,3 @@ def post(data_in: HealthPlanListIn, db: Session = Depends(get_db), current_user:
 def single_health_plan(id: int, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_employee)):
     data = healtth_plan_list_service.get_one(db=db, id=id)
     return handle_result(data)
-
-
-@router.patch('/{id}', response_model=HealthPlanListOut)
-def update(id: int, data_update: HealthPlanListUpdate, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin)):
-    up = healtth_plan_list_service.update(
-        db=db, id=id, data_update=data_update)
-    return handle_result(up)
-
-
-@router.get('/sbscribe/{id}', response_model=HealthPlanForPatientOut)
-def single_subscription(id: int, db: Session = Depends(get_db), current_user: Session = Depends(logged_in)):
-    hp = health_plan_for_patient_service.get_one(db=db, id=id)
-    return handle_result(hp)
-
-
-@router.post('/subscribe', response_model=AdminPanelActivityOut)
-def subscribe_plan(data_in: HealthPlanForPatientWithoutHealthPlanId, voucher_code: str, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_employee)):
-    hp = health_plan_for_patient_service.subscribe_plan(
-        db=db, data_in=data_in, voucher_code=voucher_code, employee_id=current_user.id)
-    return handle_result(hp)

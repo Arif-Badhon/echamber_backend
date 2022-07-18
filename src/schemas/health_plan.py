@@ -51,7 +51,7 @@ class HealthPlanForPatientBase(BaseModel):
 
 
 class HealthPlanForPatientIn(HealthPlanForPatientBase):
-    pass
+    service_order_id: int
 
 
 class HealthPlanForPatientWithoutHealthPlanId(BaseModel):
@@ -77,6 +77,7 @@ class HealthPlanForPatientUpdate(HealthPlanForPatientBase):
 
 class HealthPlanForPatientOut(HealthPlanForPatientBase):
     id: int
+    service_order_id: int
     created_at: datetime
 
     class Config:
@@ -85,4 +86,4 @@ class HealthPlanForPatientOut(HealthPlanForPatientBase):
 
 class HealthPlanForPatientWithService(BaseModel):
     service: ServiceOrderIn
-    health_plan: HealthPlanForPatientWithoutHealthPlanId
+    health_plan_subscribe: HealthPlanForPatientWithoutHealthPlanId

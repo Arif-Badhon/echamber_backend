@@ -3,7 +3,7 @@ from fastapi import status
 from exceptions import handle_result, ServiceResult, AppException
 from models import ServiceOrder
 from schemas import ServiceOrderIn, ServiceOrderUpdate, MedicineOrderIn, MedicineOrderInWithService, AdminPanelActivityIn
-from repositories import service_order_repo, admin_panel_activity_repo, follow_up_repo
+from repositories import service_order_repo, admin_panel_activity_repo, follow_up_repo, users_repo
 from services import BaseService
 from .medicine_order import medicine_order_service
 from .users import users_service
@@ -34,10 +34,16 @@ class ServiceOrderService(BaseService[ServiceOrder, ServiceOrderIn, ServiceOrder
                 i.followup = False
 
             # patient name and phone number
-            i.patient_name = handle_result(
-                users_service.get_one(db=db, id=i.patient_id)).name
-            i.patient_phone = handle_result(
-                users_service.get_one(db=db, id=i.patient_id)).phone
+            # i.patient_name = handle_result(
+            #     users_service.get_one(db=db, id=i.patient_id)).name
+            # i.patient_phone = handle_result(
+            #     users_service.get_one(db=db, id=i.patient_id)).phone
+
+            patient_name_phone = users_repo.get_one(db=db, id=i.patient_id)
+            if patient_name_phone:
+                i.patient_name = patient_name_phone.name
+                i.patient_phone = patient_name_phone.phone
+
             new_data.append(i)
 
         final_data.append(new_data)

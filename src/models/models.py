@@ -175,6 +175,7 @@ class HealthPlanList(BaseModel):
 
 class HealthPlanForPatient(BaseModel):
     __tablename__ = "health_plan_for_patient"
+    service_order_id = Column(Integer, nullable=False)
     health_plan_id = Column(Integer, nullable=False)
     user_id = Column(Integer, nullable=False)
     register_by_id = Column(Integer, nullable=False)
