@@ -1,7 +1,8 @@
 from typing import Optional
 from pydantic import BaseModel
-from models.models import DoctorQualification
 from schemas import UserOut, UserDetailOut, DoctorQualificationOut
+from schemas.doctor_chambers import DoctorChamberOut
+from schemas.doctor_specialities import DoctorSpecialityOut
 
 
 class DoctorSearchBase(BaseModel):
@@ -11,11 +12,14 @@ class DoctorSearchBase(BaseModel):
 
 
 class DoctorSearchIn(BaseModel):
-    name: Optional[str]=None
-    speciality: Optional[str]=None
+    name: Optional[str] = None
+    speciality: Optional[str] = None
 
-class DoctorSearchOut(DoctorSearchBase):
-    pass
+
+class DoctorSearchOut(BaseModel):
+    User: UserOut
+    DoctorSpeciality: DoctorSpecialityOut
+    DoctorChamber: DoctorChamberOut
 
     class Config:
         orm_mode = True

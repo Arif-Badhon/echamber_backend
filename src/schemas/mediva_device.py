@@ -1,8 +1,9 @@
 from datetime import datetime
 from pydantic import BaseModel
 from typing import Optional
-from models import MedivaDeviceCatagory
 
+
+# Catagory
 
 class MedivaDeviceCatagoryBase(BaseModel):
     name: Optional[str] = None
@@ -23,3 +24,6 @@ class MedivaDeviceCatagoryOut(MedivaDeviceCatagoryBase):
 
     class Config:
         orm_mode = True
+
+
+# Device

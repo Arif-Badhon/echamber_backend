@@ -304,6 +304,8 @@ class DoctorChamber(BaseModel):
     user_id = Column(Integer, ForeignKey("users.id"))
     name = Column(String(255), nullable=False)
     detail = Column(Text, nullable=False)
+    district = Column(String(100), nullable=False)
+    detail_address = Column(String(255), nullable=True)
     is_active = Column(Boolean, default=False)
 
     user_doctors_chamber = relationship("User", back_populates="doctors_chamber")
