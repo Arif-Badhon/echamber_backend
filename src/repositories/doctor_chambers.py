@@ -9,11 +9,7 @@ class DoctorChamberRepo(BaseRepo[DoctorChamber, DoctorChamberIn, DoctorChamberUp
         return db.query(self.model).filter(self.model.user_id == user_id).all()
 
     def create_with_user_id(self, db: Session, data_in: DoctorChamberBase, user_id: int):
-        data_for_db = DoctorChamberIn(
-            user_id=user_id,
-            name=data_in.name,
-            detail=data_in.detail
-        )
+        data_for_db = DoctorChamberIn(user_id=user_id, **data_in.dict())
 
         return self.create(db, data_in=data_for_db)
 
