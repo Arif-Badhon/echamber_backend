@@ -72,6 +72,12 @@ class DoctorService(BaseService[Doctor, DoctorIn, DoctorUpdate]):
         else:
             return ServiceResult(handle_result(specialities_user), status_code=status.HTTP_201_CREATED)
 
+    def all_doc(self, db: Session, skip: int, limit: int):
+        role_id = roles_service.role_id_by_name(db=db, name="doctor")
+        docs = users_service.get_by_two_key(db=db, skip=skip, limit=limit, descending=True, count_results=True, is_active=True, role_id=role_id)
+
+        return docs
+
     def details(self, db: Session, id: int):
         user = users_service.get_one(db=db, id=id)
         role_id = handle_result(user).role_id

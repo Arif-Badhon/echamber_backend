@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from db import get_db
 from exceptions import handle_result
 from schemas import DoctorOut, DoctorSpecialityOut, DoctorQualificationOut, DoctorSpecialityOut, DoctorQualilficationUpdate, DoctorSpecialityUpdate, DoctorSignup, UserOut, UserOutAuth
+from schemas.admin import ResultInt
 from services import doctors_service, doctor_qualifications_service, doctor_specialities_service
 from api.v1.auth_dependcies import logged_in_doctor
 from typing import List, Union
@@ -58,3 +59,9 @@ def update(id: int, data_update: DoctorSpecialityUpdate, db: Session = Depends(g
 def detail(id: int, db: Session = Depends(get_db)):
     data = doctors_service.details(db=db, id=id)
     return data
+
+
+@router.get('/all/docs', response_model=List[Union[ResultInt, List[UserOut]]])
+def all_docs(skip: int = 0, limit: int = 15, db: Session = Depends(get_db)):
+    docs = doctors_service.all_doc(db=db, skip=skip, limit=limit)
+    return handle_result(docs)

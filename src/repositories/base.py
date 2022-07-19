@@ -83,8 +83,7 @@ class BaseRepo(Generic[ModelType, CreateSchemaType, UpdateSchemaType], ABSRepo):
         second_search_key = list(kwargs.items())[1][0]
         second_search_value = list(kwargs.items())[1][1]
 
-        query = db.query(self.model).filter(
-            getattr(self.model, search_key) == search_value).all()
+        query = db.query(self.model).filter(getattr(self.model, search_key) == search_value).filter(getattr(self.model, second_search_key) == second_search_value).all()
 
         if descending == True:
             data = db.query(
@@ -93,7 +92,7 @@ class BaseRepo(Generic[ModelType, CreateSchemaType, UpdateSchemaType], ABSRepo):
                 getattr(self.model, second_search_key) == second_search_value).order_by(
                 desc(self.model.created_at)).offset(skip).limit(limit).all()
         else:
-            data = db.query(self.model).filter(getattr(self.model, search_key) == search_value).filter(getattr(self.model, search_key) == second_search_value).offset(skip).limit(limit).all()
+            data = db.query(self.model).filter(getattr(self.model, search_key) == search_value).filter(getattr(self.model, second_search_key) == second_search_value).offset(skip).limit(limit).all()
 
         if count_results == True:
             return [{"results": len(query)}, data]
