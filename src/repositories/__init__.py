@@ -10,6 +10,7 @@ from .telemedicine_orders import *
 from .health_plan_list import *
 from .health_plan_for_patient import *
 from .medicine_order import *
+from .mediva_devices import *
 from .follow_up import *
 from .admin_panel_activity import *
 from .corporate_partners import *

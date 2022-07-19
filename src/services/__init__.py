@@ -7,6 +7,7 @@ from .notice import *
 from .review import *
 from .service_order import *
 from .mediva_device_catagories import *
+from .mediva_devices import *
 from .telemedicine_orders import *
 from .health_plan_list import *
 from .health_plan_for_patient import *

@@ -4,9 +4,10 @@ from schemas import DoctorSignup, DoctorQualilficationIn
 from schemas.doctor_specialities import DoctorSpecialityIn
 from services import BaseService
 from .users import users_service
+from .roles import roles_service
 from services.doctor_qualifications import doctor_qualifications_service
 from services.doctor_specialities import doctor_specialities_service
-from repositories import doctors_repo
+from repositories import doctors_repo, users_repo, roles_repo
 from sqlalchemy.orm import Session
 from utils import ServiceResult, AppException, handle_result
 from fastapi import status
@@ -27,8 +28,6 @@ class DoctorService(BaseService[Doctor, DoctorIn, DoctorUpdate]):
         if not data:
             return ServiceResult(AppException.ServerError("Something went wrong!"))
         return ServiceResult(data, status_code=status.HTTP_201_CREATED)
-
-    
 
     def signup(self, db: Session, data_in: DoctorSignup):
 
@@ -72,6 +71,22 @@ class DoctorService(BaseService[Doctor, DoctorIn, DoctorUpdate]):
                 "Problem with Doctor registration."))
         else:
             return ServiceResult(handle_result(specialities_user), status_code=status.HTTP_201_CREATED)
+
+    def details(self, db: Session, id: int):
+        user = users_service.get_one(db=db, id=id)
+        role_id = handle_result(user).role_id
+        role = roles_service.get_one(db=db, id=role_id)
+        role_name = handle_result(role).name
+
+        if role_name != 'doctor':
+            return ServiceResult(AppException.ServerError("This user is not a doctor."))
+
+        specialities = doctor_specialities_service.get_by_key(db=db, skip=0, limit=15, descending=False, count_results=False, user_id=id)
+
+        qualifications = doctor_qualifications_service.get_by_key(db=db, skip=0, limit=15, descending=False, count_results=False, user_id=id)
+
+        return [handle_result(user), handle_result(specialities), handle_result(qualifications)]
+        # return {user, specialities, qualifications}
 
 
 doctors_service = DoctorService(Doctor, doctors_repo)

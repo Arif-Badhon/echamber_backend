@@ -2,6 +2,8 @@ from sqlalchemy import Column, ForeignKey, Integer, Boolean, String, Text, Date,
 from models import BaseModel
 from sqlalchemy.orm import relationship
 
+from schemas import service_order
+
 
 
 # fmt: off
@@ -247,12 +249,22 @@ class MedivaDevice(BaseModel):
     brand = Column(String(255), nullable=True)
     model = Column(String(255), nullable=True)
     details = Column(Text, nullable=True)
+    img_id = Column(Integer, nullable=True)
     catagory_id =  Column(Integer, ForeignKey("mediva_device_catagories.id"))
     quantity = Column(Integer, nullable=False)
     trp = Column(Integer, nullable=True)
     old_mrp = Column(Integer, nullable=True)
     current_mrp = Column(Integer, nullable=False)
 
+
+class MedivaDeviceOrder(BaseModel):
+    __tablename__ = "mediva_device_order"
+    service_order_id = Column(Integer, nullable=False)
+    device_id = Column(Integer, nullable=False)
+    quantity = Column(Integer, nullable=False)
+    mrp = Column(Integer, nullable=True)
+    discount = Column(Integer, nullable=True)
+    total_mrp = Column(Integer, nullable=True)
 
 
 ############
