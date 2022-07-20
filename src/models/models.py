@@ -2,8 +2,6 @@ from sqlalchemy import Column, ForeignKey, Integer, Boolean, String, Text, Date,
 from models import BaseModel
 from sqlalchemy.orm import relationship
 
-from schemas import service_order
-
 
 
 # fmt: off
@@ -334,6 +332,37 @@ class DoctorSchedule(BaseModel):
 
 
 # Doctor payment 
+
+####################
+#  Doctor's forum  #
+####################
+
+class DfPostCatagory(BaseModel):
+    __tablename__ = "df_post_catagories"
+    name = Column(String(100), nullable=False)
+    details = Column(Text, nullable=True)
+
+
+class DfPostTag(BaseModel):
+    __tablename__ = "df_post_tags"
+    user_id = Column(Integer, ForeignKey("users.id"))
+    tag = Column(String(255), nullable=False)
+
+
+class DfPostTagRelation(BaseModel):
+    __tablename__ = "df_post_tag_relations"
+    post_id = Column(Integer, ForeignKey("df_posts.id"))
+    tag_id = Column(Integer, ForeignKey("df_post_tags.id"))
+
+
+class DfPost(BaseModel):
+    __tablename__ = "df_posts"
+    title = Column(String(255), nullable=False)
+    body = Column(Text, nullable=True)
+    user_id = Column(Integer, ForeignKey("users.id"))
+    catagory_id = Column(Integer, ForeignKey("df_post_catagories.id"))
+    cover_image_id = Column(Integer, nullable=True)
+
 
 # Patient related models
 
