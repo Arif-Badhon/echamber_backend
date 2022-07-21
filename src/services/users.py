@@ -42,25 +42,22 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
             return ServiceResult(AppException.ServerError("Something went wrong!"))
         return ServiceResult(data, status_code=status.HTTP_201_CREATED)
 
-    
-    def user_update(self, db: Session, id:int,  data_update:UserUpdate):
+    def user_update(self, db: Session, id: int,  data_update: UserUpdate):
 
         data = self.repo.update(db, id, data_update)
         if not data:
             return ServiceResult(AppException.NotAccepted())
         return ServiceResult(data, status_code=status.HTTP_202_ACCEPTED)
 
-
     def user_id(self, db: Session, id: int):
-        data = self.get_one(db=id,id=id)
+        data = self.get_one(db=id, id=id)
         role_name = roles_service.get_one(db=db, id=handle_result(data).role_id).name
         data.role_name = role_name
         if not data:
             return ServiceResult(AppException.ServerError("Something went wrong!"))
         return ServiceResult(data, status_code=status.HTTP_201_CREATED)
 
-
-    def user_search_by_phone(self, db: Session, phone_in: str='0', skip: int=0, limit:int = 10):
+    def user_search_by_phone(self, db: Session, phone_in: str = '0', skip: int = 0, limit: int = 10):
         data_all = users_repo.search_by_phone_all(db=db, phone_in=phone_in, skip=skip, limit=limit)
         data = []
 
@@ -71,8 +68,6 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
         if not data:
             return ServiceResult([], status_code=status.HTTP_200_OK)
         return ServiceResult(data, status_code=status.HTTP_200_OK)
-
-
 
     def search_by_email_service(self, db: Session, email_in: str):
         data = self.repo.search_by_email(db, email_in)
@@ -96,6 +91,12 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
 
     def login(self, db: Session, identifier: str, password: str):
         user: User = self.is_auth(db, identifier, password)
+        print(user.is_active)
+
+        # deactive user prevent
+        if user.is_active == False:
+            return ServiceResult(AppException.NotFound("You are not active user."))
+
         if user is not None:
             access_token = Token.create_access_token({"sub": user.id})
             return ServiceResult({"access_token": access_token, "token_type": "bearer"}, status_code=200)
