@@ -91,8 +91,6 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
         else:
             return ServiceResult(data, status_code=status.HTTP_201_CREATED)
 
-
-
     def activity_log(self, db: Session, user_id: int, skip: int = 0, limit: int = 15):
         activity = admin_panel_activity_repo.activity_log(db=db, user_id=user_id, skip=skip, limit=limit)
 
@@ -148,7 +146,16 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
             return ServiceResult(created_by_employee, status_code=status.HTTP_201_CREATED)
 
     def all_employee(self, db: Session, skip: int = 0, limit: int = 10):
-        all_emp = self.repo.all_employee(db, skip, limit)
+        all_emp = self.repo.all_employee(db=db, skip=skip, limit=limit, is_active=True)
+        for i in all_emp[1]:
+            i.role_name = roles_repo.get_one(db=db, id=i.role_id).name
+        if not all_emp:
+            return ServiceResult([], status_code=status.HTTP_200_OK)
+        else:
+            return ServiceResult(all_emp, status_code=status.HTTP_200_OK)
+
+    def deactive_employee(self, db: Session, skip: int = 0, limit: int = 10):
+        all_emp = self.repo.all_employee(db=db, skip=skip, limit=limit, is_active=False)
         for i in all_emp[1]:
             i.role_name = roles_repo.get_one(db=db, id=i.role_id).name
         if not all_emp:

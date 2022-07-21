@@ -67,6 +67,12 @@ def all_employee(skip: int = 0, limit: int = 10, db: Session = Depends(get_db), 
     return handle_result(all)
 
 
+@router.get('/employee/deactive', response_model=List[Union[ResultInt, List[UserOutAuth]]])
+def all_employee(skip: int = 0, limit: int = 10, db: Session = Depends(get_db), current_user: Session = Depends(logged_in)):
+    all = admin_service.deactive_employee(db, skip=skip, limit=limit)
+    return handle_result(all)
+
+
 @router.post('/employee/create', response_model=AdminPanelActivityOut)
 def empployee_create(data_in: UserCreate, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin_moderator)):
     employee_created = admin_service.signup_employee(db, data_in=data_in, creator_id=current_user.id)

@@ -11,12 +11,12 @@ class AdminRepo(BaseRepo[User, UserCreate, UserUpdate]):
     def search_by_role_id(self, db: Session, id: int):
         return db.query(self.model).filter(self.model.role_id == id).all()
 
-    def all_employee(self, db: Session, skip: int = 0, limit: int = 10):
+    def all_employee(self, db: Session, skip: int = 0, limit: int = 10, is_active: bool = True):
         doctor_id = roles_repo.search_name_id(db, name='doctor')
         patient_id = roles_repo.search_name_id(db, name='patient')
 
-        query = db.query(self.model).filter(self.model.role_id != doctor_id).filter(self.model.role_id != patient_id).offset(skip).limit(limit).all()
-        query_all = db.query(self.model).filter(self.model.role_id != doctor_id).filter(self.model.role_id != patient_id).all()
+        query = db.query(self.model).filter(self.model.role_id != doctor_id).filter(self.model.role_id != patient_id).filter(self.model.is_active == is_active).offset(skip).limit(limit).all()
+        query_all = db.query(self.model).filter(self.model.role_id != doctor_id).filter(self.model.role_id != patient_id).filter(self.model.is_active == is_active).all()
 
         return [{"results": len(query_all)}, query]
 
