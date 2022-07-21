@@ -91,7 +91,6 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
 
     def login(self, db: Session, identifier: str, password: str):
         user: User = self.is_auth(db, identifier, password)
-        print(user.is_active)
 
         # deactive user prevent
         if user.is_active == False:

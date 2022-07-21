@@ -58,7 +58,7 @@
                     document.getElementById('token').value = log.access_token
                     console.log(log)
                 } else {
-                    document.getElementById('token').value = 'Something went wrong!'
+                    document.getElementById('token').value = log.context
                 }
             }
             funFetch()
