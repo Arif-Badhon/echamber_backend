@@ -41,6 +41,16 @@ class DoctorDetails(BaseModel):
     qualifications: List[DoctorQualificationOut]
 
 
+class DoctorUserWithSpecialities(BaseModel):
+    id: int
+    name: str
+    sex: str
+    specialities: List[DoctorSpecialityOut]
+
+    class Config:
+        orm_mode = True
+
+
 class DoctorSignup(BaseModel):
     name: str
     email: str
