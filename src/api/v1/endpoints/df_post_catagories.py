@@ -61,7 +61,7 @@ def edit(id: int, data_update: DfPostCatagoryUpdate, db: Session = Depends(get_d
 
 
 @router.get('/tag', response_model=List[DfPostTagOut])
-def search(db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
+def search(db: Session = Depends(get_db)):
     return
 
 
@@ -71,5 +71,5 @@ def create(db: Session = Depends(get_db), current_user: Session = Depends(logged
 
 
 @router.get('/tag/{id}', response_model=DfPostTagOut)
-def search(id: int, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
+def search(id: int, db: Session = Depends(get_db)):
     return
