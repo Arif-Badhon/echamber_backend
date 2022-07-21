@@ -2,8 +2,9 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from db import get_db
 from exceptions import handle_result
-from schemas import DoctorOut, DoctorSpecialityOut, DoctorQualificationOut, DoctorSpecialityOut, DoctorQualilficationUpdate, DoctorSpecialityUpdate, DoctorSignup, UserOut, UserOutAuth
+from schemas import DoctorOut, DoctorSpecialityOut, DoctorQualificationOut, DoctorSpecialityOut, DoctorQualilficationUpdate, DoctorSpecialityUpdate, DoctorSignup, UserOut, UserOutAuth, DoctorDetails
 from schemas.admin import ResultInt
+from schemas.doctors import DoctorUpdate
 from services import doctors_service, doctor_qualifications_service, doctor_specialities_service
 from api.v1.auth_dependcies import logged_in_doctor
 from typing import List, Union
@@ -27,6 +28,12 @@ def auth(doctor: Session = Depends(logged_in_doctor)):
 def get_doctor(db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
     doc = doctors_service.get_by_user_id(db=db, user_id=current_user.id)
     return handle_result(doc)
+
+
+@router.patch('/', response_model=DoctorOut)
+def edit(data_update: DoctorUpdate, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
+    data = doctors_service.edit_by_user_id(db=db, data_update=data_update, user_id=current_user.id)
+    return handle_result(data)
 
 
 @router.get('/qualifications', response_model=DoctorQualificationOut)
@@ -55,7 +62,7 @@ def update(id: int, data_update: DoctorSpecialityUpdate, db: Session = Depends(g
     return handle_result(speciality)
 
 
-@router.get('/detail/{id}', response_model=List[Union[UserOut, List[DoctorSpecialityOut], List[DoctorQualificationOut]]])
+@router.get('/detail/{id}', response_model=DoctorDetails)
 def detail(id: int, db: Session = Depends(get_db)):
     data = doctors_service.details(db=db, id=id)
     return data

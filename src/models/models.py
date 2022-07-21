@@ -286,7 +286,8 @@ class Doctor(BaseModel):
     __tablename__ = "doctors"
     user_id = Column(Integer, ForeignKey("users.id"))
     bmdc = Column(String(100), nullable=False, unique=True)
-    main_chamber = Column(String(255), nullable=True)
+    exp_year = Column(Integer, nullable=True)
+    online_fees = Column(Float, nullable=True)
 
     user_doctor = relationship("User", back_populates="doctor")
 

@@ -1,6 +1,6 @@
 from schemas import DoctorIn, DoctorUpdate, UserCreate
 from models import Doctor
-from schemas import DoctorSignup, DoctorQualilficationIn
+from schemas import DoctorSignup, DoctorQualilficationIn, DoctorUpdate
 from schemas.doctor_specialities import DoctorSpecialityIn
 from services import BaseService
 from .users import users_service
@@ -21,6 +21,11 @@ class DoctorService(BaseService[Doctor, DoctorIn, DoctorUpdate]):
             return ServiceResult(AppException.ServerError("Not found"))
         else:
             return ServiceResult(data, status_code=status.HTTP_200_OK)
+
+    def edit_by_user_id(self, db: Session, data_update: DoctorUpdate, user_id: int):
+        doc = self.get_by_user_id(db=db, user_id=user_id)
+        up = self.update(db=db, id=handle_result(doc).id, data_update=data_update)
+        return up
 
     def create_with_flush(self, db: Session, data_in: DoctorIn):
         data = self.repo.create_with_flush(db, data_in)
@@ -87,11 +92,13 @@ class DoctorService(BaseService[Doctor, DoctorIn, DoctorUpdate]):
         if role_name != 'doctor':
             return ServiceResult(AppException.ServerError("This user is not a doctor."))
 
+        doctors = self.get_by_user_id(db=db, user_id=id)
+
         specialities = doctor_specialities_service.get_by_key(db=db, skip=0, limit=15, descending=False, count_results=False, user_id=id)
 
         qualifications = doctor_qualifications_service.get_by_key(db=db, skip=0, limit=15, descending=False, count_results=False, user_id=id)
 
-        return [handle_result(user), handle_result(specialities), handle_result(qualifications)]
+        return {"user": handle_result(user), "doctor": handle_result(doctors), "specialities": handle_result(specialities), "qualifications": handle_result(qualifications)}
         # return {user, specialities, qualifications}
 
 
