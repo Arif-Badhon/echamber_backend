@@ -4,7 +4,7 @@ from db import get_db
 from exceptions.service_result import handle_result
 from schemas import ServiceOrderIn, MedicineOrderIn, HealthPlanForPatientWithService, HealthPlanForPatientOut, AdminPanelActivityOut, ServiceOrderOut, ResultInt, MedicineOrderOut, TelemedicineServiceIn, TelemedicineOut
 from sqlalchemy.orm import Session
-from api.v1.auth_dependcies import logged_in_admin_crm, logged_in_admin_moderator, logged_in_employee
+from api.v1.auth_dependcies import logged_in_admin_moderator_crm, logged_in_admin_moderator, logged_in_employee
 from schemas.medicine_order import MedicineOrderUpdate
 from schemas.service_order import ServiceOrderUpdate
 from schemas.telemedicine_orders import TelemedicineIn
@@ -34,7 +34,7 @@ def patient_services(id: int, skip: int = 0, limit: int = 15, db: Session = Depe
 
 
 @router.patch('/{id}', response_model=ServiceOrderOut)
-def update_service(id: int, data_update: ServiceOrderUpdate, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin_crm)):
+def update_service(id: int, data_update: ServiceOrderUpdate, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin_moderator_crm)):
     up = service_order_service.update(db=db, id=id, data_update=data_update)
     return handle_result(up)
 
@@ -78,6 +78,6 @@ def medicine_list_by_service(service_id: int, skip: int = 0, limit: int = 15, db
 
 
 @router.patch('/medicine/update/{id}', response_model=MedicineOrderOut)
-def update_medicine(id: int, data_update: MedicineOrderUpdate, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin_crm)):
+def update_medicine(id: int, data_update: MedicineOrderUpdate, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin_moderator_crm)):
     up = medicine_order_service.update(db=db, id=id, data_update=data_update)
     return handle_result(up)
