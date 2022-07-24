@@ -23,3 +23,11 @@ class DoctorScheduleOut(DoctorScheduleBase):
 
     class Config:
         orm_mode = True
+
+
+class DoctorScheduleOutWithBooked(DoctorScheduleBase):
+    user_id: int
+    booked: bool
+
+    class Config:
+        orm_mode = True

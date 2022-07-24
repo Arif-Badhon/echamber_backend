@@ -1,7 +1,8 @@
+from datetime import date
 from typing import List
 from fastapi import APIRouter
 from exceptions.service_result import handle_result
-from schemas import DoctorScheduleBase, DoctorScheduleIn, DoctorScheduleOut
+from schemas import DoctorScheduleBase, DoctorScheduleIn, DoctorScheduleOut, DoctorScheduleOutWithBooked
 from db import get_db
 from fastapi import Depends
 from sqlalchemy.orm import Session
@@ -22,3 +23,9 @@ def schedules(db: Session = Depends(get_db), current_doctor: Session = Depends(l
 def create_schedule(data_in: DoctorScheduleBase, db: Session = Depends(get_db), current_doctor: Session = Depends(logged_in_doctor)):
     schedule = doctor_schedule_service.create(db=db, data_in=DoctorScheduleIn(user_id=current_doctor.id, **data_in.dict()))
     return handle_result(schedule)
+
+
+@router.get('/booked/{doctor_id}/{date}', response_model=List[DoctorScheduleOutWithBooked])
+def booked_schedule(doctor_id: int, date: date, db: Session = Depends(get_db)):
+    data = doctor_schedule_service.booked_schedule(db=db, doctor_id=doctor_id, date=date)
+    return handle_result(data)
