@@ -13,7 +13,7 @@ class DoctorScheduleRepo(BaseRepo[DoctorSchedule, DoctorScheduleIn, DoctorSchedu
 
         for i in schedule_data:
             telm = db.query(TeleMedicineOrder).filter(TeleMedicineOrder.doctor_id == doctor_id).filter(TeleMedicineOrder.booked_date == date).filter(TeleMedicineOrder.schedule_id == i.id).first()
-            print(telm)
+
             if not telm:
                 i.booked = False
             else:

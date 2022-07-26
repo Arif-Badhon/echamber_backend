@@ -34,13 +34,13 @@ def patient_services(id: int, skip: int = 0, limit: int = 15, db: Session = Depe
 
 
 @router.patch('/{id}', response_model=ServiceOrderOut)
-def update_service(id: int, data_update: ServiceOrderUpdate, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin_moderator_crm)):
+def update_service(id: int, data_update: ServiceOrderUpdate, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_employee)):
     up = service_order_service.update(db=db, id=id, data_update=data_update)
     return handle_result(up)
 
 
 @router.post('/healthplan/subscribe', response_model=AdminPanelActivityOut)
-def health_plan(data_in: HealthPlanForPatientWithService, voucher_code: str, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin_moderator)):
+def health_plan(data_in: HealthPlanForPatientWithService, voucher_code: str, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_employee)):
     data = health_plan_for_patient_service.subscribe_with_service(db=db, data_in=data_in, voucher_code=voucher_code, employee_id=current_user.id)
     return handle_result(data)
 
@@ -52,7 +52,7 @@ def healthplan_subscription_by_service(service_id: int, skip: int = 0, limit: in
 
 
 @router.post('/telemedicine', response_model=AdminPanelActivityOut)
-def telemedicine_order(data_in: TelemedicineServiceIn, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin_moderator)):
+def telemedicine_order(data_in: TelemedicineServiceIn, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_employee)):
     telemed = telemedicine_service.create_with_service(db=db, user_id=current_user.id, data_in=data_in)
     return handle_result(telemed)
 
@@ -64,7 +64,7 @@ def telemedicine_by_service_id(service_id: int, db: Session = Depends(get_db), s
 
 
 @router.post('/medicine', response_model=AdminPanelActivityOut, description='Access: admin and moderator')
-def medicine_order(data_in: List[Union[ServiceOrderIn, List[MedicineOrderIn]]], db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin_moderator)):
+def medicine_order(data_in: List[Union[ServiceOrderIn, List[MedicineOrderIn]]], db: Session = Depends(get_db), current_user: Session = Depends(logged_in_employee)):
     medicine_order = service_order_service.medicine_order(
         db=db, data_in=data_in, user_id=current_user.id)
     return handle_result(medicine_order)
@@ -78,6 +78,6 @@ def medicine_list_by_service(service_id: int, skip: int = 0, limit: int = 15, db
 
 
 @router.patch('/medicine/update/{id}', response_model=MedicineOrderOut)
-def update_medicine(id: int, data_update: MedicineOrderUpdate, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin_moderator_crm)):
+def update_medicine(id: int, data_update: MedicineOrderUpdate, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_employee)):
     up = medicine_order_service.update(db=db, id=id, data_update=data_update)
     return handle_result(up)
