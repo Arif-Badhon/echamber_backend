@@ -24,7 +24,7 @@ def post(data_in: HealthPlanListIn, db: Session = Depends(get_db), current_user:
 
 
 @router.get('/{id}', response_model=HealthPlanListOut)
-def single_health_plan(id: int, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_employee)):
+def single_health_plan(id: int, db: Session = Depends(get_db)):
     data = healtth_plan_list_service.get_one(db=db, id=id)
     return handle_result(data)
 
