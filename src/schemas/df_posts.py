@@ -79,13 +79,17 @@ class DfPostTagOut(DfPostTagRelationBase):
 class DfPostBase(BaseModel):
     title: str
     body: str
-    user_id: int
+    # user_id: int
     catagory_id: int
     cover_image_id: Optional[int] = None
 
 
 class DfPostIn(DfPostBase):
     pass
+
+
+class DfPostInWithUser(DfPostBase):
+    user_id: int
 
 
 class DfPostUpdate(BaseModel):
@@ -98,6 +102,7 @@ class DfPostUpdate(BaseModel):
 
 class DfPostOut(DfPostBase):
     id: int
+    user_id: int
     cover_image_str: Optional[str]
     created_at: datetime
 

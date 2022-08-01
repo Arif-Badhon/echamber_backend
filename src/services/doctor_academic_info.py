@@ -1,0 +1,7 @@
+from services import BaseService
+from repositories import doctor_academic_info_repo
+from models import DoctorAcademicInfo
+from schemas import DoctorAcademicInfoIn, DoctorAcademicInfoUpdate
+
+
+doctor_academic_info_service = BaseService[DoctorAcademicInfo, DoctorAcademicInfoIn, DoctorAcademicInfoUpdate](DoctorAcademicInfo, doctor_academic_info_repo)

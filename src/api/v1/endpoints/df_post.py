@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from db import get_db
 from exceptions.service_result import handle_result
-from schemas import DfPostCatagoryIn, DfPostCatagoryOut, DfPostCatagoryUpdate, DfPostIn, DfPostOut, DfPostUpdate, ResultInt, DfPostTagOut
+from schemas import DfPostCatagoryIn, DfPostCatagoryOut, DfPostCatagoryUpdate, DfPostIn, DfPostOut, DfPostUpdate, ResultInt, DfPostTagOut, DfPostInWithUser
 from services import df_post_catagory_service, df_post_service
 from typing import List, Union
 from sqlalchemy.orm import Session
@@ -18,7 +18,7 @@ def posts(skip: int = 0, limit: int = 15, db: Session = Depends(get_db)):
 
 @router.post('/post', response_model=DfPostOut)
 def create(data_in: DfPostIn, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
-    data = df_post_service.create(db=db, data_in=data_in)
+    data = df_post_service.create(db=db, data_in=DfPostInWithUser(user_id=current_user.id, **data_in.dict()))
     return handle_result(data)
 
 

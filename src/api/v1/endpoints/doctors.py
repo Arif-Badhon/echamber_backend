@@ -2,10 +2,11 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from db import get_db
 from exceptions import handle_result
-from schemas import DoctorOut, DoctorSpecialityOut, DoctorQualificationOut, DoctorSpecialityOut, DoctorQualilficationUpdate, DoctorSpecialityUpdate, DoctorSignup, UserOut, UserOutAuth, DoctorDetails
+from schemas import DoctorOut, DoctorSpecialityOut, DoctorQualificationOut, DoctorSpecialityOut, DoctorQualilficationUpdate, DoctorSpecialityUpdate, DoctorSignup, UserOut, UserOutAuth, DoctorDetails, DoctorWorkPlaceOut, DoctorWorkPlaceIn, DoctorWorkPlaceWithUser, DoctorWorkPlaceUpdate
 from schemas.admin import ResultInt
+from schemas.doctor_academic_info import DoctorAcademicInfoIn, DoctorAcademicInfoOut, DoctorAcademicInfoUpdate, DoctorAcademicInfoWithUser
 from schemas.doctors import DoctorUpdate
-from services import doctors_service, doctor_qualifications_service, doctor_specialities_service
+from services import doctors_service, doctor_qualifications_service, doctor_specialities_service, doctor_workplace_service, doctor_academic_info_service
 from api.v1.auth_dependcies import logged_in_doctor
 from typing import List, Union
 
@@ -36,6 +37,18 @@ def edit(data_update: DoctorUpdate, db: Session = Depends(get_db), current_user:
     return handle_result(data)
 
 
+@router.get('/detail/{id}', response_model=DoctorDetails)
+def detail(id: int, db: Session = Depends(get_db)):
+    data = doctors_service.details(db=db, id=id)
+    return data
+
+
+@router.get('/all/docs', response_model=List[Union[ResultInt, List[UserOut]]])
+def all_docs(skip: int = 0, limit: int = 15, db: Session = Depends(get_db)):
+    docs = doctors_service.all_doc(db=db, skip=skip, limit=limit)
+    return handle_result(docs)
+
+
 @router.get('/qualifications', response_model=DoctorQualificationOut)
 def get(db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
     qualification = doctor_qualifications_service.get_by_user_id(
@@ -62,13 +75,37 @@ def update(id: int, data_update: DoctorSpecialityUpdate, db: Session = Depends(g
     return handle_result(speciality)
 
 
-@router.get('/detail/{id}', response_model=DoctorDetails)
-def detail(id: int, db: Session = Depends(get_db)):
-    data = doctors_service.details(db=db, id=id)
-    return data
+@router.post('/workplace', response_model=DoctorWorkPlaceOut)
+def create(data_in: DoctorWorkPlaceIn, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
+    data = doctor_workplace_service.create(db=db, data_in=DoctorWorkPlaceWithUser(user_id=current_user.id, **data_in.dict()))
+    return handle_result(data)
 
 
-@router.get('/all/docs', response_model=List[Union[ResultInt, List[UserOut]]])
-def all_docs(skip: int = 0, limit: int = 15, db: Session = Depends(get_db)):
-    docs = doctors_service.all_doc(db=db, skip=skip, limit=limit)
-    return handle_result(docs)
+@router.get('/workplace/{user_id}', response_model=List[DoctorWorkPlaceOut])
+def get(user_id: int, skip: int = 0, limit: int = 30, db: Session = Depends(get_db)):
+    workplace = doctor_workplace_service.get_by_key(db=db, skip=skip, limit=limit, descending=False, count_results=False, user_id=user_id)
+    return handle_result(workplace)
+
+
+@router.patch('/workplace/{id}', response_model=DoctorWorkPlaceOut)
+def update(id: int, data_update: DoctorWorkPlaceUpdate, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
+    edit = doctor_workplace_service.update(db=db, id=id, data_update=data_update)
+    return handle_result(edit)
+
+
+@router.post('/academic', response_model=DoctorAcademicInfoOut)
+def post(data_in: DoctorAcademicInfoIn, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
+    data = doctor_academic_info_service.create(db=db, data_in=DoctorAcademicInfoWithUser(user_id=current_user.id, **data_in.dict()))
+    return handle_result(data)
+
+
+@router.get('/academic/{user_id}', response_model=List[DoctorAcademicInfoOut])
+def get(user_id: int, skip: int = 0, limit: int = 30, db: Session = Depends(get_db)):
+    all = doctor_academic_info_service.get_by_key(db=db, skip=skip, limit=limit, descending=False, count_results=False, user_id=user_id)
+    return handle_result(all)
+
+
+@router.patch('/academic/{id}', response_model=DoctorAcademicInfoOut)
+def edit(id: int, data_update: DoctorAcademicInfoUpdate, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
+    up = doctor_academic_info_service.update(db=db, id=id, data_update=data_update)
+    return handle_result(up)

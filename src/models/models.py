@@ -293,6 +293,25 @@ class Doctor(BaseModel):
 
 
 
+class DoctorWorkPlace(BaseModel):
+    __tablename__ = "doctor_workplace"
+    user_id = Column(Integer, ForeignKey("users.id"))
+    institute = Column(String(255), nullable=False)
+    position = Column(String(255), nullable=True)
+    start_date = Column(Date, nullable=True)
+    end_date = Column(Date, nullable=True)
+
+
+
+class DoctorAcademicInfo(BaseModel):
+    __tablename__ = "doctor_academic_info"
+    user_id = Column(Integer, ForeignKey("users.id"))
+    institute = Column(String(255), nullable=False)
+    degree = Column(String(255), nullable=True)
+    start_date = Column(Date, nullable=True)
+    end_date = Column(Date, nullable=True)
+
+
 class DoctorQualification(BaseModel):
     __tablename__="doctor_qualifications"
     user_id = Column(Integer, ForeignKey("users.id"))
@@ -330,6 +349,7 @@ class DoctorSchedule(BaseModel):
     minutes =  Column(Integer, nullable=False)
     am_pm = Column(String(100), nullable=False)
     online = Column(Boolean, nullable=False)
+
 
 
 # Doctor payment 

@@ -21,6 +21,8 @@ from .doctor_qualifications import *
 from .doctor_specialities import *
 from .doctors_search import *
 from .doctor_schedules import *
+from .doctor_workplace import *
+from .doctor_academic_info import *
 from .df_posts import *
 from .patients import *
 from .patient_families import *
