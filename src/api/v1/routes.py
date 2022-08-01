@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
 from schemas import notice
-from .endpoints import admin, corporate_partners, follow_up, notice, review, service_order, health_plan, telemedicine, doctor_chambers, doctors_search, doctor_schedules, users, roles, doctors, patients, user_details, patient_indicators, patient_reports, patient_families, eprescription, ep_medicines, ep_chief_complaints, ep_investigations, ep_advices, mediva_device_catagories, mediva_devices, df_post_catagories
+from .endpoints import admin, corporate_partners, df_post, follow_up, notice, review, service_order, health_plan, telemedicine, doctor_chambers, doctors_search, doctor_schedules, users, roles, doctors, patients, user_details, patient_indicators, patient_reports, patient_families, eprescription, ep_medicines, ep_chief_complaints, ep_investigations, ep_advices, mediva_device_catagories, mediva_devices
 
 api_router = APIRouter()
 
@@ -23,7 +23,7 @@ api_router.include_router(doctors.router, prefix='/doctors', tags=['Doctors'])
 api_router.include_router(doctor_chambers.router, prefix='/doctors/chamber', tags=['Doctor\'s Chamber'])
 api_router.include_router(doctors_search.router, prefix='/doctors/search', tags=['Doctor Search'])
 api_router.include_router(doctor_schedules.router, prefix='/doctor/schedules', tags=['Doctor Schedules'])
-api_router.include_router(df_post_catagories.router, prefix='/doctor/forum', tags=['Doctor Forum'])
+api_router.include_router(df_post.router, prefix='/doctor/forum', tags=['Doctor Forum'])
 api_router.include_router(patients.router, prefix='/patients', tags=['Patients'])
 api_router.include_router(patient_indicators.router, prefix='/patient/indicators', tags=['Patient Indicators'])
 api_router.include_router(patient_reports.router, prefix='/patient/reports', tags=['Patients Report'])

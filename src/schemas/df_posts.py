@@ -98,6 +98,7 @@ class DfPostUpdate(BaseModel):
 
 class DfPostOut(DfPostBase):
     id: int
+    cover_image_str: Optional[str]
     created_at: datetime
 
     class Config:

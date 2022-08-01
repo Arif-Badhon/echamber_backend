@@ -60,6 +60,12 @@ def user_by_phone(number: str, skip: int = 0, limit: int = 10,  db: Session = De
     return handle_result(users)
 
 
+@router.get('/get/all/pic/{id}', response_model=ImageLogOut)
+def get_image(id: int, db: Session = Depends(get_db)):
+    get_image = image_log_service.get_one(db=db, id=id)
+    return handle_result(get_image)
+
+
 @router.get('/profile-pic', response_model=ImageLogOut, description='<h2>Alert: images/profile/(image url)</b>')
 def get_profile_pic(db: Session = Depends(get_db), current_user: Session = Depends(logged_in)):
     pp = image_log_service.last_profile_pic(db=db, user_id=current_user.id)

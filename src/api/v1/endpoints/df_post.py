@@ -12,7 +12,7 @@ router = APIRouter()
 
 @router.get('/post', response_model=List[Union[ResultInt, List[DfPostOut]]])
 def posts(skip: int = 0, limit: int = 15, db: Session = Depends(get_db)):
-    data = df_post_service.get_with_pagination(db=db, skip=skip, limit=limit, descending=True, count_results=True)
+    data = df_post_service.post_out(db=db, skip=skip, limit=limit)
     return handle_result(data)
 
 
