@@ -93,6 +93,11 @@ def update(id: int, data_update: DoctorWorkPlaceUpdate, db: Session = Depends(ge
     return handle_result(edit)
 
 
+@router.delete('/workplace/{id}')
+def remove(id: int, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
+    return doctor_academic_info_service.delete(db=db, id=id)
+
+
 @router.post('/academic', response_model=DoctorAcademicInfoOut)
 def post(data_in: DoctorAcademicInfoIn, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
     data = doctor_academic_info_service.create(db=db, data_in=DoctorAcademicInfoWithUser(user_id=current_user.id, **data_in.dict()))
@@ -109,3 +114,9 @@ def get(user_id: int, skip: int = 0, limit: int = 30, db: Session = Depends(get_
 def edit(id: int, data_update: DoctorAcademicInfoUpdate, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
     up = doctor_academic_info_service.update(db=db, id=id, data_update=data_update)
     return handle_result(up)
+
+
+@router.delete('/academic/{id}')
+def remove(id: int, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
+    delete = doctor_academic_info_service.delete(db=db, id=id)
+    return delete
