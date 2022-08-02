@@ -7,7 +7,7 @@ class DoctorWorkPlaceBase(BaseModel):
     institute: str
     position: str
     start_date: date
-    end_date: date
+    end_date: Optional[date] = None
 
 
 class DoctorWorkPlaceIn(DoctorWorkPlaceBase):
