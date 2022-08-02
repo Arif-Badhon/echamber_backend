@@ -4,8 +4,9 @@ from db import get_db
 from exceptions.service_result import handle_result
 from schemas import UserOut, UserOutAuth, UserCreate, UserDoctorOut,  DoctorSignup, DoctorChamberOut, UserCreateWitoutRole, AdminPanelActivityOut, AdminPanelActivityAllOut, PatientIndicatorBase, NewPasswordIn, AdminPanelActivityOut, PatientIndicatorOut, HealthPartnerIn, HealthPartnerOut, ResultInt, AdminPatientsOut
 from sqlalchemy.orm import Session
+from schemas.users import UserUpdate
 from services import admin_service, doctor_chambers_service, patient_indicators_service, health_partner_service
-from api.v1.auth_dependcies import logged_in, logged_in_admin, logged_in_admin_moderator, logged_in_admin_moderator_medical_affairs
+from api.v1.auth_dependcies import logged_in, logged_in_admin, logged_in_admin_moderator, logged_in_admin_moderator_medical_affairs, logged_in_employee
 
 
 router = APIRouter()
@@ -137,7 +138,11 @@ def register_patient(data_in: UserCreate, db: Session = Depends(get_db), current
     patient_created = admin_service.signup_patient(db=db, data_in=data_in, creator_id=current_user.id)
     return handle_result(patient_created)
 
-# , response_model=List[Union[ResultInt ,List[AdminPatientsOut]]]
+
+@router.patch('/patient/user/update/{id}', response_model=AdminPanelActivityOut)
+def edit_user(id: int, data_update: UserUpdate, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_employee)):
+    adm = admin_service.patient_user_update(db=db, id=id, user_id=current_user.id, data_update=data_update)
+    return handle_result(adm)
 
 
 @router.get('/patient/all', response_model=List[Union[ResultInt, List[AdminPatientsOut]]])

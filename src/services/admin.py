@@ -276,6 +276,23 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
             else:
                 return ServiceResult(created_by_employee, status_code=status.HTTP_201_CREATED)
 
+    def patient_user_update(self, id: int, data_update: UserUpdate, user_id: int, db: Session):
+        users_service.update(id=id, data_update=data_update, db=db)
+
+        created_by_employee_data = AdminPanelActivityIn(
+            user_id=user_id,
+            service_name="patient_user_data_update",
+            service_recived_id=id,
+            remark=""
+        )
+
+        created_by_employee = admin_panel_activity_repo.create(db=db, data_in=created_by_employee_data)
+
+        if not created_by_employee:
+            return ServiceResult(AppException.ServerError("Problem with patient user data uupdate."))
+        else:
+            return ServiceResult(created_by_employee, status_code=status.HTTP_201_CREATED)
+
     def all_patient(self, db: Session, phone_number: str, skip: int, limit: int):
         patients = admin_repo.all_patient(db=db, phone_number=phone_number, skip=skip, limit=limit)
 

@@ -431,6 +431,10 @@ class PatientFamily(BaseModel):
 
 # E-prescription related models
 
+
+
+
+
 class EpMedicineList(BaseModel):
     __tablename__ = "ep_medicine_list"
     name = Column(String(255), nullable=False)

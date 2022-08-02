@@ -29,14 +29,12 @@ class UserDBIn(UserBase):
 
 
 class UserUpdate(BaseModel):
-    name: Optional[str]
-    email: Optional[str]
-    phone: Optional[constr(
-        min_length=11, max_length=14, regex=r"(\+880)?[0-9]{11}"
-    )]
-    sex: Optional[str]
-    role_id: Optional[int]
-    is_active: Optional[bool] = True
+    name: Optional[str] = None
+    email: Optional[str] = None
+    phone: Optional[str] = None
+    sex: Optional[str] = None
+    role_id: Optional[int] = None
+    is_active: Optional[bool] = None
 
 
 class UserOut(UserBase):
