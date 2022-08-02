@@ -431,9 +431,88 @@ class PatientFamily(BaseModel):
 
 # E-prescription related models
 
+class EPrescription(BaseModel):
+    __tablename__ = "eprescriptions"
+    cause_of_consultation = Column(String(255), nullable=True)
+    telemedicine_order_id = Column(Integer, nullable=True)
+    doctor_id = Column(Integer, ForeignKey("users.id"))
+    patient_id = Column(Integer, ForeignKey("users.id"))
+    age = Column(Integer, nullable=False)
+    current_address = Column(Text, nullable=True)
+    remarks = Column(Text, nullable=True)
 
 
+class EpChiefComplaints(BaseModel):
+    __tablename__ = "ep_chief_complaints"
+    ep_id = Column(Integer, ForeignKey("eprescriptions.id"))
+    chief_complaints = Column(String(255), nullable=False)
 
+
+class EpHistory(BaseModel):
+    __tablename__ = "ep_histories"
+    ep_id = Column(Integer, ForeignKey("eprescriptions.id"))
+    history_type = Column(String(255), nullable=False)
+    history = Column(String(255), nullable=False)
+
+
+class EpCoMorbidity(BaseModel):
+    __tablename__ = "ep_co_morbidity"
+    ep_id = Column(Integer, ForeignKey("eprescriptions.id"))
+    cm_type = Column(String(255), nullable=False)
+    remarks = Column(String(255), nullable=False)
+
+
+class EpOnExamination(BaseModel):
+    __tablename__ = "ep_on_examinations"
+    ep_id = Column(Integer, ForeignKey("eprescriptions.id"))
+    patient_indicator_id = Column(Integer, ForeignKey("patient_indicators.id"))
+
+
+class EpInvestigation(BaseModel):
+    __tablename__ = "ep_investigations"
+    ep_id = Column(Integer, ForeignKey("eprescriptions.id"))
+    investigation = Column(String(255), nullable=False)
+
+
+class EpDiagnosis(BaseModel):
+    __tablename__ = "ep_diagnosis"
+    ep_id = Column(Integer, ForeignKey("eprescriptions.id"))
+    diagnosis_type = Column(String(255), nullable=False)
+    diagnosis =  Column(String(255), nullable=False)
+
+
+class EpMedicine(BaseModel):
+    __tablename__ = "ep_medicines"
+    ep_id = Column(Integer, ForeignKey("eprescriptions.id"))
+    name = Column(String(255), nullable=False)
+    generic = Column(String(255), nullable=False)
+    form = Column(String(255), nullable=False)
+    strength = Column(String(255), nullable=False)    
+    doses = Column(String(100), nullable=True)
+    after_meal = Column(Boolean, nullable=True)
+    days = Column(Integer, nullable=True)
+    remarks = Column(String(255), nullable=True)
+
+
+class EpAdvices(BaseModel):
+    __tablename__ = "ep_advices"
+    ep_id = Column(Integer, ForeignKey("eprescriptions.id"))
+    advice = Column(String(255), nullable=False)
+
+
+class EpNextFollowUp(BaseModel):
+    __tablename__ = "ep_next_follow_up"
+    ep_id = Column(Integer, ForeignKey("eprescriptions.id"))
+    date = Column(Date, nullable=False)
+
+
+class EpDoctorRefer(BaseModel):
+    __tablename__ = "ep_doctor_refer"
+    ep_id = Column(Integer, ForeignKey("eprescriptions.id"))
+    detail = Column(Text, nullable=False)
+
+
+# ============================================================ #
 
 class EpMedicineList(BaseModel):
     __tablename__ = "ep_medicine_list"

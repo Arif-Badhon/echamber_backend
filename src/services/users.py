@@ -93,7 +93,7 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
         user: User = self.is_auth(db, identifier, password)
 
         # deactive user prevent
-        if user.is_active == False:
+        if user and user.is_active == False:
             return ServiceResult(AppException.NotFound("You are not active user."))
 
         if user is not None:

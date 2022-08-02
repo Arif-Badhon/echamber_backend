@@ -7,11 +7,12 @@ from sqlalchemy.orm import Session
 
 class EpMedicineListRepo(BaseRepo[EpMedicineList, MedicineIn, MedicineUpdate]):
     def search_medicine(self, db: Session, search_medicine: str, skip: int = 0, limit: int = 10):
-        query = db.query(self.model).filter(or_(
-            self.model.name.like(f"%{search_medicine}"),
-            self.model.generic.like(f"%{search_medicine}")
-            )).offset(skip).limit(limit).all()
-        return query
+        data = []
+        brand = db.query(self.model).filter(self.model.name.like(f"%{search_medicine}")).offset(skip).limit(limit).all()
+        generic = db.query(self.model).filter(self.model.generic.like(f"%{search_medicine}")).offset(skip).limit(limit).all()
+        data.extend(brand)
+        data.extend(generic)
+        return data
 
 
 ep_medicines_list_repo = EpMedicineListRepo(EpMedicineList)

@@ -65,8 +65,8 @@ parent_path = os.path.dirname(os.path.realpath(__file__))
 
 
 app.mount('/static/', StaticFiles(directory=f'{parent_path}/static'), name='static')
-app.mount('/images/', StaticFiles(directory=f'{parent_path}/assets/img'), name='img')
-app.mount('/pdf/', StaticFiles(directory=f'{parent_path}/assets/pdf'), name='pdf')
+app.mount('/api/v1/images/', StaticFiles(directory=f'{parent_path}/assets/img'), name='img')
+app.mount('/api/v1/pdf/', StaticFiles(directory=f'{parent_path}/assets/pdf'), name='pdf')
 
 
 templates = Jinja2Templates(directory='templates')
