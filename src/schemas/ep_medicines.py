@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel
 
@@ -22,6 +23,49 @@ class MedicineUpdate(MedicineBase):
 
 class MedicineOut(MedicineBase):
     id: int
+
+    class Config:
+        orm_mode = True
+
+
+# for ep medicines
+
+class EpMedicineBase(BaseModel):
+    name: str
+    generic: str
+    pharmaceuticals: str
+    form: str
+    strength: str
+    doses: str
+    after_meal: bool
+    days: int
+    remarks: str
+
+
+class EpMedicineIn(EpMedicineBase):
+    pass
+
+
+class EpMedicineWithEp(EpMedicineBase):
+    ep_id: int
+
+
+class EpMedicineUpdate(BaseModel):
+    name: Optional[str] = None
+    generic: Optional[str] = None
+    pharmaceuticals: Optional[str] = None
+    form: Optional[str] = None
+    strength: Optional[str] = None
+    doses: Optional[str] = None
+    after_meal: Optional[bool] = None
+    days: Optional[int] = None
+    remarks: Optional[str] = None
+
+
+class EpMedicineOut(BaseModel):
+    id: int
+    ep_id: int
+    created_at: datetime
 
     class Config:
         orm_mode = True

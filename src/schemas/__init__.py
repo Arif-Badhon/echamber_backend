@@ -27,8 +27,14 @@ from .df_posts import *
 from .patients import *
 from .patient_families import *
 from .patient_indicators import *
-from .eprescription import *
+from .ep_patient_search import *
 from .ep_chief_complaints import *
+from .ep_history import *
+from .ep_comorbidity import *
+from .ep_on_examination import *
 from .ep_investigations import *
 from .ep_advices import *
 from .ep_medicines import *
+from .ep_diagnosis import *
+from .ep_next_follow_up import *
+from .ep_doctor_refer import *

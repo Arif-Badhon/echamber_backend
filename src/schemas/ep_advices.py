@@ -1,4 +1,7 @@
+from datetime import datetime
 from pydantic import BaseModel
+
+# advice list
 
 
 class AdviceBase(BaseModel):
@@ -15,7 +18,21 @@ class AdviceUpdate(AdviceBase):
 
 class AdviceOut(AdviceBase):
     id: int
-    advice: str
+
+    class Config:
+        orm_mode = True
+
+
+# advice for ep
+
+class AdviceInWithEp(AdviceBase):
+    ep_id: int
+
+
+class AdviceOutWithEp(AdviceBase):
+    id: int
+    ep_id: int
+    created_at: datetime
 
     class Config:
         orm_mode = True

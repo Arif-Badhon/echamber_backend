@@ -486,6 +486,7 @@ class EpMedicine(BaseModel):
     ep_id = Column(Integer, ForeignKey("eprescriptions.id"))
     name = Column(String(255), nullable=False)
     generic = Column(String(255), nullable=False)
+    pharmaceuticals = Column(String(255), nullable=False)
     form = Column(String(255), nullable=False)
     strength = Column(String(255), nullable=False)    
     doses = Column(String(100), nullable=True)
