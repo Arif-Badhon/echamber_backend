@@ -9,10 +9,12 @@ from sqlalchemy.sql import func
 class EpMedicineListRepo(BaseRepo[EpMedicineList, MedicineIn, MedicineUpdate]):
     def search_medicine(self, db: Session, search_medicine: str, skip: int = 0, limit: int = 10):
         data = []
-        brand = db.query(self.model).filter(self.model.name.like(f"%{search_medicine}")).offset(skip).limit(limit).all()
-        generic = db.query(self.model).filter(self.model.generic.like(f"%{search_medicine}")).offset(skip).limit(limit).all()
+        brand = db.query(self.model).filter(self.model.name.like(f"%{search_medicine}%")).filter(or_(self.model.add_status != 'pending', self.model.add_status == None)).offset(skip).limit(limit).all()
+        generic = db.query(self.model).filter(self.model.generic.like(f"%{search_medicine}%")).filter(
+            or_(self.model.add_status != 'pending', self.model.add_status == None)).offset(skip).limit(limit).all()
         data.extend(brand)
         data.extend(generic)
+
         return data
 
     def all_pharma(self, db: Session, skip: int, limit: int):

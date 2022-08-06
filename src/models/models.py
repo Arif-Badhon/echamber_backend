@@ -524,6 +524,9 @@ class EpMedicineList(BaseModel):
     pharmaceuticals = Column(String(255), nullable=False)
     unit_type = Column(String(100), nullable=True)
     unit_price = Column(Float, nullable=True)
+    add_status = Column(String(100), nullable=True)
+    added_by_id = Column(Integer, nullable=True)
+
 
 
 class EpChiefComplaintsList(BaseModel):

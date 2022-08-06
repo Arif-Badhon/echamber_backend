@@ -17,12 +17,21 @@ class MedicineIn(MedicineBase):
     pass
 
 
+class MedicineInWithUser(MedicineBase):
+    add_status: str
+    added_by_id: int
+
+
 class MedicineUpdate(MedicineBase):
-    pass
+    add_status: Optional[str] = None
+    added_by_id: Optional[int] = None
 
 
 class MedicineOut(MedicineBase):
     id: int
+    add_status: Optional[str] = None
+    added_by_id: Optional[int] = None
+    created_at: datetime
 
     class Config:
         orm_mode = True
