@@ -38,3 +38,4 @@ from .ep_medicines import *
 from .ep_diagnosis import *
 from .ep_next_follow_up import *
 from .ep_doctor_refer import *
+from .eprescriptions import *
