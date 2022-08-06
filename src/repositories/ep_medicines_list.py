@@ -3,6 +3,7 @@ from repositories import BaseRepo
 from models import EpMedicineList
 from schemas import MedicineIn, MedicineUpdate
 from sqlalchemy.orm import Session
+from sqlalchemy.sql import func
 
 
 class EpMedicineListRepo(BaseRepo[EpMedicineList, MedicineIn, MedicineUpdate]):
@@ -13,6 +14,20 @@ class EpMedicineListRepo(BaseRepo[EpMedicineList, MedicineIn, MedicineUpdate]):
         data.extend(brand)
         data.extend(generic)
         return data
+
+    def all_pharma(self, db: Session, skip: int, limit: int):
+        data = db.query(func.distinct(self.model.pharmaceuticals)).order_by(self.model.pharmaceuticals).offset(skip).limit(limit).all()
+        newdata = []
+        for i in data:
+            newdata.append({'pharmaceuticals': i[0]})
+        return newdata
+
+    def search_pharma(self, db: Session, pharma: str):
+        data = db.query(func.distinct(self.model.pharmaceuticals)).filter(self.model.pharmaceuticals.like(f"{pharma}%")).all()
+        newdata = []
+        for i in data:
+            newdata.append({'pharmaceuticals': i[0]})
+        return newdata
 
 
 ep_medicines_list_repo = EpMedicineListRepo(EpMedicineList)

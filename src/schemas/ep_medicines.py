@@ -69,3 +69,10 @@ class EpMedicineOut(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class EpPharmaOut(BaseModel):
+    pharmaceuticals: str
+
+    class Config:
+        orm_mode = True

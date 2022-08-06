@@ -16,6 +16,22 @@ class EpMedicineListService(BaseService[EpMedicineList, MedicineIn, MedicineUpda
         else:
             return ServiceResult(med, status_code=status.HTTP_200_OK)
 
+    def all_pharma(self, db: Session, skip: int, limit: int):
+        data = self.repo.all_pharma(db=db, skip=skip, limit=limit)
+
+        if not data:
+            return ServiceResult([], status_code=status.HTTP_200_OK)
+        else:
+            return ServiceResult(data, status_code=status.HTTP_200_OK)
+
+    def search_pharma(self, db: Session, pharma: str):
+        data = self.repo.search_pharma(db=db, pharma=pharma)
+
+        if not data:
+            return ServiceResult([], status_code=status.HTTP_200_OK)
+        else:
+            return ServiceResult(data, status_code=status.HTTP_200_OK)
+
 
 ep_medicine_list_service = EpMedicineListService(
     EpMedicineList, ep_medicines_list_repo)
