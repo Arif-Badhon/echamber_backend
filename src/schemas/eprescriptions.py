@@ -40,6 +40,16 @@ class EpIn(EpBase):
     followup: EpNextFollowUpIn = None
 
 
+class EpUpdate(BaseModel):
+    cause_of_consultation: Optional[str] = None
+    telemedicine_order_id: Optional[int] = None
+    doctor_id: Optional[int] = None
+    patient_id: Optional[int] = None
+    age: Optional[int] = None
+    current_address: Optional[str] = None
+    remarks: Optional[str] = None
+
+
 class EpOut(EpBase):
     id: int
     created_at: datetime

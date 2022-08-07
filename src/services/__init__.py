@@ -35,3 +35,4 @@ from .ep_chief_complaints import *
 from .ep_investigations import *
 from .ep_advices import *
 from .ep_medicines_list import *
+from .eprescriptions import *
