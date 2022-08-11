@@ -27,6 +27,15 @@ class EpBase(BaseModel):
     remarks: Optional[str] = None
 
 
+class EpOut(EpBase):
+    id: int
+    created_at: datetime
+    pass
+
+    class Config:
+        orm_mode = True
+
+
 class EpIn(EpBase):
     chief_complaints: List[ChiefComplaintsIn] = None
     histories: List[HistoryIn] = None
@@ -50,7 +59,7 @@ class EpUpdate(BaseModel):
     remarks: Optional[str] = None
 
 
-class EpOut(EpBase):
+class EpAllOut(EpBase):
     id: int
     created_at: datetime
     chief_complaints: List[ChiefComplaintsOut] = None

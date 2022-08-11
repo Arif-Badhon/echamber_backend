@@ -61,3 +61,22 @@ class UserLogin(BaseModel):
 
 class NewPasswordIn(BaseModel):
     password: str
+
+
+# =================================
+#           Login Log
+# =================================
+
+class LoginLogIn(BaseModel):
+    user_id: int
+
+
+class LoginLogUpdate(BaseModel):
+    user_id: Optional[int] = None
+
+
+class LoginLogLogout(BaseModel):
+    user_id: int
+
+    class Config:
+        orm_mode = True

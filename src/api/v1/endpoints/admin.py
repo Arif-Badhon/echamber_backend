@@ -59,6 +59,7 @@ def actirvity_log_service(user_id: int, service_name: str = 'patient_register', 
     actvity_user_service = admin_service.get_user_id_service(db=db, user_id=user_id, service_name=service_name, skip=skip, limit=limit)
     return handle_result(actvity_user_service)
 
+
 # Admin for employee
 
 
