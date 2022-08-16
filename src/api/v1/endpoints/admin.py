@@ -6,7 +6,7 @@ from schemas import UserOut, UserOutAuth, UserCreate, UserDoctorOut,  DoctorSign
 from sqlalchemy.orm import Session
 from schemas.users import UserUpdate
 from services import admin_service, doctor_chambers_service, patient_indicators_service, health_partner_service
-from api.v1.auth_dependcies import logged_in, logged_in_admin, logged_in_admin_moderator, logged_in_admin_moderator_medical_affairs, logged_in_employee
+from api.v1.auth_dependcies import logged_in, logged_in_admin, logged_in_employee, logged_in_moderator, logged_in_medical_affairs
 
 
 router = APIRouter()
@@ -19,7 +19,7 @@ def signup(data_in: UserCreateWitoutRole, db: Session = Depends(get_db)):
 
 
 @router.post('/password', response_model=AdminPanelActivityOut)
-def password_change_by_admin(user_id: int, password: NewPasswordIn, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin_moderator)):
+def password_change_by_admin(user_id: int, password: NewPasswordIn, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_moderator)):
     change_password = admin_service.password_changed_by_admin(db=db, user_id=user_id, password=password, changer_id=current_user.id)
     return handle_result(change_password)
 
@@ -31,7 +31,7 @@ def role_change_by_admin(id: int, role_name: str,  db: Session = Depends(get_db)
 
 
 @router.patch('/switch/active/{id}', response_model=UserOut)
-def user_active_switcher(id: int, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin_moderator)):
+def user_active_switcher(id: int, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_moderator)):
     act = admin_service.user_active_switcher(db=db, id=id)
     return handle_result(act)
 
@@ -59,6 +59,7 @@ def actirvity_log_service(user_id: int, service_name: str = 'patient_register', 
     actvity_user_service = admin_service.get_user_id_service(db=db, user_id=user_id, service_name=service_name, skip=skip, limit=limit)
     return handle_result(actvity_user_service)
 
+
 # Admin for employee
 
 
@@ -75,7 +76,7 @@ def all_employee(skip: int = 0, limit: int = 10, db: Session = Depends(get_db), 
 
 
 @router.post('/employee/create', response_model=AdminPanelActivityOut)
-def empployee_create(data_in: UserCreate, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin_moderator)):
+def empployee_create(data_in: UserCreate, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_moderator)):
     employee_created = admin_service.signup_employee(db, data_in=data_in, creator_id=current_user.id)
     return handle_result(employee_created)
 
@@ -102,7 +103,7 @@ def health_partner_create(data_in: HealthPartnerIn, db: Session = Depends(get_db
 
 
 @router.post('/doctor/register', response_model=AdminPanelActivityOut, description='<b>access:</b> admin and medical affairs')
-def doctor_register(data_in: DoctorSignup, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin_moderator_medical_affairs)):
+def doctor_register(data_in: DoctorSignup, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_medical_affairs)):
     doctor_reg = admin_service.doctor_register(db=db, data_in=data_in, creator_id=current_user.id)
     return handle_result(doctor_reg)
 
@@ -120,13 +121,13 @@ def doctors_inactive_list(skip: int = 0, limit: int = 10, db: Session = Depends(
 
 
 @router.put('/doctor/activate', response_model=UserOut)
-def doctor_active(id: int, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin_moderator)):
+def doctor_active(id: int, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_moderator)):
     doc = admin_service.doctor_active_id(db=db, id=id)
     return handle_result(doc)
 
 
 @router.get('/doctor/chambers/{user_id}', response_model=List[DoctorChamberOut])
-def chamber_list(user_id: int, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin_moderator)):
+def chamber_list(user_id: int, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_moderator)):
     chambers = doctor_chambers_service.get_by_user_id(db=db, user_id=user_id)
     return handle_result(chambers)
 

@@ -5,7 +5,7 @@ from schemas import DfPostCatagoryIn, DfPostCatagoryOut, DfPostCatagoryUpdate, D
 from services import df_post_catagory_service, df_post_service
 from typing import List, Union
 from sqlalchemy.orm import Session
-from api.v1.auth_dependcies import logged_in_admin_moderator_medical_affairs, logged_in_doctor
+from api.v1.auth_dependcies import logged_in_doctor, logged_in_medical_affairs
 
 router = APIRouter()
 
@@ -41,7 +41,7 @@ def all_catagories(db: Session = Depends(get_db)):
 
 
 @router.post('/catagory', response_model=DfPostCatagoryOut)
-def create(data_in: DfPostCatagoryIn, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin_moderator_medical_affairs)):
+def create(data_in: DfPostCatagoryIn, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_medical_affairs)):
     data = df_post_catagory_service.create(db=db, data_in=data_in)
     return handle_result(data)
 
@@ -53,7 +53,7 @@ def get_single(id: int, db: Session = Depends(get_db)):
 
 
 @router.patch('/catagory/{id}', response_model=DfPostCatagoryOut)
-def edit(id: int, data_update: DfPostCatagoryUpdate, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin_moderator_medical_affairs)):
+def edit(id: int, data_update: DfPostCatagoryUpdate, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_medical_affairs)):
     data = df_post_catagory_service.update(db=db, id=id, data_update=data_update)
     return handle_result(data)
 

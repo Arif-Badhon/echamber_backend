@@ -4,7 +4,7 @@ from schemas import ServiceOrderIn, TelemedicineIn, TelemedicineUpdate, Telemedi
 from typing import List, Union
 from sqlalchemy.orm import Session
 from db import get_db
-from api.v1.auth_dependcies import logged_in, logged_in_admin_moderator
+from api.v1.auth_dependcies import logged_in, logged_in_moderator
 from services import telemedicine_service
 
 
@@ -26,6 +26,6 @@ def single_telemedicine(id: int, db: Session = Depends(get_db), current_user: Se
 
 
 @router.patch('/single/update/{id}', response_model=TelemedicineOut)
-def update(id: int, data_update: TelemedicineUpdate, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin_moderator)):
+def update(id: int, data_update: TelemedicineUpdate, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_moderator)):
     edit = telemedicine_service.update(db=db, id=id, data_update=data_update)
     return handle_result(edit)

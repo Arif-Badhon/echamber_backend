@@ -5,7 +5,7 @@ from db import get_db
 from exceptions.service_result import handle_result
 from services import mediva_device_service, image_log_service
 from schemas import MedivaDeviceOut, ResultInt, MedivaDeviceIn, ImageLogOut, ImageLogIn
-from api.v1.auth_dependcies import logged_in_admin_moderator
+from api.v1.auth_dependcies import logged_in_moderator
 from fastapi import UploadFile, File
 from utils import UploadFileUtils
 
@@ -21,13 +21,13 @@ def all(skip: int = 0, limit: int = 16, db: Session = Depends(get_db)):
 
 
 @router.post('/', response_model=MedivaDeviceOut)
-def append(data_in: MedivaDeviceIn, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin_moderator)):
+def append(data_in: MedivaDeviceIn, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_moderator)):
     data = mediva_device_service.create(db=db, data_in=data_in)
     handle_result(data)
 
 
 @router.post('/img', response_model=ImageLogOut, description='<h2>Alert: </h2> <b>image should be < 300 kb</b>')
-async def upload_image(file: UploadFile = File(...), db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin_moderator)):
+async def upload_image(file: UploadFile = File(...), db: Session = Depends(get_db), current_user: Session = Depends(logged_in_moderator)):
 
     up_img = UploadFileUtils(file=file)
 

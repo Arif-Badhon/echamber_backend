@@ -25,19 +25,19 @@ def medicine_input(data_in: MedicineIn, db: Session = Depends(get_db), current_u
 
 
 @router.patch('/{id}', response_model=MedicineOut)
-def update_by_admin(id: int, data_update: MedicineUpdate, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin)):
+def update_by_admin(id: int, data_update: MedicineUpdate, db: Session = Depends(get_db), current_user: Session = Depends(logged_in)):
     up = ep_medicine_list_service.update(db=db, data_update=data_update, id=id)
     return handle_result(up)
 
 
 @router.delete('/{id}')
-def remove_by_admin(id: int, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin)):
+def remove_by_admin(id: int, db: Session = Depends(get_db), current_user: Session = Depends(logged_in)):
     rmv = ep_medicine_list_service.delete(db=db, id=id)
     return handle_result(rmv)
 
 
 @router.get('/pending', response_model=List[Union[ResultInt, List[MedicineOut]]])
-def all_pending_medicine(skip: int = 0, limit: int = 20, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin)):
+def all_pending_medicine(skip: int = 0, limit: int = 20, db: Session = Depends(get_db), current_user: Session = Depends(logged_in)):
     all = ep_medicine_list_service.get_by_key(db=db, skip=skip, limit=limit, descending=True, count_results=True, add_status='pending')
     return handle_result(all)
 

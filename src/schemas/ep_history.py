@@ -12,7 +12,7 @@ class HistoryIn(HistoryBase):
     pass
 
 
-class HistoryWithEp(BaseModel):
+class HistoryWithEp(HistoryBase):
     ep_id: int
 
 

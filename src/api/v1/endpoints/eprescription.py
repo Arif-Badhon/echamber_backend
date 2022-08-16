@@ -18,9 +18,9 @@ def patient_search_by_name(name: str, skip: int = 0, limit: int = 10, db: Sessio
     return handle_result(patients)
 
 
-@router.post('/')
+@router.post('/', response_model=EpOut)
 def submit(data_in: EpIn, db: Session = Depends(get_db)):
-    e = ep_service.submit(data_in=data_in)
+    e = ep_service.submit(data_in=data_in, db=db)
     return e
 
 

@@ -4,11 +4,11 @@ from utils import Token
 from sqlalchemy.orm import Session
 from exceptions import ServiceResult
 from exceptions import AppException
-from repositories import users_repo, roles_repo, UpdateSchemaType
+from repositories import users_repo, roles_repo, UpdateSchemaType, login_log_repo
 from services import BaseService
 from .roles import roles_service
 from models import User
-from schemas import UserCreate, UserUpdate, UserDBIn
+from schemas import UserCreate, UserUpdate, UserDBIn, LoginLogIn
 from utils import password_hash, verify_password
 from fastapi import status
 
@@ -97,6 +97,9 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
             return ServiceResult(AppException.NotFound("You are not active user."))
 
         if user is not None:
+            # create log
+            ll = login_log_repo.create(db=db, data_in=LoginLogIn(user_id=user.id))
+            # access token
             access_token = Token.create_access_token({"sub": user.id})
             return ServiceResult({"access_token": access_token, "token_type": "bearer"}, status_code=200)
         else:

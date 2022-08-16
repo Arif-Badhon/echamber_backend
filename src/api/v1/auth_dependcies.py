@@ -9,14 +9,6 @@ from utils import Token
 
 security = HTTPBearer()
 
-# "name": "admin"
-# "name": "moderator"
-# "name": "crm"
-# "name": "doctor"
-# "name": "patient"
-# "name": "sales"
-# "name": "medical_affairs"
-
 
 def logged_in(credentials: HTTPBasicCredentials = Depends(security), db: Session = Depends(get_db)):
     token = credentials.credentials
@@ -40,21 +32,7 @@ def logged_in_admin(credentials: HTTPBasicCredentials = Depends(security), db: S
     role_name = roles_service.get_one(db, user.role_id)
     role_name_obj = handle_result(role_name)
 
-    if(role_name_obj.name != 'admin'):
-        raise AppException.Unauthorized()
-
-    if not user:
-        raise AppException.Unauthorized()
-    return user
-
-
-def logged_in_admin_moderator(credentials: HTTPBasicCredentials = Depends(security), db: Session = Depends(get_db)):
-    user = logged_in(credentials, db)
-
-    role_name = roles_service.get_one(db, user.role_id)
-    role_name_obj = handle_result(role_name)
-
-    if(role_name_obj.name == 'admin' or role_name_obj.name == 'moderator'):
+    if role_name_obj.name in ['admin']:
         if not user:
             raise AppException.Unauthorized()
         return user
@@ -62,13 +40,13 @@ def logged_in_admin_moderator(credentials: HTTPBasicCredentials = Depends(securi
         raise AppException.Unauthorized()
 
 
-def logged_in_admin_moderator_medical_affairs(credentials: HTTPBasicCredentials = Depends(security), db: Session = Depends(get_db)):
+def logged_in_moderator(credentials: HTTPBasicCredentials = Depends(security), db: Session = Depends(get_db)):
     user = logged_in(credentials, db)
 
     role_name = roles_service.get_one(db, user.role_id)
     role_name_obj = handle_result(role_name)
 
-    if(role_name_obj.name == 'admin' or role_name_obj.name == 'moderator' or role_name_obj.name == 'medical_affairs'):
+    if role_name_obj.name in ['admin', 'moderator']:
         if not user:
             raise AppException.Unauthorized()
         return user
@@ -76,13 +54,41 @@ def logged_in_admin_moderator_medical_affairs(credentials: HTTPBasicCredentials 
         raise AppException.Unauthorized()
 
 
-def logged_in_admin_moderator_crm(credentials: HTTPBasicCredentials = Depends(security), db: Session = Depends(get_db)):
+def logged_in_medical_affairs(credentials: HTTPBasicCredentials = Depends(security), db: Session = Depends(get_db)):
     user = logged_in(credentials, db)
 
     role_name = roles_service.get_one(db, user.role_id)
     role_name_obj = handle_result(role_name)
 
-    if(role_name_obj.name == 'admin' or role_name_obj.name == 'moderator' or role_name_obj.name == 'crm'):
+    if role_name_obj.name in ['admin', 'moderator', 'medical_affairs']:
+        if not user:
+            raise AppException.Unauthorized()
+        return user
+    else:
+        raise AppException.Unauthorized()
+
+
+def logged_in_crm(credentials: HTTPBasicCredentials = Depends(security), db: Session = Depends(get_db)):
+    user = logged_in(credentials, db)
+
+    role_name = roles_service.get_one(db, user.role_id)
+    role_name_obj = handle_result(role_name)
+
+    if role_name_obj.name in ['admin', 'moderator', 'crm']:
+        if not user:
+            raise AppException.Unauthorized()
+        return user
+    else:
+        raise AppException.Unauthorized()
+
+
+def logged_in_sales(credentials: HTTPBasicCredentials = Depends(security), db: Session = Depends(get_db)):
+    user = logged_in(credentials, db)
+
+    role_name = roles_service.get_one(db, user.role_id)
+    role_name_obj = handle_result(role_name)
+
+    if role_name_obj.name in ['admin', 'moderator', 'crm', 'sales']:
         if not user:
             raise AppException.Unauthorized()
         return user
@@ -96,12 +102,12 @@ def logged_in_employee(credentials: HTTPBasicCredentials = Depends(security), db
     role_name = roles_service.get_one(db, user.role_id)
     role_name_obj = handle_result(role_name)
 
-    if(role_name_obj.name == 'doctor' or role_name_obj.name == 'patient'):
-        raise AppException.Unauthorized()
-    else:
+    if role_name_obj.name in ['admin', 'moderator', 'medical_affairs', 'crm', 'sales']:
         if not user:
             raise AppException.Unauthorized()
         return user
+    else:
+        raise AppException.Unauthorized()
 
 
 def logged_in_doctor(credentials: HTTPBasicCredentials = Depends(security), db: Session = Depends(get_db)):
@@ -110,12 +116,12 @@ def logged_in_doctor(credentials: HTTPBasicCredentials = Depends(security), db: 
     role_name = roles_service.get_one(db, user.role_id)
     role_name_obj = handle_result(role_name)
 
-    if(role_name_obj.name != 'doctor'):
+    if role_name_obj.name in ['medical_affairs', 'doctor']:
+        if not user:
+            raise AppException.Unauthorized()
+        return user
+    else:
         raise AppException.Unauthorized()
-
-    if not user:
-        raise AppException.Unauthorized()
-    return user
 
 
 def logged_in_patient(credentials: HTTPBasicCredentials = Depends(security), db: Session = Depends(get_db)):
@@ -124,9 +130,25 @@ def logged_in_patient(credentials: HTTPBasicCredentials = Depends(security), db:
     role_name = roles_service.get_one(db, user.role_id)
     role_name_obj = handle_result(role_name)
 
-    if(role_name_obj.name != 'patient'):
+    if role_name_obj.name in ['patient']:
+        if not user:
+            raise AppException.Unauthorized()
+        return user
+    else:
         raise AppException.Unauthorized()
 
-    if not user:
-        raise AppException.Unauthorized()
-    return user
+
+# old authorization
+
+# def logged_in_patient(credentials: HTTPBasicCredentials = Depends(security), db: Session = Depends(get_db)):
+#     user = logged_in(credentials, db)
+
+#     role_name = roles_service.get_one(db, user.role_id)
+#     role_name_obj = handle_result(role_name)
+
+#     if(role_name_obj.name != 'patient'):
+#         raise AppException.Unauthorized()
+
+#     if not user:
+#         raise AppException.Unauthorized()
+#     return user

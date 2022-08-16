@@ -48,6 +48,10 @@ class UserDetail(BaseModel):
     user = relationship("User", back_populates="user_details")
 
 
+class LoginLog(BaseModel):
+    __tablename__ = "login_log"
+    user_id = Column(Integer, ForeignKey("users.id"))
+
 
 class ImagesLog(BaseModel):
     __tablename__ = "image_log"
