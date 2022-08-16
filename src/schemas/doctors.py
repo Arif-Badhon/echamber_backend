@@ -55,7 +55,7 @@ class DoctorSignup(BaseModel):
     name: str
     email: str
     phone: constr(
-        min_length=11, max_length=14, regex=r"(\+880)?[0-9]{11}"
+        min_length=11, max_length=14, regex=r"(^(\+88)?(01){1}[3-9]{1}\d{8})$"
     )
     sex: str
     password: str
