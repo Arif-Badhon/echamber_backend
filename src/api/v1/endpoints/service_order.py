@@ -4,7 +4,7 @@ from db import get_db
 from exceptions.service_result import handle_result
 from schemas import ServiceOrderIn, MedicineOrderIn, HealthPlanForPatientWithService, HealthPlanForPatientOut, AdminPanelActivityOut, ServiceOrderOut, ResultInt, MedicineOrderOut, TelemedicineServiceIn, TelemedicineOut
 from sqlalchemy.orm import Session
-from api.v1.auth_dependcies import logged_in_admin_moderator_crm, logged_in_admin_moderator, logged_in_employee
+from api.v1.auth_dependcies import logged_in_employee
 from schemas.medicine_order import MedicineOrderUpdate
 from schemas.service_order import ServiceOrderUpdate
 from schemas.telemedicine_orders import TelemedicineIn
