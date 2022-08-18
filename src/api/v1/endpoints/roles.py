@@ -6,7 +6,7 @@ from schemas.roles import RoleOut, RoleIn, RoleUpdate
 from db import get_db
 from typing import List
 from models import User
-from api.v1.auth_dependcies import logged_in
+from api.v1.auth_dependcies import logged_in, logged_in_admin
 
 router = APIRouter()
 
@@ -18,7 +18,7 @@ def get(db: Session = Depends(get_db)):
 
 
 @router.post('/', response_model=RoleOut)
-def post(role_in: RoleIn, db: Session = Depends(get_db)):
+def post(role_in: RoleIn, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin)):
     role = roles_service.create(db, data_in=role_in)
     return handle_result(role)
 
@@ -26,17 +26,22 @@ def post(role_in: RoleIn, db: Session = Depends(get_db)):
 @router.get('/{id}', response_model=RoleOut)
 def get_one(id, db: Session = Depends(get_db)):
     roles = roles_service.get_one(db, id)
-    print(roles)
     return handle_result(roles)
 
 
 @router.put('/{id}', response_model=RoleUpdate)
-def update(id: int, role_update: RoleUpdate, db: Session = Depends(get_db)):
+def update(id: int, role_update: RoleUpdate, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin)):
     update = roles_service.update(db, id, data_update=role_update)
     return handle_result(update)
 
 
 @router.delete('/{id}')
-def delete(id: int, db: Session = Depends(get_db)):
+def delete(id: int, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin)):
     delete = roles_service.delete(db, id)
     return handle_result(delete)
+
+
+@router.post('/first/{name}', response_model=RoleOut)
+def first_role(name: str, db: Session = Depends(get_db)):
+    name = roles_service.first_role(db=db, name=name)
+    return handle_result(name)
