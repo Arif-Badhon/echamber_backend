@@ -27,23 +27,26 @@ class InvOut(InvBase):
 
 # Investigation
 
-class InvestigationBase(BaseModel):
+class EpInvestigationBase(BaseModel):
     investigation: str
 
 
-class InvestigationIn(InvestigationBase):
+class EpInvestigationIn(EpInvestigationBase):
     pass
 
 
-class InvestigationWithEp(InvestigationBase):
+class EpInvestigationWithEp(EpInvestigationBase):
     ep_id: int
 
 
-class InvestigationUpdate(BaseModel):
+class EpInvestigationUpdate(BaseModel):
     investigation: Optional[str] = None
 
 
-class InvestigationOut(InvestigationBase):
+class EpInvestigationOut(EpInvestigationBase):
     id: int
     ep_id: int
     created_at: datetime
+
+    class Config:
+        orm_mode = True

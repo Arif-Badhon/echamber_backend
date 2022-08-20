@@ -35,8 +35,14 @@ from .patient_families import *
 from .patient_indicators import *
 from .ep_chief_complaints import *
 from .ep_history import *
+from .ep_co_morbidities import *
+from .ep_investigations import *
 from .ep_chief_complaints_list import *
 from .ep_investigations_list import *
+from .ep_diagnosis import *
+from .ep_next_follow_up import *
+from .ep_medicines import *
+from .ep_advices import *
 from .ep_advices_list import *
 from .ep_medicines_list import *
 from .ep_refer import *

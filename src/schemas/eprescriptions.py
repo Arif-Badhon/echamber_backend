@@ -5,7 +5,7 @@ from .ep_chief_complaints import ChiefComplaintsOut, ChiefComplaintsIn
 from .ep_history import HistoryOut, HistoryIn
 from .ep_comorbidity import EpCoMorbidityOut, EpCoMorbidityIn
 from .ep_on_examination import EpOnExaminationOut, EpOnExaminationIn
-from .ep_investigations import InvestigationOut, InvestigationIn
+from .ep_investigations import EpInvestigationOut, EpInvestigationIn
 from .ep_diagnosis import EpDiagnosisOut, EpDiagnosisIn
 from .ep_medicines import EpMedicineOut, EpMedicineIn, MedicineIn
 from .ep_advices import AdviceOut, AdviceIn
@@ -41,9 +41,9 @@ class EpIn(EpBase):
     histories: List[HistoryIn] = None
     co_morbidities: List[EpCoMorbidityIn] = None
     on_examinations: List[EpOnExaminationIn] = None
-    investigations: List[InvestigationIn] = None
+    investigations: List[EpInvestigationIn] = None
     diagnosis: List[EpDiagnosisIn] = None
-    medicines: List[MedicineIn] = None
+    medicines: List[EpMedicineIn] = None
     advices: List[AdviceIn] = None
     refer: EpDoctorReferIn = None
     followup: EpNextFollowUpIn = None
@@ -66,7 +66,7 @@ class EpAllOut(EpBase):
     histories: List[HistoryOut] = None
     co_morbidities: List[EpCoMorbidityOut] = None
     on_examinations: List[EpOnExaminationOut] = None
-    investigations: List[InvestigationOut] = None
+    investigations: List[EpInvestigationOut] = None
     diagnosis: List[EpDiagnosisOut] = None
     medicines: List[EpMedicineOut] = None
     advices: List[AdviceOut] = None
