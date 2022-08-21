@@ -4,8 +4,8 @@ from db import get_db
 from exceptions.service_result import handle_result
 from schemas import UserOut, UserOutAuth, UserCreate, UserDoctorOut,  DoctorSignup, DoctorChamberOut, UserCreateWitoutRole, AdminPanelActivityOut, AdminPanelActivityAllOut, PatientIndicatorBase, NewPasswordIn, AdminPanelActivityOut, PatientIndicatorOut, HealthPartnerIn, HealthPartnerOut, ResultInt, AdminPatientsOut
 from sqlalchemy.orm import Session
-from schemas.users import UserUpdate
-from services import admin_service, doctor_chambers_service, patient_indicators_service, health_partner_service
+from schemas.users import LoginLogLogout, UserUpdate
+from services import admin_service, doctor_chambers_service, patient_indicators_service, health_partner_service, login_log_services
 from api.v1.auth_dependcies import logged_in, logged_in_admin, logged_in_employee, logged_in_moderator, logged_in_medical_affairs
 
 
@@ -54,12 +54,16 @@ def activity_log(skip: int = 0, limit: int = 15, db: Session = Depends(get_db), 
     return handle_result(activity)
 
 
-@router.get('activity/log/service/{user_id}/{service_name}', response_model=List[Union[ResultInt, List[AdminPanelActivityOut]]])
+@router.get('/activity/log/service/{user_id}/{service_name}', response_model=List[Union[ResultInt, List[AdminPanelActivityOut]]])
 def actirvity_log_service(user_id: int, service_name: str = 'patient_register', skip: int = 0, limit: int = 15, db: Session = Depends(get_db), current_user: Session = Depends(logged_in)):
     actvity_user_service = admin_service.get_user_id_service(db=db, user_id=user_id, service_name=service_name, skip=skip, limit=limit)
     return handle_result(actvity_user_service)
 
 
+@router.get('/login-log', response_model=List[Union[ResultInt, List[LoginLogLogout]]])
+def all_login_log(skip: int = 0, limit: int = 10, db: Session = Depends(get_db), currenct_user: Session = Depends(logged_in_employee)):
+    l_log = login_log_services.all_log_with_user(db=db, skip=skip, limit=limit)
+    return handle_result(l_log)
 # Admin for employee
 
 

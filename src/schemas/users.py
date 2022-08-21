@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import Optional
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from pydantic.types import constr
 
 
@@ -77,6 +77,9 @@ class LoginLogUpdate(BaseModel):
 
 class LoginLogLogout(BaseModel):
     user_id: int
+    name: str
+    created_at: datetime = Field(alias='login_time')
 
     class Config:
         orm_mode = True
+        allow_population_by_field_name = True

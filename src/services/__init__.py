@@ -5,6 +5,7 @@ from .image_log import *
 from .pdf_log import *
 from .notice import *
 from .review import *
+from .login_log import *
 from .service_order import *
 from .mediva_device_catagories import *
 from .mediva_devices import *
