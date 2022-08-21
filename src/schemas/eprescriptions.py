@@ -11,7 +11,7 @@ from .ep_medicines import EpMedicineOut, EpMedicineIn, MedicineIn
 from .ep_advices import AdviceOut, AdviceIn
 from .ep_doctor_refer import EpDoctorReferOut, EpDoctorReferIn
 from .ep_next_follow_up import EpNextFollowUpOut, EpNextFollowUpIn
-
+from .patient_indicators import PatientIndicatorBase, PatientIndicatorOut
 ###############
 #   Ep base   #
 ###############
@@ -40,7 +40,7 @@ class EpIn(EpBase):
     chief_complaints: List[ChiefComplaintsIn] = None
     histories: List[HistoryIn] = None
     co_morbidities: List[EpCoMorbidityIn] = None
-    on_examinations: List[EpOnExaminationIn] = None
+    on_examinations: List[PatientIndicatorBase] = None
     investigations: List[EpInvestigationIn] = None
     diagnosis: List[EpDiagnosisIn] = None
     medicines: List[EpMedicineIn] = None
@@ -65,7 +65,7 @@ class EpAllOut(EpBase):
     chief_complaints: List[ChiefComplaintsOut] = None
     histories: List[HistoryOut] = None
     co_morbidities: List[EpCoMorbidityOut] = None
-    on_examinations: List[EpOnExaminationOut] = None
+    on_examinations: List[PatientIndicatorOut] = None
     investigations: List[EpInvestigationOut] = None
     diagnosis: List[EpDiagnosisOut] = None
     medicines: List[EpMedicineOut] = None

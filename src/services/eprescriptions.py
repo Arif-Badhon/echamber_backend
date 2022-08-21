@@ -1,8 +1,8 @@
-from schemas import EpIn, EpUpdate, EpBase, EpDoctorReferWithEp, ChiefComplaintsWithEp, HistoryWithEp, EpCoMorbidityWithEp, EpInvestigationWithEp, EpNextFollowUpWithEp, EpMedicineWithEp
+from schemas import EpIn, EpUpdate, EpBase, EpDoctorReferWithEp, ChiefComplaintsWithEp, HistoryWithEp, EpCoMorbidityWithEp, EpInvestigationWithEp, EpNextFollowUpWithEp, EpMedicineWithEp, PatientIndicatorIn, EpOnExaminationIn
 from schemas.ep_advices import AdviceInWithEp
 from schemas.ep_diagnosis import EpDiagnosisWithEp
 from services import BaseService
-from repositories import ep_repo, ep_refer_repo, ep_chief_complaints_repo, ep_history_repo, ep_co_morbities_repo, ep_investigation_repo, ep_diagnosis_repo, ep_advices_repo, ep_next_follow_up_repo, ep_medicines_repo
+from repositories import ep_repo, ep_refer_repo, ep_chief_complaints_repo, ep_history_repo, ep_co_morbities_repo, ep_investigation_repo, ep_diagnosis_repo, ep_advices_repo, ep_next_follow_up_repo, ep_medicines_repo, patient_indicators_repo, ep_on_examination_repo
 from models import EPrescription
 from sqlalchemy.orm import Session
 
@@ -28,6 +28,16 @@ class EPrescriptionService(BaseService[EPrescription, EpBase, EpUpdate]):
         if data_in.co_morbidities and len(data_in.co_morbidities) != 0:
             for i in data_in.co_morbidities:
                 cm = ep_co_morbities_repo.create_with_flush(db=db, data_in=EpCoMorbidityWithEp(cm_type=i.cm_type, remarks=i.remarks, ep_id=ep.id))
+
+        # on examination
+        if data_in.on_examinations and len(data_in.on_examinations) != 0:
+            for i in data_in.on_examinations:
+                pi = patient_indicators_repo.create_with_flush(db=db,
+                                                               data_in=PatientIndicatorIn(
+                                                                   user_id=data_in.patient_id, key=i.key, unit=i.unit, slot_bool=i.slot_bool, slot_int1=i.slot_int1, slot_int2=i.slot_int2,
+                                                                   slot_int3=i.slot_int3, slot_flt4=i.slot_flt4, slot_flt5=i.slot_flt5, slot_flt6=i.slot_flt6, slot_str7=i.slot_str7,
+                                                                   slot_str8=i.slot_str8, slot_str9=i.slot_str9))
+                on = ep_on_examination_repo.create_with_flush(db=db, data_in=EpOnExaminationIn(ep_id=ep.id, patient_indicator_id=pi.id))
 
         # investigations
         if data_in.investigations and len(data_in.investigations) != 0:

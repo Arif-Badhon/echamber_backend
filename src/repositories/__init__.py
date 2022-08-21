@@ -42,6 +42,7 @@ from .ep_investigations_list import *
 from .ep_diagnosis import *
 from .ep_next_follow_up import *
 from .ep_medicines import *
+from .ep_on_examinations import *
 from .ep_advices import *
 from .ep_advices_list import *
 from .ep_medicines_list import *
