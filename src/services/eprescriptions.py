@@ -78,7 +78,35 @@ class EPrescriptionService(BaseService[EPrescription, EpBase, EpUpdate]):
     def get_single_ep(self, db: Session, id: int):
         ep_data = ep_repo.get_one(db=db, id=id)
 
-        return ep_data
+        chief_complaints = ep_chief_complaints_repo.get_by_key(db=db, skip=0, limit=1000, descending=False, count_results=False, ep_id=ep_data.id)
+        history = ep_history_repo.get_by_key(db=db, skip=0, limit=1000, descending=False, count_results=False, ep_id=ep_data.id)
+        co_morbidities = ep_co_morbities_repo.get_by_key(db=db, skip=0, limit=1000, descending=False, count_results=False, ep_id=ep_data.id)
+        on_examinations = ep_on_examination_repo.get_by_key(db=db, skip=0, limit=1000, descending=False, count_results=False, ep_id=ep_data.id)
+        investigations = ep_investigation_repo.get_by_key(db=db, skip=0, limit=1000, descending=False, count_results=False, ep_id=ep_data.id)
+        diagnosis = ep_diagnosis_repo.get_by_key(db=db, skip=0, limit=1000, descending=False, count_results=False, ep_id=ep_data.id)
+        medicines = ep_medicines_repo.get_by_key(db=db, skip=0, limit=1000, descending=False, count_results=False, ep_id=ep_data.id)
+        advices = ep_advices_repo.get_by_key(db=db, skip=0, limit=1000, descending=False, count_results=False, ep_id=ep_data.id)
+        refer = ep_refer_repo.get_by_key(db=db, skip=0, limit=1000, descending=False, count_results=False, ep_id=ep_data.id)
+        followup = ep_next_follow_up_repo.get_by_key(db=db, skip=0, limit=1000, descending=False, count_results=False, ep_id=ep_data.id)
+        data = {
+            "cause_of_consultation": ep_data.cause_of_consultation,
+            "telemedicine_order_id": ep_data.telemedicine_order_id,
+            "doctor_id": ep_data.doctor_id,
+            "patient_id": ep_data.patient_id,
+            "age": ep_data.age,
+            "current_address": ep_data.current_address,
+            "remarks": ep_data.remarks,
+            "chief_complaints": chief_complaints,
+            "history": history,
+            "co_morbidities": co_morbidities,
+            "on_examinations": on_examinations,
+            "investigations": investigations,
+            "diagnosis:": diagnosis,
+            "medicines": medicines,
+            "advices": advices,
+            "refer": refer[0],
+            "followup": followup}
+        return data
 
 
 ep_service = EPrescriptionService(EPrescription, ep_repo)
