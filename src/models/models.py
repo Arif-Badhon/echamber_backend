@@ -569,6 +569,6 @@ class Pharmaceuticals(BaseModel):
     contact_person_email = Column(String(255), nullable = True)
 
 class PharmaceuticalsUser(BaseModel):
-    __tablename__ = "pharmavceuticals_user"
+    __tablename__ = "pharmaceuticals_user"
     user_id = Column(Integer, ForeignKey("users.id"))
     phr_id = Column(Integer, ForeignKey("pharmaceuticals.id"))
