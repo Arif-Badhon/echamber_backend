@@ -2,7 +2,7 @@ from typing import List
 from fastapi import APIRouter
 from db import get_db
 from exceptions.service_result import handle_result
-from schemas.eprescriptions import EpIn
+from schemas.eprescriptions import EpIn, EpAllOut
 from services import patients_service, ep_service
 from sqlalchemy.orm import Session
 from fastapi import Depends
@@ -24,6 +24,7 @@ def submit(data_in: EpIn, db: Session = Depends(get_db)):
     return e
 
 
-@router.get('/{id}', response_model=EpOut)
+@router.get('/{id}')
 def single_prescription(id: int, db: Session = Depends(get_db)):
-    return
+    e = ep_service.get_single_ep(db=db, id=id)
+    return e

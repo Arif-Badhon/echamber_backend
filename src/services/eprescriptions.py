@@ -75,8 +75,10 @@ class EPrescriptionService(BaseService[EPrescription, EpBase, EpUpdate]):
 
         return return_data
 
-    def get_single_ep():
-        return
+    def get_single_ep(self, db: Session, id: int):
+        ep_data = ep_repo.get_one(db=db, id=id)
+
+        return ep_data
 
 
 ep_service = EPrescriptionService(EPrescription, ep_repo)

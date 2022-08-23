@@ -1,6 +1,5 @@
 from fastapi import APIRouter
 
-from schemas import notice
 from .endpoints import admin, corporate_partners, df_post, follow_up, notice, review, service_order, health_plan, telemedicine, doctor_chambers, doctors_search, doctor_schedules, users, roles, doctors, patients, user_details, patient_indicators, patient_reports, patient_families, eprescription, ep_medicines, ep_chief_complaints, ep_investigations, ep_advices, mediva_device_catagories, mediva_devices
 
 api_router = APIRouter()

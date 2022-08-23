@@ -5,7 +5,10 @@ import uvicorn
 import os
 from fastapi import FastAPI, Request, status
 from fastapi.responses import HTMLResponse
-from api.v1.routes import api_router
+# from api.v1.routes import api_router
+# from api.v2.routes import api_router
+import api.v1.routes
+import api.v2.routes
 from db import settings
 from exceptions import AppExceptionCase, AppException, app_exception_handler, generic_exception_handler
 from fastapi.responses import JSONResponse
@@ -77,7 +80,8 @@ async def index(request: Request):
     return templates.TemplateResponse('index.html', {"request": request})
 
 
-app.include_router(api_router, prefix=settings.API_V1_STR)
+app.include_router(api.v1.routes.api_router, prefix=settings.API_V1_STR)
+app.include_router(api.v2.routes.api_router, prefix=settings.API_V2_STR)
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="127.0.0.1",

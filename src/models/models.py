@@ -549,3 +549,26 @@ class EpAdviceList(BaseModel):
     __tablename__ = "ep_advice_list"
     advice = Column(String(255), nullable=False)
     inserted_by = Column(String(255), nullable= True)
+
+#==================================#
+#  Pharmaceuticals Related Models  #
+#==================================#
+
+class Pharmaceuticals(BaseModel):
+    __tablename__ = "pharmaceuticals"
+    name = Column(String(255), nullable = False)
+    established = Column(String(255), nullable = True)
+    details = Column(Text, nullable = True)
+    contact_phone = Column(String(255), nullable = True)
+    contact_email = Column(String(255), nullable = True)
+    address = Column(String(255), nullable = True)
+    total_generics = Column(Integer, nullable = True)
+    total_brands = Column(Integer, nullable = True)
+    contact_person = Column(String(255), nullable = True)
+    contact_person_phone = Column(String(255), nullable = True)
+    contact_person_email = Column(String(255), nullable = True)
+
+class PharmaceuticalsUser(BaseModel):
+    __tablename__ = "pharmavceuticals_user"
+    user_id = Column(Integer, ForeignKey("users.id"))
+    phr_id = Column(Integer, ForeignKey("pharmaceuticals.id"))

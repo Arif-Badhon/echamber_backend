@@ -48,3 +48,5 @@ from .ep_advices_list import *
 from .ep_medicines_list import *
 from .ep_refer import *
 from .eprescriptions import *
+from .pharmaceuticals import *
+from .pharmaceuticals_user import *
