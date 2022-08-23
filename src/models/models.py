@@ -312,6 +312,7 @@ class DoctorAcademicInfo(BaseModel):
     user_id = Column(Integer, ForeignKey("users.id"))
     institute = Column(String(255), nullable=False)
     degree = Column(String(255), nullable=True)
+    speciality = Column(String(255), nullable=True)
     start_date = Column(Date, nullable=True)
     end_date = Column(Date, nullable=True)
 
