@@ -105,7 +105,7 @@ class EPrescriptionService(BaseService[EPrescription, EpBase, EpUpdate]):
             "medicines": medicines,
             "advices": advices,
             "refer": refer[0],
-            "followup": followup}
+            "followup": followup[0]}
         return data
 
 

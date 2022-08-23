@@ -7,8 +7,8 @@ class DoctorAcademicInfoBase(BaseModel):
     institute: str
     degree: str
     speciality: str
-    start_date: date
-    end_date: date
+    start_date: Optional[date] = None
+    end_date: Optional[date] = None
 
 
 class DoctorAcademicInfoIn(DoctorAcademicInfoBase):
