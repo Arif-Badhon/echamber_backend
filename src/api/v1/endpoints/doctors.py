@@ -95,7 +95,8 @@ def update(id: int, data_update: DoctorWorkPlaceUpdate, db: Session = Depends(ge
 
 @router.delete('/workplace/{id}')
 def remove(id: int, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
-    return doctor_academic_info_service.delete(db=db, id=id)
+    delete = doctor_academic_info_service.delete(db=db, id=id)
+    return delete
 
 
 @router.post('/academic', response_model=DoctorAcademicInfoOut)
