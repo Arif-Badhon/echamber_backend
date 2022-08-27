@@ -357,6 +357,24 @@ class DoctorSchedule(BaseModel):
 
 
 
+class DoctorTrainingExp(BaseModel):
+    __tablename__ = "doctor_training_exp"
+    user_id = Column(Integer, ForeignKey("users.id"))
+    topic = Column(String(255), nullable=True)
+    place = Column(String(255), nullable=True)
+    organisation = Column(String(255), nullable=True)
+    year = Column(Integer, nullable=True)
+
+
+class DoctorProfessionalMembership(BaseModel):
+    __tablename__ = "doctor_professional_membership"
+    user_id = Column(Integer, ForeignKey("users.id"))
+    name = Column(String(100), nullable=True)
+    position = Column(String(100), nullable=True)
+    year = Column(Integer, nullable=True)
+
+
+
 # Doctor payment 
 
 ####################

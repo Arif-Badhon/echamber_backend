@@ -1,0 +1,5 @@
+from models import DoctorProfessionalMembership
+from schemas import DoctorProfessionalMembershipIn, DoctorProfessioanlMembershipUpdate
+from repositories import BaseRepo
+
+doctor_professional_membership_repo = BaseRepo[DoctorProfessionalMembership, DoctorProfessionalMembershipIn, DoctorProfessioanlMembershipUpdate](DoctorProfessionalMembership)
