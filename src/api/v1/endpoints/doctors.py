@@ -153,7 +153,7 @@ def create(data_in: DoctorProfessionalMembershipIn, db: Session = Depends(get_db
 
 
 @router.get('/membership/', response_model=List[Union[ResultInt, List[DoctorProfessionalMembershipOut]]])
-def all_training(skip: int = 0, limit: int = 15, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
+def all_membership(skip: int = 0, limit: int = 15, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
     all = doctor_professional_membership_service.get_by_key(db=db, skip=skip, limit=limit, descending=False, count_results=True, user_id=current_user.id)
     return handle_result(all)
 
