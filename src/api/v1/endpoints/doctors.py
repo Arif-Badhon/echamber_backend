@@ -2,9 +2,10 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from db import get_db
 from exceptions import handle_result
-from schemas import DoctorOut, DoctorUpdate, DoctorSpecialityOut, DoctorAcademicInfoIn, DoctorAcademicInfoOut, DoctorAcademicInfoUpdate, DoctorAcademicInfoWithUser, DoctorQualificationOut, DoctorSpecialityOut, DoctorQualilficationUpdate, DoctorSpecialityUpdate, DoctorSignup, UserOut, UserOutAuth, DoctorDetails, DoctorWorkPlaceOut, DoctorWorkPlaceIn, DoctorWorkPlaceWithUser, DoctorWorkPlaceUpdate, DoctorTrainingExpOut, DoctorTrainingExpUpdate, DoctorTrainingExpIn, DoctorTrainingExpInWithUser
+from schemas import DoctorOut, DoctorUpdate, DoctorSpecialityOut, DoctorAcademicInfoIn, DoctorAcademicInfoOut, DoctorAcademicInfoUpdate, DoctorAcademicInfoWithUser, DoctorQualificationOut, DoctorSpecialityOut, DoctorQualilficationUpdate, DoctorSpecialityUpdate, DoctorSignup, UserOut, UserOutAuth, DoctorDetails, DoctorWorkPlaceOut, DoctorWorkPlaceIn, DoctorWorkPlaceWithUser, DoctorWorkPlaceUpdate, DoctorTrainingExpOut, DoctorTrainingExpUpdate, DoctorTrainingExpIn, DoctorTrainingExpInWithUser, DoctorProfessionalMembershipIn, DoctorProfessionalMembershipInWithUser, DoctorProfessionalMembershipOut
 from schemas.admin import ResultInt
-from services import doctors_service, doctor_qualifications_service, doctor_specialities_service, doctor_workplace_service, doctor_academic_info_service, doctor_training_exp_services
+from schemas.doctor_professional_membership import DoctorProfessioanlMembershipUpdate
+from services import doctors_service, doctor_qualifications_service, doctor_specialities_service, doctor_workplace_service, doctor_academic_info_service, doctor_training_exp_services, doctor_professional_membership_service
 from api.v1.auth_dependcies import logged_in_doctor
 from typing import List, Union
 
@@ -121,7 +122,7 @@ def remove(id: int, db: Session = Depends(get_db), current_user: Session = Depen
     return delete
 
 
-@router.post('/training', response_model=DoctorTrainingExpOut)
+@router.post('/training/', response_model=DoctorTrainingExpOut)
 def create(data_in: DoctorTrainingExpIn, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
     tr = doctor_training_exp_services.create(db=db, data_in=DoctorTrainingExpInWithUser(**data_in.dict(), user_id=current_user.id))
     return handle_result(tr)
@@ -134,12 +135,36 @@ def all_training(skip: int = 0, limit: int = 15, db: Session = Depends(get_db), 
 
 
 @router.patch('/training/{id}', response_model=DoctorTrainingExpOut)
-def update(data_up: DoctorTrainingExpUpdate, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
-    up = doctor_training_exp_services.update(db=db, data_update=data_up)
+def update(id: int, data_up: DoctorTrainingExpUpdate, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
+    up = doctor_training_exp_services.update(db=db, id=id, data_update=data_up)
     return handle_result(up)
 
 
 @router.delete('/training/{id}')
 def remove(id: int, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
     dl = doctor_training_exp_services.delete(db=db, id=id)
+    return handle_result(dl)
+
+
+@router.post('/membership/', response_model=DoctorProfessionalMembershipOut)
+def create(data_in: DoctorProfessionalMembershipIn, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
+    mm = doctor_professional_membership_service.create(db=db, data_in=DoctorProfessionalMembershipInWithUser(**data_in.dict(), user_id=current_user.id))
+    return handle_result(mm)
+
+
+@router.get('/membership/', response_model=List[Union[ResultInt, List[DoctorProfessionalMembershipOut]]])
+def all_training(skip: int = 0, limit: int = 15, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
+    all = doctor_professional_membership_service.get_by_key(db=db, skip=skip, limit=limit, descending=False, count_results=True, user_id=current_user.id)
+    return handle_result(all)
+
+
+@router.patch('/membership/{id}', response_model=DoctorProfessionalMembershipOut)
+def update(id: int, data_up: DoctorProfessioanlMembershipUpdate, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
+    up = doctor_professional_membership_service.update(db=db, id=id, data_update=data_up)
+    return handle_result(up)
+
+
+@router.delete('/membership/{id}')
+def remove(id: int, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
+    dl = doctor_professional_membership_service.delete(db=db, id=id)
     return handle_result(dl)

@@ -26,6 +26,7 @@ from .doctor_training_exp import *
 from .doctor_specialities import *
 from .doctors_search import *
 from .doctor_schedules import *
+from .doctor_professional_membership import *
 from .doctor_workplace import *
 from .doctor_academic_info import *
 from .df_post_catagories import *
