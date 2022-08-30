@@ -24,6 +24,7 @@ def submit(data_in: EpIn, db: Session = Depends(get_db)):
     return e
 
 
+# @router.get('/{id}')
 @router.get('/{id}', response_model=EpAllOut)
 def single_prescription(id: int, db: Session = Depends(get_db)):
     e = ep_service.get_single_ep(db=db, id=id)

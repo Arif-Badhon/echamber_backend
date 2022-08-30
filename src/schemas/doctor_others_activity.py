@@ -4,9 +4,9 @@ from typing import Optional
 
 
 class DoctorOthersAcivityBase(BaseModel):
-    topic: str
-    title: str
-    details: str
+    topic: Optional[str] = None
+    title: Optional[str] = None
+    details: Optional[str] = None
 
 
 class DoctorOthersActivityIn(DoctorOthersAcivityBase):

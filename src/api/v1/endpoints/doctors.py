@@ -178,7 +178,7 @@ def all_others_activity(skip: int = 0, limit: int = 15, topic: str = '', db: Ses
 
 @router.post('/others-activity/', response_model=DoctorOthersActivityOut)
 def create(data_in: DoctorOthersActivityIn, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
-    added = doctor_others_activity_service.create(db=db, data_in=DoctorAcademicInfoWithUser(**data_in.dict(), user_id=current_user.id))
+    added = doctor_others_activity_service.create(db=db, data_in=DoctorOthersActivityWithUser(**data_in.dict(), user_id=current_user.id))
     return handle_result(added)
 
 
