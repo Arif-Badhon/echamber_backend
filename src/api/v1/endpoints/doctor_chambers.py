@@ -21,7 +21,7 @@ def active_chamber(db: Session = Depends(get_db), current_user: Session = Depend
 def get(db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
     doc_chamber = doctor_chambers_service.get_by_user_id(
         db, user_id=current_user.id)
-    print(doc_chamber)
+    print(current_user.id)
     return handle_result(doc_chamber)
 
 

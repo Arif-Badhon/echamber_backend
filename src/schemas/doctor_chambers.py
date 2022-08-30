@@ -6,7 +6,7 @@ class DoctorChamberBase(BaseModel):
     name: str
     detail: str
     district: str
-    detail_address: str
+    detail_address: Optional[str] = None
 
 
 class DoctorChamberIn(DoctorChamberBase):
@@ -20,13 +20,9 @@ class DoctorChamberUpdate(BaseModel):
     detail_address: Optional[str] = None
 
 
-class DoctorChamberOut(BaseModel):
+class DoctorChamberOut(DoctorChamberBase):
     id: int
     user_id: int
-    name: str
-    detail: str
-    district: str
-    detail_address: str
     is_active: bool
 
     class Config:
