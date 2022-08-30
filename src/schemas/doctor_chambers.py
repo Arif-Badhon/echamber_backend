@@ -7,7 +7,7 @@ class DoctorChamberBase(BaseModel):
     detail: str
     district: str
     detail_address: Optional[str] = None
-    chamber_fee: Optional[int] = None
+    chamber_fee: Optional[float] = None
 
 
 class DoctorChamberIn(DoctorChamberBase):
@@ -19,7 +19,7 @@ class DoctorChamberUpdate(BaseModel):
     detail: Optional[str] = None
     district: Optional[str] = None
     detail_address: Optional[str] = None
-    chamber_fee: Optional[int] = None
+    chamber_fee: Optional[float] = None
 
 
 class DoctorChamberOut(DoctorChamberBase):

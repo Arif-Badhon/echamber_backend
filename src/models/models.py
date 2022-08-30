@@ -342,7 +342,7 @@ class DoctorChamber(BaseModel):
     district = Column(String(100), nullable=False)
     detail_address = Column(String(255), nullable=True)
     is_active = Column(Boolean, default=False)
-    chamber_fee = Column(Integer, nullable=True)
+    chamber_fee = Column(Float, nullable=True)
 
     user_doctors_chamber = relationship("User", back_populates="doctors_chamber")
 
