@@ -374,6 +374,13 @@ class DoctorProfessionalMembership(BaseModel):
     year = Column(Integer, nullable=True)
 
 
+class DoctorOthersActivity(BaseModel):
+    __tablename__ = "doctor_others_activity"
+    user_id = Column(Integer, ForeignKey("users.id"))
+    topic = Column(String(255), nullable=False)
+    title = Column(String(255), nullable=True)
+    details = Column(Text, nullable=True)
+
 
 # Doctor payment 
 

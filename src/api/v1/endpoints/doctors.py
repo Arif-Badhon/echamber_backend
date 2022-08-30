@@ -1,11 +1,12 @@
+from pickletools import read_uint1
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from db import get_db
 from exceptions import handle_result
-from schemas import DoctorOut, DoctorUpdate, DoctorSpecialityOut, DoctorAcademicInfoIn, DoctorAcademicInfoOut, DoctorAcademicInfoUpdate, DoctorAcademicInfoWithUser, DoctorQualificationOut, DoctorSpecialityOut, DoctorQualilficationUpdate, DoctorSpecialityUpdate, DoctorSignup, UserOut, UserOutAuth, DoctorDetails, DoctorWorkPlaceOut, DoctorWorkPlaceIn, DoctorWorkPlaceWithUser, DoctorWorkPlaceUpdate, DoctorTrainingExpOut, DoctorTrainingExpUpdate, DoctorTrainingExpIn, DoctorTrainingExpInWithUser, DoctorProfessionalMembershipIn, DoctorProfessionalMembershipInWithUser, DoctorProfessionalMembershipOut
+from schemas import DoctorOut, DoctorUpdate, DoctorSpecialityOut, DoctorAcademicInfoIn, DoctorAcademicInfoOut, DoctorAcademicInfoUpdate, DoctorAcademicInfoWithUser, DoctorQualificationOut, DoctorSpecialityOut, DoctorQualilficationUpdate, DoctorSpecialityUpdate, DoctorSignup, UserOut, UserOutAuth, DoctorDetails, DoctorWorkPlaceOut, DoctorWorkPlaceIn, DoctorWorkPlaceWithUser, DoctorWorkPlaceUpdate, DoctorTrainingExpOut, DoctorTrainingExpUpdate, DoctorTrainingExpIn, DoctorTrainingExpInWithUser, DoctorProfessionalMembershipIn, DoctorProfessionalMembershipInWithUser, DoctorProfessionalMembershipOut, DoctorOthersActivityIn, DoctorOthersActivityWithUser, DoctorOthersActivityUpdate, DoctorOthersActivityOut
 from schemas.admin import ResultInt
 from schemas.doctor_professional_membership import DoctorProfessioanlMembershipUpdate
-from services import doctors_service, doctor_qualifications_service, doctor_specialities_service, doctor_workplace_service, doctor_academic_info_service, doctor_training_exp_services, doctor_professional_membership_service
+from services import doctors_service, doctor_qualifications_service, doctor_specialities_service, doctor_workplace_service, doctor_academic_info_service, doctor_training_exp_services, doctor_professional_membership_service, doctor_others_activity_service
 from api.v1.auth_dependcies import logged_in_doctor
 from typing import List, Union
 
@@ -168,3 +169,26 @@ def update(id: int, data_up: DoctorProfessioanlMembershipUpdate, db: Session = D
 def remove(id: int, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
     dl = doctor_professional_membership_service.delete(db=db, id=id)
     return handle_result(dl)
+
+
+@router.get('/others-activity/', response_model=List[Union[ResultInt, List[DoctorOthersActivityOut]]])
+def all_others_activity(skip: int = 0, limit: int = 15, topic: str = '', db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
+    all = doctor_others_activity_service.get_by_two_key(db=db, skip=skip, limit=limit, descending=False, count_results=True, user_id=current_user.id, topic=topic)
+
+
+@router.post('/others-activity/', response_model=DoctorOthersActivityOut)
+def create(data_in: DoctorOthersActivityIn, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
+    added = doctor_others_activity_service.create(db=db, data_in=DoctorAcademicInfoWithUser(**data_in.dict(), user_id=current_user.id))
+    return handle_result(added)
+
+
+@router.patch('/others-activity/{id}', response_model=DoctorOthersActivityOut)
+def edit(id: int, data_up: DoctorOthersActivityUpdate, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
+    up = doctor_others_activity_service.update(db=db, id=id, data_update=data_up)
+    return handle_result(up)
+
+
+@router.delete('/others-activity/{id}')
+def remove(id: int, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
+    re = doctor_others_activity_service.delete(db=db, id=id)
+    return handle_result(re)
