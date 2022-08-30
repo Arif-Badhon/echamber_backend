@@ -174,6 +174,7 @@ def remove(id: int, db: Session = Depends(get_db), current_user: Session = Depen
 @router.get('/others-activity/', response_model=List[Union[ResultInt, List[DoctorOthersActivityOut]]])
 def all_others_activity(skip: int = 0, limit: int = 15, topic: str = '', db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
     all = doctor_others_activity_service.get_by_two_key(db=db, skip=skip, limit=limit, descending=False, count_results=True, user_id=current_user.id, topic=topic)
+    return handle_result(all)
 
 
 @router.post('/others-activity/', response_model=DoctorOthersActivityOut)
