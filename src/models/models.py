@@ -320,7 +320,7 @@ class DoctorAcademicInfo(BaseModel):
 class DoctorQualification(BaseModel):
     __tablename__="doctor_qualifications"
     user_id = Column(Integer, ForeignKey("users.id"))
-    qualification= Column(String(100), nullable=False)
+    qualification= Column(Text, nullable=False)
 
     user_doctor_qualification = relationship("User", back_populates="doctor_qualification")
 
@@ -329,7 +329,7 @@ class DoctorQualification(BaseModel):
 class DoctorSpeciality(BaseModel):
     __tablename__="doctor_specialities"
     user_id = Column(Integer, ForeignKey("users.id"))
-    speciality= Column(String(100), nullable=False)
+    speciality= Column(Text, nullable=False)
 
     user_doctor_speciality = relationship("User", back_populates="doctor_speciality")
 
