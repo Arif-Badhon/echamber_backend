@@ -167,6 +167,7 @@ class MedicineOrder(BaseModel):
 
 class HealthPlanList(BaseModel):
     __tablename__ = "health_plan_list"
+    plan_type = Column(String(255), nullable=True)
     name = Column(String(255), nullable=False)
     details = Column(Text, nullable=True)
     voucher_code = Column(String(100), nullable=True)

@@ -5,6 +5,7 @@ from .service_order import ServiceOrderIn
 
 
 class HealthPlanListBase(BaseModel):
+    plan_type: Optional[str] = None
     name: str
     details: str
     voucher_code: str
@@ -19,7 +20,8 @@ class HealthPlanListIn(HealthPlanListBase):
     pass
 
 
-class HealthPlanListUpdate(HealthPlanListBase):
+class HealthPlanListUpdate(BaseModel):
+    plan_type: Optional[str] = None
     name: Optional[str] = None
     details: Optional[str] = None
     voucher_code: Optional[str] = None
