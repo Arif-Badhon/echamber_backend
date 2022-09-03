@@ -54,7 +54,7 @@ def activity_log(skip: int = 0, limit: int = 15, db: Session = Depends(get_db), 
     return handle_result(activity)
 
 
-@router.get('/activity/log/service/{user_id}/{service_name}', response_model=List[Union[ResultInt, List[AdminPanelActivityOut]]])
+@router.get('/activity/log/service/{user_id}/{service_name}', response_model=List[Union[ResultInt, List[AdminPanelActivityOut]]], response_description="<b>service_name: patient_register</b>")
 def actirvity_log_service(user_id: int, service_name: str = 'patient_register', skip: int = 0, limit: int = 15, db: Session = Depends(get_db), current_user: Session = Depends(logged_in)):
     actvity_user_service = admin_service.get_user_id_service(db=db, user_id=user_id, service_name=service_name, skip=skip, limit=limit)
     return handle_result(actvity_user_service)
