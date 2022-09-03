@@ -39,6 +39,7 @@ class UserUpdate(BaseModel):
 
 class UserOut(UserBase):
     id: int
+    phone: str
     role_id: int
     created_at: Optional[datetime] = None
 
@@ -48,6 +49,7 @@ class UserOut(UserBase):
 
 class UserOutAuth(UserBase):
     id: int
+    phone: str
     role_name: Optional[str]
 
     class Config:
@@ -66,6 +68,7 @@ class NewPasswordIn(BaseModel):
 # =================================
 #           Login Log
 # =================================
+
 
 class LoginLogIn(BaseModel):
     user_id: int
