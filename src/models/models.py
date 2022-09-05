@@ -469,7 +469,8 @@ class EPrescription(BaseModel):
     telemedicine_order_id = Column(Integer, nullable=True)
     doctor_id = Column(Integer, ForeignKey("users.id"))
     patient_id = Column(Integer, ForeignKey("users.id"))
-    age = Column(Integer, nullable=False)
+    age_years = Column(Integer, nullable=True)
+    age_months = Column(Integer, nullable=True)
     current_address = Column(Text, nullable=True)
     remarks = Column(Text, nullable=True)
 
