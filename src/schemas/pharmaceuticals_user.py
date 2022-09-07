@@ -7,7 +7,7 @@ class PharmaecuticalsUserBase(BaseModel):
 class PharmaecuticalsUserIn(PharmaecuticalsUserBase):
     pass
 
-class PhamaceuticalsUserWithPhr(PharmaecuticalsUserBase):
+class PhamaceuticalsUserWithPhrId(PharmaecuticalsUserBase):
     phr_id = int
 
 class PharmaecuticalsUserUpdate(BaseModel):
