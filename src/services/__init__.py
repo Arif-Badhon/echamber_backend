@@ -42,3 +42,5 @@ from .ep_medicines_list import *
 from .eprescriptions import *
 from .pharmaceuticals import *
 from .pharmaceuticals_user import *
+from .pharmacy import *
+from .pharmacy_user import *
