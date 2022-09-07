@@ -31,7 +31,7 @@ class PharmacyService(BaseService[Pharmacy, PharmacyIn, PharmacyUpdate]):
             drug_lisence = data_in.pharmacy.drug_lisence
         ))
 
-        pharma_user = pharmacy_user_service.create(db=db, data_in=PharmacyUserIn(user_id=handle_result(signup).id, pharma_id=handle_result(pharma).id))
+        pharma_user = pharmacy_user_service.create(db=db, data_in=PharmacyUserIn(user_id=handle_result(signup).id, pharmacy_id=handle_result(pharma).id))
         return pharma_user 
 
 pharmacy_service = PharmacyService(Pharmacy, pharmacy_repo)
