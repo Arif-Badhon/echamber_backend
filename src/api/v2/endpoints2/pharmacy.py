@@ -9,12 +9,8 @@ from api.v1.auth_dependcies import logged_in_admin
 
 router = APIRouter()
 
-@router.get("/", response_model=List[PharmacyOut])
-def search(db: Session = Depends(get_db)):
-    pharma = pharmacy_service.get(db=db)
-    return handle_result(pharma)
 
 @router.post("/")
-def pharmacy_with_user(data_in: PharmacyUserWithPharmacy, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin)):
-    user = pharmacy_service.register_pharmacy(db=db, data_in=data_in)
-    return handle_result(user)
+def pharmacy_register_by_admin(data_in: PharmacyUserWithPharmacy, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin)):
+    admin = pharmacy_service.register_pharmacy(db=db, data_in=data_in)
+    return handle_result(admin)
