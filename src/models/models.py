@@ -601,3 +601,22 @@ class PharmaceuticalsUser(BaseModel):
     __tablename__ = "pharmaceuticals_user"
     user_id = Column(Integer, ForeignKey("users.id"))
     phr_id = Column(Integer, ForeignKey("pharmaceuticals.id"))
+
+
+#===================#
+#  Pharmacy Models  #  
+#===================#
+
+class Pharmacy(BaseModel):
+    __tablename__ = "pharmacy"
+    name = Column(String(255), nullable = False)
+    trade_lisence = Column(String(255), nullable = False)
+    detail_address = Column(Text, nullable = True)
+    district = Column(String(255), nullable = True)
+    sub_district = Column(String(255), nullable = True)
+    drug_lisence = Column(String(255), nullable = True)
+
+class PharmacyUser(BaseModel):
+    __tablename__ = "pharmacy_user"
+    user_id = Column(Integer, ForeignKey("users.id"))
+    pharmacy_id = Column(Integer, ForeignKey("pharmacy.id"))
