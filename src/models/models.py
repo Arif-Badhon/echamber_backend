@@ -598,10 +598,14 @@ class Pharmaceuticals(BaseModel):
     contact_person_phone = Column(String(255), nullable = True)
     contact_person_email = Column(String(255), nullable = True)
 
+
+
 class PharmaceuticalsUser(BaseModel):
     __tablename__ = "pharmaceuticals_user"
     user_id = Column(Integer, ForeignKey("users.id"))
     phr_id = Column(Integer, ForeignKey("pharmaceuticals.id"))
+
+
 
 class PharmaceuticalsNameList(BaseModel):
     __tablename__ = "pharmaceuticals_name_list"
@@ -635,8 +639,8 @@ class PharmacyPurchaseOrder(BaseModel):
     total_amount = Column(Float, nullable = True)
     paid_amount = Column(Float, nullable = True)
     due_amount = Column(Float, nullable = True)
-    remarks = Column(Text, nullable = True)
+    pharmaceuticals_name_id = Column(Integer, nullable = True)
     purchase_number = Column(String(100), nullable = True)
-    pharmaceuticals_id = Column(Integer, nullable = True)
     user_id = Column(Integer, ForeignKey("users.id"))
     pharmacy_id = Column(Integer, ForeignKey("pharmacy.id"))
+    remarks = Column(Text, nullable = True)
