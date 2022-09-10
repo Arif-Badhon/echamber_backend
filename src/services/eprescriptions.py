@@ -11,8 +11,11 @@ class EPrescriptionService(BaseService[EPrescription, EpBase, EpUpdate]):
 
     def submit(self, data_in: EpIn, db: Session):
         # eprescription
-        ep = ep_repo.create_with_flush(db=db, data_in=EpBase(cause_of_consultation=data_in.cause_of_consultation, telemedicine_order_id=data_in.telemedicine_order_id,
-                                       doctor_id=data_in.doctor_id, patient_id=data_in.patient_id, age=data_in.age, current_address=data_in.current_address, remarks=data_in.remarks))
+        ep = ep_repo.create_with_flush(
+            db=db,
+            data_in=EpBase(
+                cause_of_consultation=data_in.cause_of_consultation, telemedicine_order_id=data_in.telemedicine_order_id, doctor_id=data_in.doctor_id, patient_id=data_in.patient_id,
+                age_years=data_in.age_years, age_months=data_in.age_months, current_address=data_in.current_address, remarks=data_in.remarks))
 
         # chief complaints
         if data_in.chief_complaints and len(data_in.chief_complaints) != 0:
@@ -61,11 +64,11 @@ class EPrescriptionService(BaseService[EPrescription, EpBase, EpUpdate]):
                 adv = ep_advices_repo.create_with_flush(db=db, data_in=AdviceInWithEp(advice=i.advice, ep_id=ep.id))
 
         # reference
-        if data_in.refer.detail and len(data_in.refer.detail) != 0:
+        if data_in.refer and len(data_in.refer.detail) != 0:
             refr = ep_refer_repo.create_with_flush(db=db, data_in=EpDoctorReferWithEp(detail=data_in.refer.detail, ep_id=ep.id))
 
         # followup
-        if data_in.followup.date:
+        if data_in.followup:
             flup = ep_next_follow_up_repo.create_with_flush(db=db, data_in=EpNextFollowUpWithEp(date=data_in.followup.date, ep_id=ep.id))
 
         # commit all flushed data
@@ -93,7 +96,8 @@ class EPrescriptionService(BaseService[EPrescription, EpBase, EpUpdate]):
             "telemedicine_order_id": ep_data.telemedicine_order_id,
             "doctor_id": ep_data.doctor_id,
             "patient_id": ep_data.patient_id,
-            "age": ep_data.age,
+            "age_years": ep_data.age_years,
+            "age_months": ep_data.age_months,
             "current_address": ep_data.current_address,
             "remarks": ep_data.remarks,
             "chief_complaints": chief_complaints,
@@ -104,8 +108,8 @@ class EPrescriptionService(BaseService[EPrescription, EpBase, EpUpdate]):
             "diagnosis:": diagnosis,
             "medicines": medicines,
             "advices": advices,
-            "refer": refer[0],
-            "followup": followup[0]}
+            "refer": refer,
+            "followup": followup}
         return data
 
 

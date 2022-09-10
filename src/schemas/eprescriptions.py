@@ -69,8 +69,8 @@ class EpAllOut(EpBase):
     diagnosis: List[EpDiagnosisOut] = None
     medicines: List[EpMedicineOut] = None
     advices: List[AdviceOut] = None
-    refer: EpDoctorReferOut = None
-    followup: EpNextFollowUpOut = None
+    refer: List[EpDoctorReferOut] = None
+    followup: List[EpNextFollowUpOut] = None
 
     class Config:
         orm_mode = True
