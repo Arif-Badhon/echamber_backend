@@ -1,3 +1,4 @@
+from tokenize import Double
 from sqlalchemy import Column, ForeignKey, Integer, Boolean, String, Text, Date, Float, DateTime, Time
 from models import BaseModel
 from sqlalchemy.orm import relationship
@@ -597,10 +598,20 @@ class Pharmaceuticals(BaseModel):
     contact_person_phone = Column(String(255), nullable = True)
     contact_person_email = Column(String(255), nullable = True)
 
+
+
 class PharmaceuticalsUser(BaseModel):
     __tablename__ = "pharmaceuticals_user"
     user_id = Column(Integer, ForeignKey("users.id"))
     phr_id = Column(Integer, ForeignKey("pharmaceuticals.id"))
+
+
+
+class PharmaceuticalsNameList(BaseModel):
+    __tablename__ = "pharmaceuticals_name_list"
+    name = Column(String(255), nullable = False)
+    details = Column(Text, nullable = True)
+    remarks = Column(Text, nullable = True)
 
 
 #===================#
@@ -620,3 +631,16 @@ class PharmacyUser(BaseModel):
     __tablename__ = "pharmacy_user"
     user_id = Column(Integer, ForeignKey("users.id"))
     pharmacy_id = Column(Integer, ForeignKey("pharmacy.id"))
+
+# Purchase Order
+
+class PharmacyPurchaseOrder(BaseModel):
+    __tablename__ = "pharmacy_purchase_order"
+    total_amount = Column(Float, nullable = True)
+    paid_amount = Column(Float, nullable = True)
+    due_amount = Column(Float, nullable = True)
+    pharmaceuticals_name_id = Column(Integer, nullable = True)
+    purchase_number = Column(String(100), nullable = True)
+    user_id = Column(Integer, ForeignKey("users.id"))
+    pharmacy_id = Column(Integer, ForeignKey("pharmacy.id"))
+    remarks = Column(Text, nullable = True)
