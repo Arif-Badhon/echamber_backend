@@ -100,6 +100,7 @@ class EPrescriptionService(BaseService[EPrescription, EpBase, EpUpdate]):
             "age_months": ep_data.age_months,
             "current_address": ep_data.current_address,
             "remarks": ep_data.remarks,
+            "created_at": ep_data.created_at,
             "chief_complaints": chief_complaints,
             "history": history,
             "co_morbidities": co_morbidities,
