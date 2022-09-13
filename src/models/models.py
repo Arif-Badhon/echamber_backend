@@ -636,11 +636,26 @@ class PharmacyUser(BaseModel):
 
 class PharmacyPurchaseOrder(BaseModel):
     __tablename__ = "pharmacy_purchase_order"
-    total_amount = Column(Float, nullable = True)
+    total_amount_dp = Column(Float, nullable = True)
+    discount = Column(Float, nullabel = True)
+    payable_amount = Column(Float, nullable = True)
     paid_amount = Column(Float, nullable = True)
     due_amount = Column(Float, nullable = True)
+    subtotal_amount = Column(Float, nullable = True)
     pharmaceuticals_name_id = Column(Integer, nullable = True)
     purchase_number = Column(String(100), nullable = True)
     user_id = Column(Integer, ForeignKey("users.id"))
     pharmacy_id = Column(Integer, ForeignKey("pharmacy.id"))
     remarks = Column(Text, nullable = True)
+
+# Purchase Single Order
+
+class PurchaseSingleOrder(BaseModel):
+    __tablename__ = "purchase_single_order"
+    quantity = Column(Integer, nullable = True)
+    unit_price_dp = Column(Float, nullable = True)
+    discount = Column(Float, nullabel = True)
+    payable_prize_dp = Column(Float, nullable = True)
+    purchase_id = Column(Integer, ForeignKey("pharmacy_purchase_order.id"))
+    medicine_id = Column(Integer, nullable = False)
+
