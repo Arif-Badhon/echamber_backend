@@ -1,0 +1,6 @@
+from services import BaseService
+from models import PurchaseSingleOrder
+from schemas import PurchaseSingleOrderIn, PurchaseSingleOrderUpdate
+from repositories import purchase_single_order_repo
+
+purchase_single_order_service = BaseService[PurchaseSingleOrder, PurchaseSingleOrderIn, PurchaseSingleOrderUpdate](PurchaseSingleOrder, purchase_single_order_repo)
