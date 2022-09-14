@@ -31,7 +31,6 @@ class EpBase(BaseModel):
 class EpOut(EpBase):
     id: int
     created_at: datetime
-    pass
 
     class Config:
         orm_mode = True
@@ -61,6 +60,7 @@ class EpUpdate(BaseModel):
 
 
 class EpAllOut(EpBase):
+    created_at: datetime
     chief_complaints: List[ChiefComplaintsOut] = None
     histories: List[HistoryOut] = None
     co_morbidities: List[EpCoMorbidityOut] = None
@@ -69,8 +69,8 @@ class EpAllOut(EpBase):
     diagnosis: List[EpDiagnosisOut] = None
     medicines: List[EpMedicineOut] = None
     advices: List[AdviceOut] = None
-    refer: EpDoctorReferOut = None
-    followup: EpNextFollowUpOut = None
+    refer: List[EpDoctorReferOut] = None
+    followup: List[EpNextFollowUpOut] = None
 
     class Config:
         orm_mode = True
