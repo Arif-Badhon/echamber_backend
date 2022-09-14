@@ -1,0 +1,6 @@
+from services import BaseService
+from models import PharmacyPurchaseOrder
+from schemas import PharmacyPurchaseOrderIn, PharmacyPurchaseOrderUpdate
+from repositories import pharmacy_purchase_order_repo
+
+pharmacy_purchase_order_service = BaseService[PharmacyPurchaseOrder, PharmacyPurchaseOrderIn, PharmacyPurchaseOrderUpdate](PharmacyPurchaseOrder, pharmacy_purchase_order_repo)
