@@ -23,7 +23,7 @@ from .doctors_search import *
 from .doctor_training_exp import *
 from .doctor_professional_membership import *
 from .doctor_schedules import *
-from . doctor_others_activity import *
+from .doctor_others_activity import *
 from .doctor_workplace import *
 from .doctor_academic_info import *
 from .df_posts import *
@@ -47,4 +47,3 @@ from .pharmaceuticals_user import *
 from .pharmacy import *
 from .pharmacy_user import *
 from .pharmacy_purchase_order import *
-from .purchase_single_order import *
