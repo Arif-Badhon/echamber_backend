@@ -1,10 +1,9 @@
 from typing import List, Union
 from fastapi import APIRouter, Depends, UploadFile, File
-from exceptions import service_result
 from exceptions.service_result import handle_result
 from schemas import ImageLogOut, PdfLogOut, PdfLogIn, ImageLogIn, ResultInt
 from db import get_db
-from api.v1.auth_dependcies import logged_in_patient
+from api.v1.auth_dependcies import logged_in_admin, logged_in_doctor, logged_in_patient
 from sqlalchemy.orm import Session
 from utils import UploadFileUtils
 from services import pdf_log_service, image_log_service
@@ -56,3 +55,40 @@ def pdf_report_create(service_name: str, file: UploadFile = File(...), db: Sessi
     pdf_in_db = pdf_log_service.create(db=db, data_in=PdfLogIn(user_id=current_user.id, service_name=service_name, pdf_string=upload_pdf))
 
     return handle_result(pdf_in_db)
+
+
+# for doctor view
+
+
+@router.get(
+    '/doctor/img/{service_name}/{patient_id}', response_model=List[Union[ResultInt, List[ImageLogOut]]],
+    description='<b>location:</b> /images/patient_reports/[your filename with extention.] <br/> valid service name: patient_report, patient_medication, patient_prescription, patient_surgery, patient_vaccination')
+def img_report_by_user(service_name: str, patient_id: int,  skip: int = 0, limit: int = 10, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
+    all_reports = image_log_service.get_by_two_key(db=db,  skip=skip, limit=limit, descending=True, count_results=True, user_id=patient_id, service_name=service_name)
+    return handle_result(all_reports)
+
+
+@router.get(
+    '/doctor/pdf/{service_name}/{patient_id}', response_model=List[Union[ResultInt, List[PdfLogOut]]],
+    description="<b>location:</b> /pdf/[service_name]/[your filename with extention.] <br/> valid service name: patient_report, patient_medication, patient_prescription, patient_surgery, patient_vaccination")
+def pdf_report_by_user(service_name: str, patient_id: int,  skip: int = 0, limit: int = 10, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
+    all_reports = pdf_log_service.get_by_two_key(db=db, skip=skip, limit=limit, descending=True, count_results=True, user_id=patient_id, service_name=service_name)
+    return handle_result(all_reports)
+
+
+# for admin view
+
+@router.get(
+    '/admin/img/{service_name}/{patient_id}', response_model=List[Union[ResultInt, List[ImageLogOut]]],
+    description='<b>location:</b> /images/patient_reports/[your filename with extention.] <br/> valid service name: patient_report, patient_medication, patient_prescription, patient_surgery, patient_vaccination')
+def img_report_by_user(service_name: str, patient_id: int,  skip: int = 0, limit: int = 10, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin)):
+    all_reports = image_log_service.get_by_two_key(db=db,  skip=skip, limit=limit, descending=True, count_results=True, user_id=patient_id, service_name=service_name)
+    return handle_result(all_reports)
+
+
+@router.get(
+    '/admin/pdf/{service_name}/{patient_id}', response_model=List[Union[ResultInt, List[PdfLogOut]]],
+    description="<b>location:</b> /pdf/[service_name]/[your filename with extention.] <br/> valid service name: patient_report, patient_medication, patient_prescription, patient_surgery, patient_vaccination")
+def pdf_report_by_user(service_name: str, patient_id: int,  skip: int = 0, limit: int = 10, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin)):
+    all_reports = pdf_log_service.get_by_two_key(db=db, skip=skip, limit=limit, descending=True, count_results=True, user_id=patient_id, service_name=service_name)
+    return handle_result(all_reports)
