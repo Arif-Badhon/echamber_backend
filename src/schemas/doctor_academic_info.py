@@ -6,8 +6,9 @@ from typing import Optional
 class DoctorAcademicInfoBase(BaseModel):
     institute: str
     degree: str
-    start_date: date
-    end_date: date
+    speciality: str
+    start_date: Optional[date] = None
+    end_date: Optional[date] = None
 
 
 class DoctorAcademicInfoIn(DoctorAcademicInfoBase):
@@ -21,6 +22,7 @@ class DoctorAcademicInfoWithUser(DoctorAcademicInfoBase):
 class DoctorAcademicInfoUpdate(BaseModel):
     institute: Optional[str] = None
     degree: Optional[str] = None
+    speciality: Optional[str] = None
     start_date: Optional[date] = None
     end_date: Optional[date] = None
 

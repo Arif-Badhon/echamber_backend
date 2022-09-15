@@ -1,0 +1,6 @@
+from services import BaseService
+from models import PharmaceuticalsUser
+from schemas import PharmaecuticalsUserIn, PharmaecuticalsUserUpdate
+from repositories import pharmaceuticals_user_repo
+
+pharmaceuticals_user_service = BaseService[PharmaceuticalsUser, PharmaecuticalsUserIn, PharmaecuticalsUserUpdate](PharmaceuticalsUser, pharmaceuticals_user_repo)

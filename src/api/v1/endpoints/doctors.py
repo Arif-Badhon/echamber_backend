@@ -1,12 +1,12 @@
+from pickletools import read_uint1
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from db import get_db
 from exceptions import handle_result
-from schemas import DoctorOut, DoctorSpecialityOut, DoctorQualificationOut, DoctorSpecialityOut, DoctorQualilficationUpdate, DoctorSpecialityUpdate, DoctorSignup, UserOut, UserOutAuth, DoctorDetails, DoctorWorkPlaceOut, DoctorWorkPlaceIn, DoctorWorkPlaceWithUser, DoctorWorkPlaceUpdate
+from schemas import DoctorOut, DoctorUpdate, DoctorSpecialityOut, DoctorAcademicInfoIn, DoctorAcademicInfoOut, DoctorAcademicInfoUpdate, DoctorAcademicInfoWithUser, DoctorQualificationOut, DoctorSpecialityOut, DoctorQualilficationUpdate, DoctorSpecialityUpdate, DoctorSignup, UserOut, UserOutAuth, DoctorDetails, DoctorWorkPlaceOut, DoctorWorkPlaceIn, DoctorWorkPlaceWithUser, DoctorWorkPlaceUpdate, DoctorTrainingExpOut, DoctorTrainingExpUpdate, DoctorTrainingExpIn, DoctorTrainingExpInWithUser, DoctorProfessionalMembershipIn, DoctorProfessionalMembershipInWithUser, DoctorProfessionalMembershipOut, DoctorOthersActivityIn, DoctorOthersActivityWithUser, DoctorOthersActivityUpdate, DoctorOthersActivityOut
 from schemas.admin import ResultInt
-from schemas.doctor_academic_info import DoctorAcademicInfoIn, DoctorAcademicInfoOut, DoctorAcademicInfoUpdate, DoctorAcademicInfoWithUser
-from schemas.doctors import DoctorUpdate
-from services import doctors_service, doctor_qualifications_service, doctor_specialities_service, doctor_workplace_service, doctor_academic_info_service
+from schemas.doctor_professional_membership import DoctorProfessioanlMembershipUpdate
+from services import doctors_service, doctor_qualifications_service, doctor_specialities_service, doctor_workplace_service, doctor_academic_info_service, doctor_training_exp_services, doctor_professional_membership_service, doctor_others_activity_service
 from api.v1.auth_dependcies import logged_in_doctor
 from typing import List, Union
 
@@ -95,7 +95,8 @@ def update(id: int, data_update: DoctorWorkPlaceUpdate, db: Session = Depends(ge
 
 @router.delete('/workplace/{id}')
 def remove(id: int, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
-    return doctor_academic_info_service.delete(db=db, id=id)
+    delete = doctor_academic_info_service.delete(db=db, id=id)
+    return delete
 
 
 @router.post('/academic', response_model=DoctorAcademicInfoOut)
@@ -120,3 +121,75 @@ def edit(id: int, data_update: DoctorAcademicInfoUpdate, db: Session = Depends(g
 def remove(id: int, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
     delete = doctor_academic_info_service.delete(db=db, id=id)
     return delete
+
+
+@router.post('/training/', response_model=DoctorTrainingExpOut)
+def create(data_in: DoctorTrainingExpIn, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
+    tr = doctor_training_exp_services.create(db=db, data_in=DoctorTrainingExpInWithUser(**data_in.dict(), user_id=current_user.id))
+    return handle_result(tr)
+
+
+@router.get('/training/', response_model=List[Union[ResultInt, List[DoctorTrainingExpOut]]])
+def all_training(skip: int = 0, limit: int = 15, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
+    all = doctor_training_exp_services.get_by_key(db=db, skip=skip, limit=limit, descending=False, count_results=True, user_id=current_user.id)
+    return handle_result(all)
+
+
+@router.patch('/training/{id}', response_model=DoctorTrainingExpOut)
+def update(id: int, data_up: DoctorTrainingExpUpdate, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
+    up = doctor_training_exp_services.update(db=db, id=id, data_update=data_up)
+    return handle_result(up)
+
+
+@router.delete('/training/{id}')
+def remove(id: int, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
+    dl = doctor_training_exp_services.delete(db=db, id=id)
+    return handle_result(dl)
+
+
+@router.post('/membership/', response_model=DoctorProfessionalMembershipOut)
+def create(data_in: DoctorProfessionalMembershipIn, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
+    mm = doctor_professional_membership_service.create(db=db, data_in=DoctorProfessionalMembershipInWithUser(**data_in.dict(), user_id=current_user.id))
+    return handle_result(mm)
+
+
+@router.get('/membership/', response_model=List[Union[ResultInt, List[DoctorProfessionalMembershipOut]]])
+def all_membership(skip: int = 0, limit: int = 15, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
+    all = doctor_professional_membership_service.get_by_key(db=db, skip=skip, limit=limit, descending=False, count_results=True, user_id=current_user.id)
+    return handle_result(all)
+
+
+@router.patch('/membership/{id}', response_model=DoctorProfessionalMembershipOut)
+def update(id: int, data_up: DoctorProfessioanlMembershipUpdate, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
+    up = doctor_professional_membership_service.update(db=db, id=id, data_update=data_up)
+    return handle_result(up)
+
+
+@router.delete('/membership/{id}')
+def remove(id: int, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
+    dl = doctor_professional_membership_service.delete(db=db, id=id)
+    return handle_result(dl)
+
+
+@router.get('/others-activity/', response_model=List[Union[ResultInt, List[DoctorOthersActivityOut]]])
+def all_others_activity(skip: int = 0, limit: int = 15, topic: str = '', db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
+    all = doctor_others_activity_service.get_by_two_key(db=db, skip=skip, limit=limit, descending=False, count_results=True, user_id=current_user.id, topic=topic)
+    return handle_result(all)
+
+
+@router.post('/others-activity/', response_model=DoctorOthersActivityOut)
+def create(data_in: DoctorOthersActivityIn, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
+    added = doctor_others_activity_service.create(db=db, data_in=DoctorOthersActivityWithUser(**data_in.dict(), user_id=current_user.id))
+    return handle_result(added)
+
+
+@router.patch('/others-activity/{id}', response_model=DoctorOthersActivityOut)
+def edit(id: int, data_up: DoctorOthersActivityUpdate, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
+    up = doctor_others_activity_service.update(db=db, id=id, data_update=data_up)
+    return handle_result(up)
+
+
+@router.delete('/others-activity/{id}')
+def remove(id: int, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
+    re = doctor_others_activity_service.delete(db=db, id=id)
+    return handle_result(re)

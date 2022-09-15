@@ -1,0 +1,6 @@
+from services import BaseService
+from repositories import doctor_others_activity_repo
+from models import DoctorOthersActivity
+from schemas import DoctorOthersActivityIn, DoctorOthersActivityUpdate
+
+doctor_others_activity_service = BaseService[DoctorOthersActivity, DoctorOthersActivityIn, DoctorOthersActivityUpdate](DoctorOthersActivity, doctor_others_activity_repo)

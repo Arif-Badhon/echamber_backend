@@ -1,0 +1,5 @@
+from repositories import BaseRepo
+from models import PharmaceuticalsUser
+from schemas import PharmaecuticalsUserIn, PharmaecuticalsUserUpdate
+
+pharmaceuticals_user_repo = BaseRepo[PharmaceuticalsUser, PharmaecuticalsUserIn, PharmaecuticalsUserUpdate](PharmaceuticalsUser)

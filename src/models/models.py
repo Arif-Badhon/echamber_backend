@@ -1,3 +1,4 @@
+from tokenize import Double
 from sqlalchemy import Column, ForeignKey, Integer, Boolean, String, Text, Date, Float, DateTime, Time
 from models import BaseModel
 from sqlalchemy.orm import relationship
@@ -167,6 +168,7 @@ class MedicineOrder(BaseModel):
 
 class HealthPlanList(BaseModel):
     __tablename__ = "health_plan_list"
+    plan_type = Column(String(255), nullable=True)
     name = Column(String(255), nullable=False)
     details = Column(Text, nullable=True)
     voucher_code = Column(String(100), nullable=True)
@@ -312,6 +314,7 @@ class DoctorAcademicInfo(BaseModel):
     user_id = Column(Integer, ForeignKey("users.id"))
     institute = Column(String(255), nullable=False)
     degree = Column(String(255), nullable=True)
+    speciality = Column(String(255), nullable=True)
     start_date = Column(Date, nullable=True)
     end_date = Column(Date, nullable=True)
 
@@ -319,7 +322,7 @@ class DoctorAcademicInfo(BaseModel):
 class DoctorQualification(BaseModel):
     __tablename__="doctor_qualifications"
     user_id = Column(Integer, ForeignKey("users.id"))
-    qualification= Column(String(100), nullable=False)
+    qualification= Column(Text, nullable=False)
 
     user_doctor_qualification = relationship("User", back_populates="doctor_qualification")
 
@@ -328,7 +331,7 @@ class DoctorQualification(BaseModel):
 class DoctorSpeciality(BaseModel):
     __tablename__="doctor_specialities"
     user_id = Column(Integer, ForeignKey("users.id"))
-    speciality= Column(String(100), nullable=False)
+    speciality= Column(Text, nullable=False)
 
     user_doctor_speciality = relationship("User", back_populates="doctor_speciality")
 
@@ -341,6 +344,7 @@ class DoctorChamber(BaseModel):
     district = Column(String(100), nullable=False)
     detail_address = Column(String(255), nullable=True)
     is_active = Column(Boolean, default=False)
+    chamber_fee = Column(Float, nullable=True)
 
     user_doctors_chamber = relationship("User", back_populates="doctors_chamber")
 
@@ -354,6 +358,31 @@ class DoctorSchedule(BaseModel):
     am_pm = Column(String(100), nullable=False)
     online = Column(Boolean, nullable=False)
 
+
+
+class DoctorTrainingExp(BaseModel):
+    __tablename__ = "doctor_training_exp"
+    user_id = Column(Integer, ForeignKey("users.id"))
+    topic = Column(String(255), nullable=True)
+    place = Column(String(255), nullable=True)
+    organisation = Column(String(255), nullable=True)
+    year = Column(Integer, nullable=True)
+
+
+class DoctorProfessionalMembership(BaseModel):
+    __tablename__ = "doctor_professional_membership"
+    user_id = Column(Integer, ForeignKey("users.id"))
+    name = Column(String(100), nullable=True)
+    position = Column(String(100), nullable=True)
+    year = Column(Integer, nullable=True)
+
+
+class DoctorOthersActivity(BaseModel):
+    __tablename__ = "doctor_others_activity"
+    user_id = Column(Integer, ForeignKey("users.id"))
+    topic = Column(String(255), nullable=False)
+    title = Column(String(255), nullable=True)
+    details = Column(Text, nullable=True)
 
 
 # Doctor payment 
@@ -441,7 +470,8 @@ class EPrescription(BaseModel):
     telemedicine_order_id = Column(Integer, nullable=True)
     doctor_id = Column(Integer, ForeignKey("users.id"))
     patient_id = Column(Integer, ForeignKey("users.id"))
-    age = Column(Integer, nullable=False)
+    age_years = Column(Integer, nullable=True)
+    age_months = Column(Integer, nullable=True)
     current_address = Column(Text, nullable=True)
     remarks = Column(Text, nullable=True)
 
@@ -549,3 +579,83 @@ class EpAdviceList(BaseModel):
     __tablename__ = "ep_advice_list"
     advice = Column(String(255), nullable=False)
     inserted_by = Column(String(255), nullable= True)
+
+#==================================#
+#  Pharmaceuticals Related Models  #
+#==================================#
+
+class Pharmaceuticals(BaseModel):
+    __tablename__ = "pharmaceuticals"
+    name = Column(String(255), nullable = False)
+    established = Column(String(255), nullable = True)
+    details = Column(Text, nullable = True)
+    contact_phone = Column(String(255), nullable = True)
+    contact_email = Column(String(255), nullable = True)
+    address = Column(String(255), nullable = True)
+    total_generics = Column(Integer, nullable = True)
+    total_brands = Column(Integer, nullable = True)
+    contact_person = Column(String(255), nullable = True)
+    contact_person_phone = Column(String(255), nullable = True)
+    contact_person_email = Column(String(255), nullable = True)
+
+
+
+class PharmaceuticalsUser(BaseModel):
+    __tablename__ = "pharmaceuticals_user"
+    user_id = Column(Integer, ForeignKey("users.id"))
+    phr_id = Column(Integer, ForeignKey("pharmaceuticals.id"))
+
+
+
+class PharmaceuticalsNameList(BaseModel):
+    __tablename__ = "pharmaceuticals_name_list"
+    name = Column(String(255), nullable = False)
+    details = Column(Text, nullable = True)
+    remarks = Column(Text, nullable = True)
+
+
+#===================#
+#  Pharmacy Models  #  
+#===================#
+
+class Pharmacy(BaseModel):
+    __tablename__ = "pharmacy"
+    name = Column(String(255), nullable = False)
+    trade_lisence = Column(String(255), nullable = False)
+    detail_address = Column(Text, nullable = True)
+    district = Column(String(255), nullable = True)
+    sub_district = Column(String(255), nullable = True)
+    drug_lisence = Column(String(255), nullable = True)
+
+class PharmacyUser(BaseModel):
+    __tablename__ = "pharmacy_user"
+    user_id = Column(Integer, ForeignKey("users.id"))
+    pharmacy_id = Column(Integer, ForeignKey("pharmacy.id"))
+
+# Purchase Order
+
+class PharmacyPurchaseOrder(BaseModel):
+    __tablename__ = "pharmacy_purchase_order"
+    total_amount_dp = Column(Float, nullable = True)
+    discount = Column(Float, nullable = True)
+    payable_amount = Column(Float, nullable = True)
+    paid_amount = Column(Float, nullable = True)
+    due_amount = Column(Float, nullable = True)
+    subtotal_amount = Column(Float, nullable = True)
+    pharmaceuticals_name_id = Column(Integer, nullable = True)
+    user_id = Column(Integer, ForeignKey("users.id"))
+    pharmacy_id = Column(Integer, ForeignKey("pharmacy.id"))
+    purchase_number = Column(String(100), nullable = True)
+    remarks = Column(Text, nullable = True)
+
+# Purchase Single Order
+
+class PharmacyPurchaseSingleOrder(BaseModel):
+    __tablename__ = "pharmacy_purchase_single_order"
+    quantity = Column(Integer, nullable = True)
+    unit_price_dp = Column(Float, nullable = True)
+    discount = Column(Float, nullable = True)
+    payable_prize_dp = Column(Float, nullable = True)
+    purchase_order_id = Column(Integer, ForeignKey("pharmacy_purchase_order.id"))
+    medicine_id = Column(Integer, nullable = False)
+

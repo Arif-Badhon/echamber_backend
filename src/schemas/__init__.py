@@ -20,7 +20,10 @@ from .doctor_chambers import *
 from .doctor_qualifications import *
 from .doctor_specialities import *
 from .doctors_search import *
+from .doctor_training_exp import *
+from .doctor_professional_membership import *
 from .doctor_schedules import *
+from .doctor_others_activity import *
 from .doctor_workplace import *
 from .doctor_academic_info import *
 from .df_posts import *
@@ -39,3 +42,8 @@ from .ep_diagnosis import *
 from .ep_next_follow_up import *
 from .ep_doctor_refer import *
 from .eprescriptions import *
+from .pharmaceuticals import *
+from .pharmaceuticals_user import *
+from .pharmacy import *
+from .pharmacy_user import *
+from .pharmacy_purchase_order import *

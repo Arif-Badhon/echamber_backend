@@ -6,7 +6,7 @@ from typing import Optional
 class DoctorWorkPlaceBase(BaseModel):
     institute: str
     position: str
-    start_date: date
+    start_date: Optional[date] = None
     end_date: Optional[date] = None
 
 

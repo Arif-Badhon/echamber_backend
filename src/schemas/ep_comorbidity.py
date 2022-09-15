@@ -4,7 +4,7 @@ from typing import Optional
 
 
 class EpCoMorbidityBase(BaseModel):
-    cm_type: str
+    cm_type: Optional[str] = None
     remarks: Optional[str] = None
 
 
@@ -25,3 +25,6 @@ class EpCoMorbidityOut(EpCoMorbidityBase):
     id: int
     ep_id: int
     created_at: datetime
+
+    class Config:
+        orm_mode = True
