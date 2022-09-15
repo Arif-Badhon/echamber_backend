@@ -13,7 +13,7 @@ class EPrescriptionService(BaseService[EPrescription, EpBase, EpUpdate]):
                                        doctor_id=data_in.doctor_id, patient_id=data_in.patient_id, age=data_in.age, current_address=data_in.current_address, remarks=data_in.remarks))
 
         # chief complaints
-        if len(data_in.chief_complaints) != 0:
+        if data_in.chief_complaints and len(data_in.chief_complaints) != 0:
             for i in data_in.chief_complaints:
                 cc = ep_chief_complaints_repo.create_with_flush(db=db, data_in=ChiefComplaintsWithEp(chief_complaints=i.chief_complaints, ep_id=ep.id))
 
