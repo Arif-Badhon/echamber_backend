@@ -348,15 +348,15 @@ class DoctorChamber(BaseModel):
 
     user_doctors_chamber = relationship("User", back_populates="doctors_chamber")
 
-# online offline issue
-# class DoctorSchedule(BaseModel):
-#     __tablename__ = "doctor_schedules"
-#     user_id = Column(Integer, ForeignKey("users.id"))
-#     day = Column(Integer, nullable=False)
-#     hours = Column(Integer, nullable=False)
-#     minutes =  Column(Integer, nullable=False)
-#     am_pm = Column(String(100), nullable=False)
-#     online = Column(Boolean, nullable=False)
+
+class DoctorSchedule(BaseModel):
+    __tablename__ = "doctor_schedules"
+    user_id = Column(Integer, ForeignKey("users.id"))
+    date = Column(String(100), nullable=False)
+    time_min = Column(Integer, nullable=False)
+    duration = Column(String(100), nullable=False)
+    online = Column(Boolean, nullable=False)
+    chamber_id = Column(Integer, nullable=True)
 
 
 
