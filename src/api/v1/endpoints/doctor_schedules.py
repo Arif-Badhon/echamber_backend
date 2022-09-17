@@ -1,16 +1,21 @@
-from datetime import date
 from typing import List
 from fastapi import APIRouter
-# from exceptions.service_result import handle_result
-# from schemas import DoctorScheduleBase, DoctorScheduleIn, DoctorScheduleOut, DoctorScheduleOutWithBooked
-# from db import get_db
-# from fastapi import Depends
-# from sqlalchemy.orm import Session
-# from services import doctor_schedule_service
-# from api.v1.auth_dependcies import logged_in_doctor
+from exceptions.service_result import handle_result
+from schemas import DoctorScheduleBase, DoctorScheduleIn, DoctorScheduleOut, DoctorScheduleOutWithBooked, RangeScheduleInput
+from db import get_db
+from fastapi import Depends
+from sqlalchemy.orm import Session
+from services import doctor_schedule_service
+from api.v1.auth_dependcies import logged_in_doctor
 
 
 router = APIRouter()
+
+
+@router.post('/range/')
+def range_input(data_in: RangeScheduleInput, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
+    doctor_schedule_service.submit_with_range(db=db, data_in=data_in, user_id=current_user.id)
+    return 0
 
 
 # @router.get('/', response_model=List[DoctorScheduleOut])

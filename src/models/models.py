@@ -352,11 +352,12 @@ class DoctorChamber(BaseModel):
 class DoctorSchedule(BaseModel):
     __tablename__ = "doctor_schedules"
     user_id = Column(Integer, ForeignKey("users.id"))
-    date = Column(String(100), nullable=False)
+    date = Column(Date, nullable=False)
     time_min = Column(Integer, nullable=False)
-    duration = Column(String(100), nullable=False)
+    duration_min = Column(Integer, nullable=False)
     online = Column(Boolean, nullable=False)
     chamber_id = Column(Integer, nullable=True)
+    booked_by_patient_id = Column(Integer, nullable=True)
 
 
 
