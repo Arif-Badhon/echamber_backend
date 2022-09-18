@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from .endpoints import admin, corporate_partners, df_post, follow_up, notice, review, service_order, health_plan, telemedicine, doctor_chambers, doctors_search, doctor_schedules, users, roles, doctors, patients, user_details, patient_indicators, patient_reports, patient_families, eprescription, ep_medicines, ep_chief_complaints, ep_investigations, ep_advices, mediva_device_catagories, mediva_devices
+from .endpoints import admin, corporate_partners, df_post, follow_up, notice, review, service_order, health_plan, telemedicine, doctor_chambers, doctors_search, doctor_schedules, users, roles, doctors, patients, user_details, patient_indicators, patient_reports, patient_families, eprescription, ep_medicines, ep_chief_complaints, ep_investigations, ep_advices, mediva_device_catagories, mediva_devices, doctor_with_patient
 
 api_router = APIRouter()
 
@@ -20,8 +20,9 @@ api_router.include_router(health_plan.router, prefix='/health-plan', tags=['Heal
 api_router.include_router(telemedicine.router, prefix='/telemedicine', tags=['Telemedicine'])
 api_router.include_router(doctors.router, prefix='/doctors', tags=['Doctors'])
 api_router.include_router(doctor_chambers.router, prefix='/doctors/chamber', tags=['Doctor\'s Chamber'])
-api_router.include_router(doctors_search.router, prefix='/doctors/search', tags=['Doctor Search'])
 api_router.include_router(doctor_schedules.router, prefix='/doctor/schedules', tags=['Doctor Schedules'])
+api_router.include_router(doctor_with_patient.router, prefix='/doctor/patient', tags=['Doctor with Patient'])
+api_router.include_router(doctors_search.router, prefix='/doctors/search', tags=['Doctor Search'])
 api_router.include_router(df_post.router, prefix='/doctor/forum', tags=['Doctor Forum'])
 api_router.include_router(patients.router, prefix='/patients', tags=['Patients'])
 api_router.include_router(patient_indicators.router, prefix='/patient/indicators', tags=['Patient Indicators'])
