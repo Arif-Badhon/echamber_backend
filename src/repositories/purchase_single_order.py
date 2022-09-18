@@ -1,5 +1,0 @@
-from repositories import BaseRepo
-from models import PharmacyPurchaseSingleOrder
-from schemas import PurchaseSingleOrderIn, PurchaseSingleOrderUpdate
-
-purchase_single_order_repo = BaseRepo[PharmacyPurchaseSingleOrder, PurchaseSingleOrderIn, PurchaseSingleOrderUpdate](PharmacyPurchaseSingleOrder)
