@@ -355,6 +355,7 @@ class DoctorSchedule(BaseModel):
     date = Column(Date, nullable=False)
     time_min = Column(Integer, nullable=False)
     duration_min = Column(Integer, nullable=False)
+    am_pm = Column(String(255), nullable=False)
     online = Column(Boolean, nullable=False)
     chamber_id = Column(Integer, nullable=True)
     booked_by_patient_id = Column(Integer, nullable=True)
