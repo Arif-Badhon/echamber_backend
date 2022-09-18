@@ -16,10 +16,19 @@ class TimeString:
         return all_min
 
     @staticmethod
+    def min_to_time_str(min: int) -> str:
+        res_hour = int(min / 60)
+        res_min = int(min % 60)
+        if res_hour == 0:
+            res_hour = 12
+        if res_hour > 12:
+            res_hour -= 12
+        return f'{res_hour}:{res_min}'
+
+    @staticmethod
     def diff_dates(y1: int, m1: int, d1: int, y2: int, m2: int, d2: int):
         date1 = date(y1, m1, d1)
         date2 = date(y2, m2, d2)
 
         result = abs(date2-date1).days
-
         return result

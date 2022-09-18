@@ -1,16 +1,17 @@
-from typing import Literal, Optional
+from typing import Literal, Optional, List
 from pydantic import BaseModel, constr, conint
 from datetime import date
 
 
 class DoctorScheduleBase(BaseModel):
     date: date
-    time_min: conint(gt=0, lt=1441)
+    time_min: conint(gt=-1, lt=1441)
+    time: Optional[str] = None
     am_pm: Literal['am', 'pm']
     online: bool
     chamber_id: Optional[int] = None
     booked_by_patient_id: Optional[int] = None
-    duration_min: conint(gt=0, lt=1441)
+    duration_min: conint(gt=-1, lt=1441)
 
 
 class DoctorScheduleIn(DoctorScheduleBase):
@@ -45,6 +46,7 @@ class RangeScheduleInput(BaseModel):
     time_end: str = "12:10"
     time_start_am_pm: Literal['am', 'pm']
     time_end_am_pm: Literal['am', 'pm']
+    week_day: List[Literal['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']]
     online: bool
     chamber_id: Optional[int] = None
     booked_by_patient_id: Optional[int] = None

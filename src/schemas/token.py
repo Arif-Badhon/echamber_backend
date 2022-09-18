@@ -9,3 +9,10 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     user_id: int
+
+
+class Msg(BaseModel):
+    msg: str
+
+    class Config:
+        orm_mode = True
