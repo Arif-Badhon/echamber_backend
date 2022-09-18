@@ -659,3 +659,31 @@ class PharmacyPurchaseSingleOrder(BaseModel):
     purchase_order_id = Column(Integer, ForeignKey("pharmacy_purchase_order.id"))
     medicine_id = Column(Integer, nullable = False)
 
+# Goods Received Note (GRN)
+
+class PharmacyGrn(BaseModel):
+    __tablename__ = "pharmacy_grn"
+    total_amount_dp = Column(Float, nullable = True)
+    grn_number = Column(String(100), nullable = True)
+    total_amount_mrp = Column(Float, nullable = True)
+    total_vat_mrp = Column(Float, nullable = True)
+    total_discount_mrp = Column(Float, nullable = True)
+    total_cost_mrp = Column(Float, nullable = True)
+    pharmaceuticals_name_id = Column(Integer, nullable = True)
+    purchase_order_id = Column(Integer, ForeignKey("pharmacy_purchase_order.id"))
+    pharmacy_id = Column(Integer, ForeignKey("pharmacy.id"))
+
+# Single GRN
+
+class PharmacySingleGrn(BaseModel):
+    __tablename__ = "pharmacy_single_grn"
+    dp_prize = Column(Float, nullable = True)
+    quantity = Column(Integer, nullable = True)
+    mrp = Column(Float, nullable = True)
+    vat = Column(Float, nullable = True)
+    discount = Column(Float, nullable = True)
+    cost = Column(Float, nullable = True)
+    expiry_date = Column(Date, nullable = True)
+    batch_number = Column(String(100), nullable = True)
+    grn_id = Column(Integer, ForeignKey("pharmacy_grn.id"))
+    medicine_id = Column(Integer, nullable = False)
