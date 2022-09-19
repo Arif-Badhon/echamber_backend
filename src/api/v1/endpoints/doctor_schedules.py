@@ -18,7 +18,7 @@ def get_all_schedule(date: date, db: Session = Depends(get_db), current_user: Se
     return handle_result(all_ds)
 
 
-@router.post('/range/', response_model=Msg)
+@router.post('/range/', response_model=Msg, description='weekday = mon, tue, wed, thu, fri, sat, sun')
 def range_input(data_in: RangeScheduleInput, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
     ds = doctor_schedule_service.submit_with_range(db=db, data_in=data_in, user_id=current_user.id)
     return handle_result(ds)
