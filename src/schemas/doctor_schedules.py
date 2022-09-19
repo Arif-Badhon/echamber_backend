@@ -6,7 +6,6 @@ from datetime import date
 class DoctorScheduleBase(BaseModel):
     date: date
     time_min: conint(gt=-1, lt=1441)
-    time: Optional[str] = None
     am_pm: Literal['am', 'pm']
     online: bool
     chamber_id: Optional[int] = None
@@ -24,6 +23,7 @@ class DoctorScheduleUpdate(DoctorScheduleBase):
 
 class DoctorScheduleOut(DoctorScheduleBase):
     user_id: int
+    time: Optional[str] = None
 
     class Config:
         orm_mode = True
