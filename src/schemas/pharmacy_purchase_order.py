@@ -22,6 +22,16 @@ class PharmacyPurchaseOrderIn(PharmacyPurchaseOrderBase):
 
 
 class PharmacyPurchaseOrderUpdate(BaseModel):
+    total_amount_dp: Optional[float] = None
+    discount: Optional[float] = None
+    payable_amount: Optional[float] = None
+    paid_amount: Optional[float] = None
+    due_amount: Optional[float] = None
+    subtotal_amount: Optional[float] = None
+    pharmaceuticals_name_id: Optional[int] = None
+    purchase_number: Optional[str] = None
+    user_id: Optional[int] = None
+    pharmacy_id: Optional[int] = None
     remarks: Optional[str] = None
 
 
@@ -51,7 +61,11 @@ class PharmacyPurchaseSingleOrderWithPurchaseOrder(PharmacyPurchaseSingleOrderBa
 
 
 class PharmacyPurchaseSingleOrderUpdate(BaseModel):
-    pass
+    quantity: Optional[int] = None
+    unit_price_dp: Optional[float] = None
+    discount: Optional[float] = None
+    payable_prize_dp: Optional[float] = None
+    medicine_id: Optional[int] = None
 
 
 class PharmacyPurchaseSingleOrderOut(PharmacyPurchaseSingleOrderBase):

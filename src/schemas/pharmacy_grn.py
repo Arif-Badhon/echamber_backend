@@ -19,7 +19,15 @@ class PharmacyGrnIn(PharmacyGrnBase):
 
 
 class PharmacyGrnUpdate(BaseModel):
-    pass
+    total_amount_dp: Optional[float] = None
+    grn_number: Optional[str] = None
+    total_amount_mrp: Optional[float] = None
+    total_vat_mrp: Optional[float] = None
+    total_discount_mrp: Optional[float] = None
+    total_cost_mrp: Optional[float] = None
+    pharmaceuticals_name_id: Optional[int] = None
+    purchase_order_id: Optional[int] = None
+    pharmacy_id: Optional[int] = None
 
 
 class PharmacyGrnOut(PharmacyGrnBase):
@@ -52,7 +60,15 @@ class PharmacySingleGrnWithGrn(PharmacySingleGrnBase):
 
 
 class PharmacySingleGrnUpdate(BaseModel):
-    pass
+    dp_prize: Optional[float] = None
+    quantity: Optional[int] = None
+    mrp: Optional[float] = None
+    vat: Optional[float] = None
+    discount: Optional[float] = None
+    cost: Optional[float] = None
+    expiry_date: Optional[date] = None
+    batch_number: Optional[str] = None
+    medicine_id: Optional[int] = None
 
 
 class PharmacySingleGrnOut(PharmacySingleGrnBase):
