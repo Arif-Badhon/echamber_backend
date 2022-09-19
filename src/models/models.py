@@ -628,6 +628,7 @@ class Pharmacy(BaseModel):
     district = Column(String(255), nullable = True)
     sub_district = Column(String(255), nullable = True)
     drug_lisence = Column(String(255), nullable = True)
+    pharmacy_is_active = Column(Boolean, nullable=False)
 
 class PharmacyUser(BaseModel):
     __tablename__ = "pharmacy_user"
