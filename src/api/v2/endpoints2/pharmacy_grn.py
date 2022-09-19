@@ -8,6 +8,6 @@ from exceptions.service_result import handle_result
 router = APIRouter()
 
 @router.post("/")
-def pharmacy_purchase_order_with_singleorder(data_in: PharmacyGrnWithSingleGrn, db: Session = Depends(get_db)):
-    order = pharmacy_grn_service.submit(db=db, data_in=data_in)
-    return handle_result (order)
+def grn_with_single_grn(data_in: PharmacyGrnWithSingleGrn, db: Session = Depends(get_db)):
+    grn = pharmacy_grn_service.submit(db=db, data_in=data_in)
+    return handle_result (grn)
