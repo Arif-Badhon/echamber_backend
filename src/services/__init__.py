@@ -46,3 +46,5 @@ from .pharmacy import *
 from .pharmacy_user import *
 from .pharmacy_puchase_order import *
 from .pharmacy_purchase_single_order import *
+from .pharmacy_grn import *
+from .pharmacy_single_grn import *
