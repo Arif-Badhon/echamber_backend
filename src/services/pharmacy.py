@@ -28,7 +28,8 @@ class PharmacyService(BaseService[Pharmacy, PharmacyIn, PharmacyUpdate]):
             detail_address = data_in.pharmacy.detail_address,
             district = data_in.pharmacy.district,
             sub_district = data_in.pharmacy.sub_district,
-            drug_lisence = data_in.pharmacy.drug_lisence
+            drug_lisence = data_in.pharmacy.drug_lisence,
+            pharmacy_is_active = data_in.pharmacy.pharmacy_is_active
         ))
 
         pharma_user = pharmacy_user_service.create(db=db, data_in=PharmacyUserIn(user_id=handle_result(signup).id, pharmacy_id=handle_result(pharma).id))

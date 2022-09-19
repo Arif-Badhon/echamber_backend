@@ -10,6 +10,7 @@ class PharmacyBase(BaseModel):
     district: Optional[str] = None
     sub_district: Optional[str] = None
     drug_lisence: Optional[str] = None
+    pharmacy_is_active: bool = False
 
 class PharmacyIn(PharmacyBase):
     pass
@@ -21,6 +22,7 @@ class PharmacyUpdate(BaseModel):
     district: Optional[str] = None
     sub_district: Optional[str] = None
     drug_lisence: Optional[str] = None
+    pharmacy_is_active: Optional[bool] = None
 
 class PharmacyOut(PharmacyBase):
     id: int
