@@ -1,6 +1,6 @@
 from datetime import datetime
 from pydantic import BaseModel
-from typing import Optional
+from typing import List, Optional
 
 
 class PharmacyPurchaseOrderBase(BaseModel):
@@ -35,26 +35,33 @@ class PharmacyPurchaseOrderOut(PharmacyPurchaseOrderBase):
 # Single purchase order
 
 
-class PurchaseSingleOrderBase(BaseModel):
+class PharmacyPurchaseSingleOrderBase(BaseModel):
     quantity: Optional[int] = None
     unit_price_dp: Optional[float] = None
     discount: Optional[float] = None
     payable_prize_dp: Optional[float] = None
-    purchase_order_id: Optional[int] = None
     medicine_id: Optional[int] = None
 
 
-class PurchaseSingleOrderIn(PurchaseSingleOrderBase):
+class PharmacyPurchaseSingleOrderIn(PharmacyPurchaseSingleOrderBase):
+    pass
+
+class PharmacyPurchaseSingleOrderWithPurchaseOrder(PharmacyPurchaseSingleOrderBase):
+    purchase_order_id: int
+
+
+class PharmacyPurchaseSingleOrderUpdate(BaseModel):
     pass
 
 
-class PurchaseSingleOrderUpdate(BaseModel):
-    pass
-
-
-class PharmacySingleOrderOut(PurchaseSingleOrderBase):
+class PharmacyPurchaseSingleOrderOut(PharmacyPurchaseSingleOrderBase):
     id: int
     created_at: datetime
 
     class Config:
         orm_mode = True
+
+
+class PharmacyPurchaseOrderWithSingleOrder(BaseModel):
+    purchase_order: PharmacyPurchaseOrderIn
+    single_purchase_order: List[PharmacyPurchaseSingleOrderIn]

@@ -45,4 +45,8 @@ from .pharmaceuticals_user import *
 from .pharmacy import *
 from .pharmacy_user import *
 from .pharmacy_puchase_order import *
+<<<<<<< HEAD
 from .purchase_single_order import *
+=======
+from .pharmacy_purchase_single_order import *
+>>>>>>> d547bb56341e7d552466d7b25525449e4da74965
