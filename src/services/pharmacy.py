@@ -5,7 +5,8 @@ from repositories import pharmacy_repo
 from sqlalchemy.orm import Session
 from .users import users_service
 from .pharmacy_user import pharmacy_user_service
-from exceptions.service_result import handle_result
+from exceptions.service_result import ServiceResult, handle_result
+from fastapi import status
 
 class PharmacyService(BaseService[Pharmacy, PharmacyIn, PharmacyUpdate]):
     
@@ -24,15 +25,22 @@ class PharmacyService(BaseService[Pharmacy, PharmacyIn, PharmacyUpdate]):
 
         pharma = self.create_with_flush(db=db,data_in=PharmacyIn(
             name = data_in.pharmacy.name,
-            trade_lisence = data_in.pharmacy.trade_lisence,
+            trade_license = data_in.pharmacy.trade_license,
             detail_address = data_in.pharmacy.detail_address,
             district = data_in.pharmacy.district,
             sub_district = data_in.pharmacy.sub_district,
-            drug_lisence = data_in.pharmacy.drug_lisence,
+            drug_license = data_in.pharmacy.drug_license,
             pharmacy_is_active = data_in.pharmacy.pharmacy_is_active
         ))
 
         pharma_user = pharmacy_user_service.create(db=db, data_in=PharmacyUserIn(user_id=handle_result(signup).id, pharmacy_id=handle_result(pharma).id))
         return pharma_user 
+
+    def search_by_trade_license(self, db: Session, trade_license: str):
+        trade = self.repo.search_by_trade_license(db=db, trade_license=trade_license)
+        if not trade:
+            return ServiceResult([], status_code = status.HTTP_200_OK)
+        else:
+            return ServiceResult(trade, status_code = status.HTTP_200_OK)
 
 pharmacy_service = PharmacyService(Pharmacy, pharmacy_repo)
