@@ -5,22 +5,24 @@ from .users import UserCreateWitoutRole
 
 class PharmacyBase(BaseModel):
     name: str
-    trade_lisence: str
+    trade_license: str
     detail_address: Optional[str] = None
     district: Optional[str] = None
     sub_district: Optional[str] = None
-    drug_lisence: Optional[str] = None
+    drug_license: Optional[str] = None
+    pharmacy_is_active: bool = False
 
 class PharmacyIn(PharmacyBase):
     pass
 
 class PharmacyUpdate(BaseModel):
     name: Optional[str] = None
-    trade_lisence: Optional[str] = None
+    trade_license: Optional[str] = None
     detail_address: Optional[str] = None
     district: Optional[str] = None
     sub_district: Optional[str] = None
-    drug_lisence: Optional[str] = None
+    drug_license: Optional[str] = None
+    pharmacy_is_active: Optional[bool] = None
 
 class PharmacyOut(PharmacyBase):
     id: int

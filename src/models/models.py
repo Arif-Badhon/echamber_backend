@@ -623,11 +623,12 @@ class PharmaceuticalsNameList(BaseModel):
 class Pharmacy(BaseModel):
     __tablename__ = "pharmacy"
     name = Column(String(255), nullable = False)
-    trade_lisence = Column(String(255), nullable = False)
+    trade_license = Column(String(255), nullable = False)
     detail_address = Column(Text, nullable = True)
     district = Column(String(255), nullable = True)
     sub_district = Column(String(255), nullable = True)
-    drug_lisence = Column(String(255), nullable = True)
+    drug_license = Column(String(255), nullable = True)
+    pharmacy_is_active = Column(Boolean, nullable=False)
 
 class PharmacyUser(BaseModel):
     __tablename__ = "pharmacy_user"
