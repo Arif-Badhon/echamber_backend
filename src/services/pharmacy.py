@@ -1,3 +1,4 @@
+from exceptions.app_exceptions import AppException
 from services import BaseService
 from models import Pharmacy
 from schemas import PharmacyIn, PharmacyUpdate, UserCreate, PharmacyUserIn, PharmacyUserWithPharmacy
@@ -39,7 +40,7 @@ class PharmacyService(BaseService[Pharmacy, PharmacyIn, PharmacyUpdate]):
     def search_by_trade_license(self, db: Session, trade_license: str):
         trade = self.repo.search_by_trade_license(db=db, trade_license=trade_license)
         if not trade:
-            return ServiceResult([], status_code = status.HTTP_200_OK)
+            return ServiceResult(AppException.ServerError("Pharmacy not found"))
         else:
             return ServiceResult(trade, status_code = status.HTTP_200_OK)
 
