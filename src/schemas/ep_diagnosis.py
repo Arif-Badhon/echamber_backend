@@ -4,8 +4,8 @@ from typing import Optional
 
 
 class EpDiagnosisBase(BaseModel):
-    diagnosis_type: str
-    diagnosis: str
+    diagnosis_type: Optional[str] = None
+    diagnosis: Optional[str] = None
 
 
 class EpDiagnosisIn(EpDiagnosisBase):

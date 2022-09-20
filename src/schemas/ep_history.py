@@ -25,3 +25,6 @@ class HistoryOut(BaseModel):
     id: int
     ep_id: int
     created_at: datetime
+
+    class Config:
+        orm_mode = True

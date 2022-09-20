@@ -91,6 +91,7 @@ class EPrescriptionService(BaseService[EPrescription, EpBase, EpUpdate]):
         advices = ep_advices_repo.get_by_key(db=db, skip=0, limit=1000, descending=False, count_results=False, ep_id=ep_data.id)
         refer = ep_refer_repo.get_by_key(db=db, skip=0, limit=1000, descending=False, count_results=False, ep_id=ep_data.id)
         followup = ep_next_follow_up_repo.get_by_key(db=db, skip=0, limit=1000, descending=False, count_results=False, ep_id=ep_data.id)
+        print(diagnosis)
         data = {
             "cause_of_consultation": ep_data.cause_of_consultation,
             "telemedicine_order_id": ep_data.telemedicine_order_id,
