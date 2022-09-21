@@ -21,6 +21,10 @@ def pharmacy_register_by_admin(data_in: PharmacyUserWithPharmacy, db: Session = 
     admin = pharmacy_service.register_pharmacy(db=db, data_in=data_in)
     return handle_result(admin)
 
+@router.post("/signup/user")
+def pharmacy_user_signup(data_in: PharmacyUserWithPharmacy, db: Session = Depends(get_db)):
+    user = pharmacy_service.register_pharmacy(db=db, data_in=data_in)
+    return handle_result(user)
 
 @router.post("/login", response_model=Token)
 def pharmacy_user_login(data_in: PharmacyLogin, db: Session = Depends(get_db)):
