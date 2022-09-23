@@ -6,7 +6,7 @@ from schemas.eprescriptions import EpIn, EpAllOut
 from services import patients_service, ep_service
 from sqlalchemy.orm import Session
 from fastapi import Depends
-from schemas import EpPatientSearchOut, EpOut, EpAllOut
+from schemas import EpPatientSearchOut, EpOut, EpAllOut, EpDiagnosisOut
 from api.v1.auth_dependcies import logged_in_doctor
 
 router = APIRouter()
@@ -30,3 +30,11 @@ def submit(data_in: EpIn, db: Session = Depends(get_db)):
 def single_prescription(id: int, db: Session = Depends(get_db)):
     e = ep_service.get_single_ep(db=db, id=id)
     return e
+
+#
+
+
+@router.get('/diagnosis/{id}', response_model=List[EpDiagnosisOut])
+def single_diagnosis(id: int, db: Session = Depends(get_db)):
+    diagnosis = ep_service.only_diagnosis(db=db, id=id)
+    return diagnosis

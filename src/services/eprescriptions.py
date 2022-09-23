@@ -1,6 +1,6 @@
 from schemas import EpIn, EpUpdate, EpBase, EpDoctorReferWithEp, ChiefComplaintsWithEp, HistoryWithEp, EpCoMorbidityWithEp, EpInvestigationWithEp, EpNextFollowUpWithEp, EpMedicineWithEp, PatientIndicatorIn, EpOnExaminationIn
 from schemas.ep_advices import AdviceInWithEp
-from schemas.ep_diagnosis import EpDiagnosisWithEp
+from schemas.ep_diagnosis import EpDiagnosisOut, EpDiagnosisWithEp
 from services import BaseService
 from repositories import ep_repo, ep_refer_repo, ep_chief_complaints_repo, ep_history_repo, ep_co_morbities_repo, ep_investigation_repo, ep_diagnosis_repo, ep_advices_repo, ep_next_follow_up_repo, ep_medicines_repo, patient_indicators_repo, ep_on_examination_repo
 from models import EPrescription
@@ -91,7 +91,7 @@ class EPrescriptionService(BaseService[EPrescription, EpBase, EpUpdate]):
         advices = ep_advices_repo.get_by_key(db=db, skip=0, limit=1000, descending=False, count_results=False, ep_id=ep_data.id)
         refer = ep_refer_repo.get_by_key(db=db, skip=0, limit=1000, descending=False, count_results=False, ep_id=ep_data.id)
         followup = ep_next_follow_up_repo.get_by_key(db=db, skip=0, limit=1000, descending=False, count_results=False, ep_id=ep_data.id)
-        print(diagnosis)
+        print(len(diagnosis))
         data = {
             "cause_of_consultation": ep_data.cause_of_consultation,
             "telemedicine_order_id": ep_data.telemedicine_order_id,
@@ -107,12 +107,17 @@ class EPrescriptionService(BaseService[EPrescription, EpBase, EpUpdate]):
             "co_morbidities": co_morbidities,
             "on_examinations": on_examinations,
             "investigations": investigations,
-            "diagnosis:": diagnosis,
+            "diagnosis": diagnosis,
             "medicines": medicines,
             "advices": advices,
             "refer": refer,
-            "followup": followup}
+            "followup": followup
+        }
         return data
+
+    def only_diagnosis(self, db: Session, id: int):
+        diagnosis = ep_diagnosis_repo.get_by_key(db=db, skip=0, limit=1000, descending=False, count_results=False, ep_id=id)
+        return diagnosis
 
 
 ep_service = EPrescriptionService(EPrescription, ep_repo)

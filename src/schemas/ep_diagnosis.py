@@ -21,9 +21,11 @@ class EpDiagnosisUpdate(BaseModel):
     diagnosis: Optional[str] = None
 
 
-class EpDiagnosisOut(EpDiagnosisBase):
+class EpDiagnosisOut(BaseModel):
     id: int
     ep_id: int
+    diagnosis_type: Optional[str]
+    diagnosis: Optional[str]
     created_at: datetime
 
     class Config:
