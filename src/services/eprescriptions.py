@@ -91,7 +91,7 @@ class EPrescriptionService(BaseService[EPrescription, EpBase, EpUpdate]):
         advices = ep_advices_repo.get_by_key(db=db, skip=0, limit=1000, descending=False, count_results=False, ep_id=ep_data.id)
         refer = ep_refer_repo.get_by_key(db=db, skip=0, limit=1000, descending=False, count_results=False, ep_id=ep_data.id)
         followup = ep_next_follow_up_repo.get_by_key(db=db, skip=0, limit=1000, descending=False, count_results=False, ep_id=ep_data.id)
-        print(len(diagnosis))
+
         data = {
             "cause_of_consultation": ep_data.cause_of_consultation,
             "telemedicine_order_id": ep_data.telemedicine_order_id,
@@ -103,7 +103,7 @@ class EPrescriptionService(BaseService[EPrescription, EpBase, EpUpdate]):
             "remarks": ep_data.remarks,
             "created_at": ep_data.created_at,
             "chief_complaints": chief_complaints,
-            "history": history,
+            "histories": history,
             "co_morbidities": co_morbidities,
             "on_examinations": on_examinations,
             "investigations": investigations,
@@ -114,10 +114,6 @@ class EPrescriptionService(BaseService[EPrescription, EpBase, EpUpdate]):
             "followup": followup
         }
         return data
-
-    def only_diagnosis(self, db: Session, id: int):
-        diagnosis = ep_diagnosis_repo.get_by_key(db=db, skip=0, limit=1000, descending=False, count_results=False, ep_id=id)
-        return diagnosis
 
 
 ep_service = EPrescriptionService(EPrescription, ep_repo)
