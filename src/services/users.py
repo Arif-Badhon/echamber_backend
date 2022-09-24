@@ -118,5 +118,12 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
         access_token = Token.create_access_token({"sub": user_id})
         return ServiceResult({"access_token": access_token, "token_type": "bearer"}, status_code=200)
 
+    def get_one_user(self, db: Session, id: int):
+        usr = self.repo.get_one(db=db, id=id)
+        if not usr:
+            return ServiceResult(AppException.NotFound("User not found"))
+        usr.role_name = roles_repo.get_one(db=db, id=usr.role_id).name
+        return ServiceResult(usr, status_code=status.HTTP_200_OK)
+
 
 users_service = UserService(User, users_repo)

@@ -50,7 +50,7 @@ def user_update(user_update: UserUpdate, db: Session = Depends(get_db), current_
 
 @router.get('/user/{id}', response_model=UserOutAuth)
 def user_by_id(id: int, db: Session = Depends(get_db), current_user: Session = Depends(logged_in)):
-    user = users_service.get_one(db=db, id=id)
+    user = users_service.get_one_user(db=db, id=id)
     return handle_result(user)
 
 
