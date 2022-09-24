@@ -24,6 +24,11 @@ class PharmacyService(BaseService[Pharmacy, PharmacyIn, PharmacyUpdate]):
             role_name='pharmacy_admin'
         )
 
+        tr_license = self.repo.get_by_key(db=db, skip=0, limit=100, descending=False, count_results=True, trade_license=data_in.pharmacy.trade_license)
+        print(tr_license[0]["results"])
+        if tr_license[0]["results"] != 0:
+            return ServiceResult(AppException.ServerError("Trade License Already Registered"))
+
         signup = users_service.signup(db=db, data_in=admin_signup, flush=True)
 
         pharma = self.create_with_flush(db=db, data_in=PharmacyIn(
