@@ -21,7 +21,7 @@ class HistoryUpdate(BaseModel):
     history: Optional[str] = None
 
 
-class HistoryOut(BaseModel):
+class HistoryOut(HistoryBase):
     id: int
     ep_id: int
     created_at: datetime
