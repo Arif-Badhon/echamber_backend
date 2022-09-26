@@ -1,0 +1,5 @@
+from repositories import BaseRepo
+from models import PharmacyTotalCurrentStock
+from schemas import PharmacyTotalCurrentStockIn, PharmacyTotalCurrentStockUpdate
+
+pharmacy_total_current_stock_repo = BaseRepo[PharmacyTotalCurrentStock, PharmacyTotalCurrentStockIn, PharmacyTotalCurrentStockUpdate](PharmacyTotalCurrentStock)
