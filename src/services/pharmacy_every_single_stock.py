@@ -1,0 +1,6 @@
+from services import BaseService
+from models import PharmacyEverySingleStock
+from schemas import PharmacyEverySingleStockIn, PharmacyEverySingleStockUpdate
+from repositories import pharmacy_every_single_stock_repo
+
+pharmacy_every_single_stock_servive = BaseService[PharmacyEverySingleStock, PharmacyEverySingleStockIn, PharmacyEverySingleStockUpdate](PharmacyEverySingleStock, pharmacy_every_single_stock_repo)
