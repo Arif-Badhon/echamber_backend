@@ -48,3 +48,4 @@ from .pharmacy import *
 from .pharmacy_user import *
 from .pharmacy_purchase_order import *
 from .pharmacy_grn import *
+from .pharmacy_stock import *

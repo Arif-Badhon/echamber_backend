@@ -37,6 +37,6 @@ class PharmacyGrnService(BaseService[PharmacyGrn, PharmacyGrnIn, PharmacyGrnUpda
 
         db.commit()
 
-        return ServiceResult("Success")
+        return ServiceResult({"msg": "Success"}, status_code=200)
 
 pharmacy_grn_service = PharmacyGrnService(PharmacyGrn, pharmacy_grn_repo)

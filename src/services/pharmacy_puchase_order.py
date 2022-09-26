@@ -31,6 +31,6 @@ class PharmacyPurchaseOrderService(BaseService[PharmacyPurchaseOrder, PharmacyPu
 
         db.commit()
 
-        return ServiceResult("Success")
+        return ServiceResult({"msg": "Success"}, status_code=200)
 
 pharmacy_purchase_order_service = PharmacyPurchaseOrderService(PharmacyPurchaseOrder, pharmacy_purchase_order_repo)

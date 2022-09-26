@@ -1,0 +1,5 @@
+from repositories import BaseRepo
+from models import PharmacyEverySingleStock
+from schemas import PharmacyEverySingleStockIn, PharmacyEverySingleStockUpdate
+
+pharmacy_every_single_stock_repo = BaseRepo[PharmacyEverySingleStock, PharmacyEverySingleStockIn, PharmacyEverySingleStockUpdate](PharmacyEverySingleStock)

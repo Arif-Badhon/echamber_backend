@@ -1,0 +1,6 @@
+from services import BaseService
+from models import PharmacyTotalCurrentStock
+from schemas import PharmacyTotalCurrentStockIn, PharmacyTotalCurrentStockUpdate
+from repositories import pharmacy_total_current_stock_repo
+
+pharmacy_total_current_stock_service = BaseService[PharmacyTotalCurrentStock, PharmacyTotalCurrentStockIn, PharmacyTotalCurrentStockUpdate](PharmacyTotalCurrentStock, pharmacy_total_current_stock_repo)

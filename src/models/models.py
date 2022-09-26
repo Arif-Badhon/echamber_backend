@@ -623,7 +623,7 @@ class PharmaceuticalsNameList(BaseModel):
 class Pharmacy(BaseModel):
     __tablename__ = "pharmacy"
     name = Column(String(255), nullable = False)
-    trade_license = Column(String(255), nullable = False)
+    trade_license = Column(String(255), nullable = False, unique = True)
     detail_address = Column(Text, nullable = True)
     district = Column(String(255), nullable = True)
     sub_district = Column(String(255), nullable = True)
@@ -690,3 +690,22 @@ class PharmacySingleGrn(BaseModel):
     batch_number = Column(String(100), nullable = True)
     grn_id = Column(Integer, ForeignKey("pharmacy_grn.id"))
     medicine_id = Column(Integer, nullable = False)
+
+# Every Single Stock
+
+class PharmacyEverySingleStock(BaseModel):
+    __tablename__ = "pharmacy_every_single_stock"
+    quantity = Column(Integer, nullable = True)
+    expiry_date = Column(Date, nullable = True)
+    batch_number = Column(String(100), nullable = True)
+    medicine_id = Column(Integer, nullable = False)
+    single_grn = Column(Integer, ForeignKey("pharmacy_single_grn.id"))
+    pharmacy_id = Column(Integer, ForeignKey("pharmacy.id"))
+
+# Total Current Stock
+
+class PharmacyTotalCurrentStock(BaseModel):
+    __tablename__ = "pharmacy_total_current_stock"
+    quantity = Column(Integer, nullable = True)
+    medicine_id = Column(Integer, nullable = False)
+    pharmacy_id = Column(Integer, ForeignKey("pharmacy.id"))
