@@ -1,7 +1,7 @@
 from services import BaseService
 from models import PharmacyGrn
-from schemas import PharmacyGrnIn, PharmacyGrnUpdate, PharmacyGrnWithSingleGrn, PharmacySingleGrnWithGrn
-from repositories import pharmacy_grn_repo, pharmacy_single_grn_repo
+from schemas import PharmacyGrnIn, PharmacyGrnUpdate, PharmacyGrnWithSingleGrn, PharmacySingleGrnWithGrn, PharmacySingleGrnForStock
+from repositories import pharmacy_grn_repo, pharmacy_single_grn_repo, pharmacy_every_single_stock_repo
 from sqlalchemy.orm import Session
 from exceptions.service_result import ServiceResult
 
@@ -33,6 +33,15 @@ class PharmacyGrnService(BaseService[PharmacyGrn, PharmacyGrnIn, PharmacyGrnUpda
                     batch_number=i.batch_number,
                     medicine_id=i.medicine_id,
                     grn_id=grn.id
+                ))
+
+                single_stock = pharmacy_every_single_stock_repo.create(db=db, data_in=PharmacySingleGrnForStock(
+                    quantity=i.quantity,
+                    expiry_date=i.expiry_date,
+                    batch_number=i.batch_number,
+                    medicine_id=i.medicine_id,
+                    single_grn_id=single_grn.id,
+                    pharmacy_id=data_in.grn.pharmacy_id
                 ))
 
         db.commit()
