@@ -699,7 +699,7 @@ class PharmacyEverySingleStock(BaseModel):
     expiry_date = Column(Date, nullable = True)
     batch_number = Column(String(100), nullable = True)
     medicine_id = Column(Integer, nullable = False)
-    single_grn = Column(Integer, ForeignKey("pharmacy_single_grn.id"))
+    single_grn_id = Column(Integer, ForeignKey("pharmacy_single_grn.id"))
     pharmacy_id = Column(Integer, ForeignKey("pharmacy.id"))
 
 # Total Current Stock
