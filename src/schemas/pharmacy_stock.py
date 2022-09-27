@@ -7,13 +7,13 @@ class PharmacyEverySingleStockBase(BaseModel):
     expiry_date: Optional[date] = None
     batch_number: Optional[str] = None
     medicine_id: Optional[int] = None
-    single_grn: Optional[int] = None
 
 
 class PharmacyEverySingleStockIn(PharmacyEverySingleStockBase):
     pass
 
-class PharmacyStockWithPharmacyID(PharmacyEverySingleStockBase):
+class PharmacySingleGrnForStock(PharmacyEverySingleStockIn):
+    single_grn_id: int
     pharmacy_id: int
 
 
@@ -22,7 +22,7 @@ class PharmacyEverySingleStockUpdate(BaseModel):
     expiry_date: Optional[date] = None
     batch_number: Optional[str] = None
     medicine_id: Optional[int] = None
-    single_grn: Optional[int] = None
+    single_grn_id: Optional[int] = None
 
 class PharmacyEverySingleStockOut(PharmacyEverySingleStockBase):
     id: int
