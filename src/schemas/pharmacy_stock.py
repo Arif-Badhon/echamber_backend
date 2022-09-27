@@ -37,7 +37,7 @@ class PharmacyEverySingleStockOut(PharmacyEverySingleStockBase):
 class PharmacyTotalCurrentStockBase(BaseModel):
      quantity: Optional[int] = None
      medicine_id: Optional[int] = None
-     Pharmacy_id: Optional[int] = None
+     pharmacy_id: Optional[int] = None
 
 
 class PharmacyTotalCurrentStockIn(PharmacyTotalCurrentStockBase):
@@ -46,7 +46,7 @@ class PharmacyTotalCurrentStockIn(PharmacyTotalCurrentStockBase):
 
 class PharmacyTotalCurrentStockUpdate(BaseModel):
      quantity: Optional[int] = None
-     medicine_id: Optional[int] = None
+    #  medicine_id: Optional[int] = None
 
 
 class PharmacyTOtalCurrentStockOut(PharmacyTotalCurrentStockBase):
