@@ -526,7 +526,7 @@ class EpMedicine(BaseModel):
     form = Column(String(255), nullable=False)
     strength = Column(String(255), nullable=False)    
     doses = Column(String(100), nullable=True)
-    after_meal = Column(Boolean, nullable=True)
+    before_after = Column(String(100), nullable=True)
     days = Column(Integer, nullable=True)
     remarks = Column(String(255), nullable=True)
 

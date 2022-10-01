@@ -46,7 +46,7 @@ class EpMedicineBase(BaseModel):
     form: str
     strength: str
     doses: str
-    after_meal: bool
+    before_after: str
     days: int
     remarks: str
 
@@ -66,7 +66,7 @@ class EpMedicineUpdate(BaseModel):
     form: Optional[str] = None
     strength: Optional[str] = None
     doses: Optional[str] = None
-    after_meal: Optional[bool] = None
+    before_after: Optional[bool] = None
     days: Optional[int] = None
     remarks: Optional[str] = None
 
