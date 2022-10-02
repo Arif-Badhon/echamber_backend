@@ -1,4 +1,3 @@
-from multiprocessing.forkserver import read_signed
 from fastapi import APIRouter, Depends
 from db import get_db
 from sqlalchemy.orm import Session
