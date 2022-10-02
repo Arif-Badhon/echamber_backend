@@ -2,14 +2,13 @@ from datetime import datetime
 from pydantic import BaseModel
 from typing import Optional
 
-from sqlalchemy import Float
 
 class PharmacyInvoiceBase(BaseModel):
     subtotal_amount: Optional[float] = None
     total_amount_mrp: Optional[float] = None
     total_amount: Optional[float] = None
     paid_amount: Optional[float] = None
-    due_amount: Optional[Float] = None
+    due_amount: Optional[float] = None
     remarks: Optional[str] = None
     discount: Optional[float] = None
     vat: Optional[float] = None
@@ -27,7 +26,7 @@ class PharmacyInvoiceUpdate(BaseModel):
     total_amount_mrp: Optional[float] = None
     total_amount: Optional[float] = None
     paid_amount: Optional[float] = None
-    due_amount: Optional[Float] = None
+    due_amount: Optional[float] = None
     remarks: Optional[str] = None
     discount: Optional[float] = None
     vat: Optional[float] = None
@@ -56,7 +55,7 @@ class PharmacySingleInvoiceBase(BaseModel):
     invoice_id: Optional[int] = None
 
 
-class PharmacySingleInvoiceIn(PharmacyInvoiceBase):
+class PharmacySingleInvoiceIn(PharmacySingleInvoiceBase):
     pass 
 
 
@@ -70,7 +69,7 @@ class PharmacySingleInvoiceUpdate(BaseModel):
     invoice_id: Optional[int] = None
 
 
-class PharmacySingleInvoiceOut(PharmacyInvoiceBase):
+class PharmacySingleInvoiceOut(PharmacySingleInvoiceBase):
     id: int
     created_at: datetime
 
