@@ -1,6 +1,6 @@
 from typing import List
 from fastapi import APIRouter, Depends
-from schemas import PharmacyOut, PharmacyUserWithPharmacy, Token, PharmacyLogin
+from schemas import PharmacyOut, PharmacyUserWithPharmacy, Token, PharmacyLogin, PharmacyUpdate
 from db import get_db
 from sqlalchemy.orm import Session
 from services import pharmacy_service
@@ -30,3 +30,9 @@ def pharmacy_user_signup(data_in: PharmacyUserWithPharmacy, db: Session = Depend
 def pharmacy_user_login(data_in: PharmacyLogin, db: Session = Depends(get_db)):
     login = pharmacy_service.pharmacy_user_login(db=db, data_in=data_in)
     return handle_result(login)
+
+
+@router.patch('/{id}', response_model=PharmacyOut)
+def update_pharmacy(id: int, data_update: PharmacyUpdate, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin)):
+    update_ph = pharmacy_service.update(db=db, data_update=data_update, id=id)
+    return handle_result(update_ph)
