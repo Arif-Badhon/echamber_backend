@@ -709,3 +709,33 @@ class PharmacyTotalCurrentStock(BaseModel):
     quantity = Column(Integer, nullable = True)
     medicine_id = Column(Integer, nullable = False)
     pharmacy_id = Column(Integer, ForeignKey("pharmacy.id"))
+
+
+# Invoice Order
+
+class PharmacyInvoice(BaseModel):
+    __tablename__ = "pharmacy_invoice"
+    subtotal_amount = Column(Float, nullable = True)
+    total_amount_mrp = Column(Float, nullable = True)
+    total_amount = Column(Float, nullable = True)
+    paid_amount = Column(Float, nullable = True)
+    due_amount = Column(Float, nullable = True)
+    remarks = Column(Text, nullable = True)
+    discount = Column(Float, nullable = True)
+    vat = Column(Float, nullable = True)
+    invoice_number = Column(String(100), nullable = True)
+    customer_id = Column(Integer, nullable = False)
+    pharmacy_id = Column(Integer, ForeignKey("pharmacy.id"))
+
+
+# Single Invoice Order
+
+class PharmacySingleInvoice(BaseModel):
+    __tablename__ = "pharmacy_single_invoice"
+    mrp = Column(Float, nullable = True)
+    quantity = Column(Integer, nullable = True)
+    unit_prize = Column(Float, nullable = True)
+    discount = Column(Float, nullable = True)
+    cost = Column(Float, nullable = True)
+    medicine_id = Column(Integer, nullable = False)
+    invoice_id = Column(Integer, ForeignKey("pharmacy_invoice.id"))
