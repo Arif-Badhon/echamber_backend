@@ -657,6 +657,7 @@ class PharmacyPurchaseSingleOrder(BaseModel):
     __tablename__ = "pharmacy_purchase_single_order"
     quantity = Column(Integer, nullable = True)
     unit_price_dp = Column(Float, nullable = True)
+    total_price_dp = Column(Float, nullable = True)
     discount = Column(Float, nullable = True)
     payable_prize_dp = Column(Float, nullable = True)
     purchase_order_id = Column(Integer, ForeignKey("pharmacy_purchase_order.id"))
