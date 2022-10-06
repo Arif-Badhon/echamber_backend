@@ -25,7 +25,7 @@ class PharmacyService(BaseService[Pharmacy, PharmacyIn, PharmacyUpdate]):
         )
 
         tr_license = self.repo.get_by_key(db=db, skip=0, limit=100, descending=False, count_results=True, trade_license=data_in.pharmacy.trade_license)
-        print(tr_license[0]["results"])
+        # print(tr_license[0]["results"])
         if tr_license[0]["results"] != 0:
             return ServiceResult(AppException.ServerError("Trade License Already Registered"))
 
@@ -67,6 +67,17 @@ class PharmacyService(BaseService[Pharmacy, PharmacyIn, PharmacyUpdate]):
 
 
         return users_service.login(db=db, identifier=data_in.identifier, password=data_in.password)
+
+    def check_user_with_pharmacy(self, db: Session, user_id:int, pharmacy_id:int):
+        check = pharmacy_user_service.get_by_two_key(db=db, skip=0, limit=100, descending=False, count_results=False, user_id=user_id, pharmacy_id=pharmacy_id)
+        check_user_ph_id = handle_result(check)
+        
+
+        if len(check_user_ph_id) == 1:
+            return True
+        else:
+            return False
+
 
     def search_by_trade_license(self, db: Session, trade_license: str):
         trade = self.repo.search_by_trade_license(db=db, trade_license=trade_license)
