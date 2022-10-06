@@ -1,0 +1,7 @@
+from services import BaseService
+from models import PharmacySingleInvoice
+from schemas import PharmacySingleInvoiceIn, PharmacySingleInvoiceUpdate
+from repositories import pharmacy_single_invoice_repo
+
+
+pharmacy_single_invoice_service = BaseService[PharmacySingleInvoice, PharmacySingleInvoiceIn, PharmacySingleInvoiceUpdate](PharmacySingleInvoice, pharmacy_single_invoice_repo)

@@ -46,7 +46,6 @@ class PharmacyTotalCurrentStockIn(PharmacyTotalCurrentStockBase):
 
 class PharmacyTotalCurrentStockUpdate(BaseModel):
      quantity: Optional[int] = None
-    #  medicine_id: Optional[int] = None
 
 
 class PharmacyTOtalCurrentStockOut(PharmacyTotalCurrentStockBase):

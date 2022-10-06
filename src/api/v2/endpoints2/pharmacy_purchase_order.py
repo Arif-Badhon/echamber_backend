@@ -1,6 +1,5 @@
-from enum import Flag
 from fastapi import APIRouter, Depends
-from schemas import PharmacyPurchaseOrderWithSingleOrder, PharmacyPurchaseOrderOut, PharmacyPurchaseSingleOrderOut, ResultInt
+from schemas import PharmacyPurchaseOrderWithSingleOrder, PharmacyPurchaseOrderOut, PharmacyPurchaseSingleOrderOut, ResultInt, PharmacyPurchaseOrderUpdate
 from db import get_db
 from sqlalchemy.orm import Session
 from services import pharmacy_purchase_order_service, pharmacy_purchase_single_order_service
@@ -25,3 +24,9 @@ def search_purchase_order(skip: int = 0, limit: int = 10, db: Session = Depends(
 def search_single_purchase_order(id: int, skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
     search_single = pharmacy_purchase_single_order_service.get_by_key(db=db, skip=skip, limit=limit, descending=True, count_results=True, purchase_order_id = id)
     return handle_result(search_single)
+
+
+@router.patch('/{id}', response_model=PharmacyPurchaseOrderOut)
+def update_purchase_order(id: int, data_update: PharmacyPurchaseOrderUpdate, db: Session = Depends(get_db)):
+    update_pho = pharmacy_purchase_order_service.update(db=db, data_update=data_update, id=id)
+    return handle_result(update_pho)
