@@ -84,7 +84,13 @@ class EPrescriptionService(BaseService[EPrescription, EpBase, EpUpdate]):
         chief_complaints = ep_chief_complaints_repo.get_by_key(db=db, skip=0, limit=1000, descending=False, count_results=False, ep_id=ep_data.id)
         history = ep_history_repo.get_by_key(db=db, skip=0, limit=1000, descending=False, count_results=False, ep_id=ep_data.id)
         co_morbidities = ep_co_morbities_repo.get_by_key(db=db, skip=0, limit=1000, descending=False, count_results=False, ep_id=ep_data.id)
+
         on_examinations = ep_on_examination_repo.get_by_key(db=db, skip=0, limit=1000, descending=False, count_results=False, ep_id=ep_data.id)
+        patient_indicators = []
+        for i in on_examinations:
+            get_in = patient_indicators_repo.get_one(db, id=i.patient_indicator_id)
+            patient_indicators.append(get_in)
+
         investigations = ep_investigation_repo.get_by_key(db=db, skip=0, limit=1000, descending=False, count_results=False, ep_id=ep_data.id)
         diagnosis = ep_diagnosis_repo.get_by_key(db=db, skip=0, limit=1000, descending=False, count_results=False, ep_id=ep_data.id)
         medicines = ep_medicines_repo.get_by_key(db=db, skip=0, limit=1000, descending=False, count_results=False, ep_id=ep_data.id)
@@ -105,7 +111,7 @@ class EPrescriptionService(BaseService[EPrescription, EpBase, EpUpdate]):
             "chief_complaints": chief_complaints,
             "histories": history,
             "co_morbidities": co_morbidities,
-            "on_examinations": on_examinations,
+            "on_examinations": patient_indicators,
             "investigations": investigations,
             "diagnosis": diagnosis,
             "medicines": medicines,
