@@ -71,7 +71,7 @@ class EpMedicineUpdate(BaseModel):
     remarks: Optional[str] = None
 
 
-class EpMedicineOut(BaseModel):
+class EpMedicineOut(EpMedicineBase):
     id: int
     ep_id: int
     created_at: datetime
