@@ -9,13 +9,15 @@ from typing import List
 
 router = APIRouter()
 
-@router.get("/every-single-stock/", response_model=List[PharmacyEverySingleStockOut])
-def search(db: Session = Depends(get_db)):
-    search_single = pharmacy_every_single_stock_servive.get(db=db)
+
+# , response_model=List[PharmacyEverySingleStockOut]
+@router.get("/every-single-stock/")
+def get_single_stock(db: Session = Depends(get_db)):
+    search_single = pharmacy_every_single_stock_servive.all_single_stock(db=db)
     return handle_result(search_single)
 
-
-@router.get("/total-current-stock/", response_model=List[PharmacyTOtalCurrentStockOut])
-def search(db: Session = Depends(get_db)):
-    search_total = pharmacy_total_current_stock_service.get(db=db)
+# , response_model=List[PharmacyTOtalCurrentStockOut]
+@router.get("/total-current-stock/")
+def get_total_stock(db: Session = Depends(get_db)):
+    search_total = pharmacy_total_current_stock_service.total_current_stock(db=db)
     return handle_result(search_total)
