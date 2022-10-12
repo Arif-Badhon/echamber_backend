@@ -50,7 +50,7 @@ def search_with_user_and_pharmacy_id(user_id: int, pharmacy_id: int, db: Session
     return check 
 
 
-@router.get("/user", response_model=List[PharmacyUserWithPharmacyID])
+@router.get("/user-pharmacy")
 def search_pharmacy_with_user_id(user_id: int, db: Session = Depends(get_db)):
-    search = pharmacy_service.find_pharmacy_id_with_user_id(db=db, user_id=user_id)
+    search = pharmacy_service.find_pharmacy_with_user_id(db=db, user_id=user_id)
     return handle_result(search)
