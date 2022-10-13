@@ -81,3 +81,8 @@ class PharmacyPurchaseSingleOrderOut(PharmacyPurchaseSingleOrderBase):
 class PharmacyPurchaseOrderWithSingleOrder(BaseModel):
     purchase_order: PharmacyPurchaseOrderIn
     single_purchase_order: List[PharmacyPurchaseSingleOrderIn]
+
+
+class PharmacyPurchaseSingleOrderWithMedicine(PharmacyPurchaseSingleOrderOut):
+    medicine_name: Optional[str] = None 
+    medicine_generic: Optional[str] = None

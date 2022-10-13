@@ -32,6 +32,12 @@ class PharmacyEverySingleStockOut(PharmacyEverySingleStockBase):
         orm_mode = True
 
 
+class PharmacyEverySingleStockOutWithMedicine(PharmacyEverySingleStockOut):
+    pharmacy_id: Optional[int] = None
+    medicine_name: Optional[str] = None 
+    medicine_generic: Optional[str] = None
+
+
 # Total current Stock
 
 class PharmacyTotalCurrentStockBase(BaseModel):
@@ -48,9 +54,14 @@ class PharmacyTotalCurrentStockUpdate(BaseModel):
      quantity: Optional[int] = None
 
 
-class PharmacyTOtalCurrentStockOut(PharmacyTotalCurrentStockBase):
+class PharmacyTotalCurrentStockOut(PharmacyTotalCurrentStockBase):
     id: int
     created_at: datetime
 
     class Config:
         orm_mode = True
+
+
+class PharmacyTotalCurrentStockWithMedicine(PharmacyTotalCurrentStockOut):
+    medicine_name: Optional[str] = None 
+    medicine_generic: Optional[str] = None
