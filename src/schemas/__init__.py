@@ -19,6 +19,7 @@ from .doctors import *
 from .doctor_chambers import *
 from .doctor_qualifications import *
 from .doctor_specialities import *
+from .doctor_ep_header import *
 from .doctors_search import *
 from .doctor_training_exp import *
 from .doctor_professional_membership import *
