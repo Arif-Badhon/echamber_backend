@@ -1,4 +1,4 @@
-from mysqlx import Session
+from sqlalchemy.orm import Session
 from exceptions.service_result import handle_result
 from services import BaseService
 from models import PharmacyPurchaseSingleOrder
