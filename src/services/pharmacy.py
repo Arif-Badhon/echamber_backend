@@ -78,6 +78,16 @@ class PharmacyService(BaseService[Pharmacy, PharmacyIn, PharmacyUpdate]):
         else:
             return False
 
+    def find_pharmacy_with_user_id(self, db: Session, user_id: int):
+        find = pharmacy_user_service.get_by_key(db=db, skip=0, limit=100, descending=False, count_results=False, user_id=user_id)
+        find_user = handle_result(find)
+        if len(find_user) == 0:
+            return ServiceResult(AppException.ServerError("Not Pharmacy User"))
+        else:
+            pharmacy_id = handle_result(find)[0].pharmacy_id
+            return pharmacy_service.get_one(db=db, id=pharmacy_id)
+
+
 
     def search_by_trade_license(self, db: Session, trade_license: str):
         trade = self.repo.search_by_trade_license(db=db, trade_license=trade_license)

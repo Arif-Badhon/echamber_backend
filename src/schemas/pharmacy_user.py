@@ -11,6 +11,9 @@ class PharmacyUserIn(PharmacyUserBase):
 class PharmacyUserWithPharmacyID(PharmacyUserBase):
     pharmacy_id: int
 
+    class Config:
+        orm_mode = True
+
 class PharmacyUserUpdate(BaseModel):
     user_id: int
 

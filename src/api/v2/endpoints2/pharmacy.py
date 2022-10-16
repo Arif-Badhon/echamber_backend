@@ -1,6 +1,6 @@
 from typing import List
 from fastapi import APIRouter, Depends
-from schemas import PharmacyOut, PharmacyUserWithPharmacy, Token, PharmacyLogin, PharmacyUpdate, UserOutAuth
+from schemas import PharmacyOut, PharmacyUserWithPharmacy, Token, PharmacyLogin, PharmacyUpdate, UserOutAuth, PharmacyUserOut, PharmacyUserWithPharmacyID
 from db import get_db
 from sqlalchemy.orm import Session
 from services import pharmacy_service
@@ -48,3 +48,9 @@ def auth(current_user: User = Depends(logged_in)):
 def search_with_user_and_pharmacy_id(user_id: int, pharmacy_id: int, db: Session = Depends(get_db)):
     check = pharmacy_service.check_user_with_pharmacy(db=db, user_id=user_id, pharmacy_id=pharmacy_id)
     return check 
+
+
+@router.get("/user-pharmacy")
+def search_pharmacy_with_user_id(user_id: int, db: Session = Depends(get_db)):
+    search = pharmacy_service.find_pharmacy_with_user_id(db=db, user_id=user_id)
+    return handle_result(search)

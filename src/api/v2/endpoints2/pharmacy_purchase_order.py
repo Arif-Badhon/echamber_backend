@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends
-from schemas import PharmacyPurchaseOrderWithSingleOrder, PharmacyPurchaseOrderOut, PharmacyPurchaseSingleOrderOut, ResultInt, PharmacyPurchaseOrderUpdate
+from schemas import PharmacyPurchaseOrderWithSingleOrder, PharmacyPurchaseOrderOut, PharmacyPurchaseSingleOrderOut, ResultInt, PharmacyPurchaseOrderUpdate, PharmacyPurchaseSingleOrderWithMedicine
 from db import get_db
 from sqlalchemy.orm import Session
 from services import pharmacy_purchase_order_service, pharmacy_purchase_single_order_service
@@ -15,14 +15,14 @@ def pharmacy_purchase_order_with_singleorder(data_in: PharmacyPurchaseOrderWithS
 
 
 @router.get("/", response_model=List[Union[ResultInt, List[PharmacyPurchaseOrderOut]]])
-def search_purchase_order(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+def get_all_purchase_order(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
     search = pharmacy_purchase_order_service.get_with_pagination(db = db, skip=skip, limit=limit, descending=True, count_results=True)
     return handle_result(search)
 
 
-@router.get("/single/{id}", response_model=List[Union[ResultInt, List[PharmacyPurchaseSingleOrderOut]]])
-def search_single_purchase_order(id: int, skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
-    search_single = pharmacy_purchase_single_order_service.get_by_key(db=db, skip=skip, limit=limit, descending=True, count_results=True, purchase_order_id = id)
+@router.get("/single-order-with-purchase-id/{id}", response_model=List[Union[ResultInt, List[PharmacyPurchaseSingleOrderWithMedicine]]])
+def get_single_purchase_order(id: int, skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+    search_single = pharmacy_purchase_single_order_service.all_single_order(db=db, skip=skip, limit=limit, purchase_order_id = id)
     return handle_result(search_single)
 
 
