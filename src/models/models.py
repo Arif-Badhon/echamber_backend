@@ -740,3 +740,26 @@ class PharmacySingleInvoice(BaseModel):
     cost = Column(Float, nullable = True)
     medicine_id = Column(Integer, nullable = False)
     invoice_id = Column(Integer, ForeignKey("pharmacy_invoice.id"))
+
+
+
+#=========================#
+#  Clinic Related Models  #
+#=========================#
+
+class Clinic(BaseModel):
+    __tablename__ = "clinic"
+    name = Column(String(255), nullable = False)
+    detail_address = Column(Text, nullable = True)
+    district = Column(String(255), nullable = True)
+    sub_district = Column(String(255), nullable = True)
+    contact_phone = Column(String(255), nullable = True)
+    contact_email = Column(String(255), nullable = True)
+    clinic_is_active = Column(Boolean, nullable=False)
+
+
+# Clinic User 
+class ClinicUser(BaseModel):
+    __tablename__ = "clinic_user"
+    user_id = Column(Integer, ForeignKey("users.id"))
+    clinic_id = Column(Integer, ForeignKey("clinic.id"))
