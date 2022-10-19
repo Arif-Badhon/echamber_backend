@@ -24,6 +24,7 @@ from .doctors import *
 from .doctor_chambers import *
 from .doctor_qualifications import *
 from .doctor_specialities import *
+from .doctor_ep_header import *
 from .doctors_search import *
 from .doctor_training_exp import *
 from .doctor_professional_membership import *
@@ -63,5 +64,3 @@ from .pharmacy_every_single_stock import *
 from .pharmacy_total_current_stock import *
 from .pharmacy_invoice import *
 from .pharmacy_single_invoice import *
-from .clinic import *
-from .clinic_user import *

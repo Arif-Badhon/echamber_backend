@@ -56,7 +56,7 @@ class EPrescriptionService(BaseService[EPrescription, EpBase, EpUpdate]):
         if data_in.medicines and len(data_in.medicines) != 0:
             for i in data_in.medicines:
                 med = ep_medicines_repo.create_with_flush(db=db, data_in=EpMedicineWithEp(name=i.name, generic=i.generic, pharmaceuticals=i.pharmaceuticals,
-                                                          form=i.form, strength=i.strength, doses=i.doses, after_meal=i.after_meal, days=i.days, remarks=i.remarks, ep_id=ep.id))
+                                                          form=i.form, strength=i.strength, doses=i.doses, before_after=i.before_after, days=i.days, remarks=i.remarks, ep_id=ep.id))
 
         # advices
         if data_in.advices and len(data_in.advices) != 0:

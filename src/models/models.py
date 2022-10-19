@@ -349,6 +349,16 @@ class DoctorChamber(BaseModel):
     user_doctors_chamber = relationship("User", back_populates="doctors_chamber")
 
 
+
+class DoctorEpHeader(BaseModel):
+    __tablename__ = "doctor_ep_header"
+    user_id = Column(Integer, ForeignKey("users.id"))
+    header_side = Column(String(100), nullable=False)
+    heading = Column(String(255), nullable=True)
+    body = Column(Text, nullable=True)
+
+
+
 class DoctorSchedule(BaseModel):
     __tablename__ = "doctor_schedules"
     user_id = Column(Integer, ForeignKey("users.id"))
