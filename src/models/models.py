@@ -778,6 +778,7 @@ class ClinicUser(BaseModel):
 # Clinic Details
 class ClinicDetails(BaseModel):
     __tablename__ = "clinic_details"
+    clinic_id = Column(Integer, ForeignKey("clinic.id"))
     title = Column(String(255), nullable = False)
     sub_title = Column(Text, nullable = True)
     title_bg_image_id = Column(Integer, nullable=True)
@@ -785,12 +786,11 @@ class ClinicDetails(BaseModel):
     about_image_id = Column(Integer, nullable=True)
     contuct_us = Column(Text, nullable = True)
     footer = Column(Text, nullable = True)
-    clinic_id = Column(Integer, ForeignKey("clinic.id"))
 
 
 # Clinic Navbar
 class ClinicNavbar(BaseModel):
     __tablename__ = "clinic_navbar"
+    clinic_id = Column(Integer, ForeignKey("clinic.id"))
     nav_text = Column(String(255), nullable = True)
     nav_href = Column(Text, nullable = True)
-    clinic_id = Column(Integer, ForeignKey("clinic.id"))
