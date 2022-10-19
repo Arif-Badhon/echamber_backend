@@ -1,8 +1,8 @@
-from re import L
 from exceptions.service_result import handle_result
 from services import BaseService
 from .user_details import user_details_service
 from .doctors import doctors_service
+from .image_log import image_log_service
 from .doctor_qualifications import doctor_qualifications_service
 from .doctor_specialities import doctor_specialities_service
 from .patient_indicators import patient_indicators_service
@@ -215,10 +215,21 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
 
     def doctor_active_list(self, db: Session, skip: int = 0, limit: int = 10):
         all_doc = self.repo.doctors_active_list(db, skip, limit)
+
+        data_with_images = []
+        for i in all_doc[1]:
+            doc_image_serve = image_log_service.get_by_two_key(db=db, skip=0, limit=100, descending=True, count_results=False, user_id=i.User.id, service_name='propic')
+            doc_images = handle_result(doc_image_serve)
+
+            i.Doctor.images = doc_images
+            data_with_images.append(i)
+
+        data = [{"results": all_doc[0]["results"]}, data_with_images]
+
         if not all_doc:
             return ServiceResult([], status_code=status.HTTP_200_OK)
         else:
-            return ServiceResult(all_doc, status_code=status.HTTP_200_OK)
+            return ServiceResult(data, status_code=status.HTTP_200_OK)
 
     def doctor_inactive_list(self, db: Session, skip: int = 0, limit: int = 10):
         all_doc = self.repo.doctors_inactive_list(db, skip, limit)

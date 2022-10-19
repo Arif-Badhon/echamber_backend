@@ -1,21 +1,20 @@
 from datetime import datetime
 from pydantic import BaseModel
-from .doctors import DoctorOut
+from .doctors import DoctorOut, DoctorWithImages
 from .users import UserOut
 from .doctor_qualifications import DoctorQualificationOut
 from .doctor_specialities import DoctorSpecialityOut
-from typing import Optional
+from typing import Optional, List
 
 
 class UserDoctorOut(BaseModel):
     User: UserOut
-    Doctor: DoctorOut
+    Doctor: DoctorWithImages
     DoctorQualification: DoctorQualificationOut
     DoctorSpeciality: DoctorSpecialityOut
 
     class Config:
         orm_mode = True
-
 
 
 class AdminPanelActivityBase(BaseModel):
@@ -24,11 +23,14 @@ class AdminPanelActivityBase(BaseModel):
     service_recived_id: int
     remark: str
 
+
 class AdminPanelActivityIn(AdminPanelActivityBase):
     pass
 
+
 class AdminPanelActivityUpdate(AdminPanelActivityBase):
     pass
+
 
 class AdminPanelActivityOut(BaseModel):
     user_id: int
@@ -53,12 +55,12 @@ class AdminPanelActivityAllOut(BaseModel):
     class Config:
         orm_mode = True
 
+
 class ResultInt(BaseModel):
     results: int
 
     class Config:
         orm_mode = True
-
 
 
 class AdminPatientsOut(BaseModel):
@@ -69,7 +71,7 @@ class AdminPatientsOut(BaseModel):
     sex: str
     is_active: bool
     created_at: datetime
-    register_by_id: Optional[int] = None 
+    register_by_id: Optional[int] = None
     register_by_name: Optional[str] = None
     register_by_role: Optional[str] = None
     company_name: Optional[str] = None

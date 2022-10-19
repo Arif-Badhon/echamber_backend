@@ -19,6 +19,8 @@ from .corporate_partner_users import *
 from .health_partner import *
 from .users import *
 from .user_details import *
+from .clinic import *
+from .clinic_user import *
 from .doctors import *
 from .doctor_chambers import *
 from .doctor_qualifications import *

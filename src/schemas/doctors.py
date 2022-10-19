@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import List, Optional
 from pydantic import BaseModel
 from pydantic.types import constr
-
+from .image_log import ImageLogOut
 from schemas.users import UserOut
 from schemas.doctor_specialities import DoctorSpecialityOut
 from schemas.doctor_qualifications import DoctorQualificationOut
@@ -29,6 +29,16 @@ class DoctorOut(DoctorBase):
     id: int
     user_id: int
     created_at: datetime
+
+    class Config:
+        orm_mode = True
+
+
+class DoctorWithImages(DoctorBase):
+    id: int
+    user_id: int
+    created_at: datetime
+    images: List[ImageLogOut]
 
     class Config:
         orm_mode = True

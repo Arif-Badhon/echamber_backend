@@ -15,6 +15,8 @@ from .user_details import *
 from .token import *
 from .review import *
 from .mediva_device import *
+from .clinic import *
+from .clinic_user import *
 from .doctors import *
 from .doctor_chambers import *
 from .doctor_qualifications import *
