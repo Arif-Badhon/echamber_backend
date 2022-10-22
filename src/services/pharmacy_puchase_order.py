@@ -5,11 +5,18 @@ from schemas import PharmacyPurchaseOrderIn, PharmacyPurchaseOrderUpdate, Pharma
 from repositories import pharmacy_purchase_order_repo, pharmacy_purchase_single_order_repo
 from sqlalchemy.orm import Session
 from exceptions.service_result import ServiceResult
+from exceptions.app_exceptions import AppException
 
 
 class PharmacyPurchaseOrderService(BaseService[PharmacyPurchaseOrder, PharmacyPurchaseOrderBase, PharmacyPurchaseOrderUpdate]):
 
     def submit(self, data_in: PharmacyPurchaseOrderWithSingleOrder, db: Session):
+        
+        pur_num = self.repo.get_by_key(db=db, skip=0, limit=100, descending=False, count_results=True, purchase_number=data_in.purchase_order.purchase_number)
+
+        if pur_num[0]["results"] !=0:
+            return ServiceResult(AppException.ServerError("Purchase Number Already Registered"))
+
 
         purchase_order = pharmacy_purchase_order_repo.create_with_flush(db = db, data_in = PharmacyPurchaseOrderBase(
             total_amount_dp=data_in.purchase_order.total_amount_dp,
