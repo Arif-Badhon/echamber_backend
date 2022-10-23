@@ -30,3 +30,10 @@ def get_single_purchase_order(id: int, skip: int = 0, limit: int = 10, db: Sessi
 def update_purchase_order(id: int, data_update: PharmacyPurchaseOrderUpdate, db: Session = Depends(get_db)):
     update_pho = pharmacy_purchase_order_service.update(db=db, data_update=data_update, id=id)
     return handle_result(update_pho)
+
+
+
+@router.get("/single-order-with-purchase-num/", response_model=List[Union[ResultInt, List[PharmacyPurchaseSingleOrderWithMedicine]]])
+def get_single_purchase_order(purchase_number: str, skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+    search_single = pharmacy_purchase_single_order_service.all_single_order_by_purchase_num(db=db, skip=skip, limit=limit, purchase_number= purchase_number)
+    return handle_result(search_single)

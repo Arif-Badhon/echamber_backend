@@ -686,6 +686,8 @@ class PharmacyGrn(BaseModel):
     pharmaceuticals_name_id = Column(Integer, nullable = True)
     purchase_order_id = Column(Integer, ForeignKey("pharmacy_purchase_order.id"))
     pharmacy_id = Column(Integer, ForeignKey("pharmacy.id"))
+    paid_amount = Column(Float, nullable = True)
+    due_amount = Column(Float, nullable = True)
 
 # Single GRN
 
