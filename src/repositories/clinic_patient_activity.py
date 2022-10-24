@@ -1,0 +1,5 @@
+from repositories import BaseRepo
+from models import ClinicPatientActivity
+from schemas import ClinicPatientActivityIn, ClinicPatientActivityUpdate
+
+clinic_patient_activity_repo = BaseRepo[ClinicPatientActivity, ClinicPatientActivityIn, ClinicPatientActivityUpdate](ClinicPatientActivity)
