@@ -2,12 +2,12 @@ from typing import List, Union
 from fastapi import APIRouter
 from db import get_db
 from exceptions.service_result import handle_result
-from schemas.eprescriptions import EpIn, EpAllOut
+from schemas.eprescriptions import EpIn, EpAllOut, EpOut
 from services import patients_service, ep_service, doctor_ep_header_service
 from sqlalchemy.orm import Session
 from fastapi import Depends
-from schemas import EpPatientSearchOut, EpOut, EpAllOut, EpDiagnosisOut, DoctorEpHeaderOut, DoctorEpHeaderUpdate, ResultInt
-from api.v1.auth_dependcies import logged_in_doctor
+from schemas import EpPatientSearchOut, EpOut, EpOutWithDoctorName, EpAllOut, EpDiagnosisOut, DoctorEpHeaderOut, DoctorEpHeaderUpdate, ResultInt
+from api.v1.auth_dependcies import logged_in_doctor, logged_in_patient
 
 router = APIRouter()
 
@@ -44,3 +44,9 @@ def submit(data_in: EpIn, db: Session = Depends(get_db)):
 def single_prescription(id: int, db: Session = Depends(get_db)):
     e = ep_service.get_single_ep(db=db, id=id)
     return e
+
+
+@router.get('/patient/ep/', response_model=List[Union[ResultInt, List[EpOutWithDoctorName]]])
+def patient_prescriptions(skip: int = 0, limit: int = 10, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_patient)):
+    e = ep_service.patient_prescriptions(db=db, skip=skip, limit=limit, descending=True, count_results=True, patient_id=current_user.id)
+    return handle_result(e)

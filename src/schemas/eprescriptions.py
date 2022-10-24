@@ -36,6 +36,15 @@ class EpOut(EpBase):
         orm_mode = True
 
 
+class EpOutWithDoctorName(EpBase):
+    id: int
+    created_at: datetime
+    doctor_name: Optional[str] = None
+
+    class Config:
+        orm_mode = True
+
+
 class EpIn(EpBase):
     chief_complaints: List[ChiefComplaintsIn] = None
     histories: List[HistoryIn] = None

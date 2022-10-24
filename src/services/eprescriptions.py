@@ -2,9 +2,11 @@ from schemas import EpIn, EpUpdate, EpBase, EpDoctorReferWithEp, ChiefComplaints
 from schemas.ep_advices import AdviceInWithEp
 from schemas.ep_diagnosis import EpDiagnosisOut, EpDiagnosisWithEp
 from services import BaseService
-from repositories import ep_repo, ep_refer_repo, ep_chief_complaints_repo, ep_history_repo, ep_co_morbities_repo, ep_investigation_repo, ep_diagnosis_repo, ep_advices_repo, ep_next_follow_up_repo, ep_medicines_repo, patient_indicators_repo, ep_on_examination_repo
+from repositories import ep_repo, users_repo, ep_refer_repo, ep_chief_complaints_repo, ep_history_repo, ep_co_morbities_repo, ep_investigation_repo, ep_diagnosis_repo, ep_advices_repo, ep_next_follow_up_repo, ep_medicines_repo, patient_indicators_repo, ep_on_examination_repo
 from models import EPrescription
 from sqlalchemy.orm import Session
+from fastapi import status
+from exceptions import ServiceResult
 
 
 class EPrescriptionService(BaseService[EPrescription, EpBase, EpUpdate]):
@@ -120,6 +122,16 @@ class EPrescriptionService(BaseService[EPrescription, EpBase, EpUpdate]):
             "followup": followup
         }
         return data
+
+    def patient_prescriptions(self, db: Session, skip: int, limit: int, descending: bool, count_results: bool, patient_id: int):
+        data = self.repo.get_by_key(db=db, skip=skip, limit=limit, descending=descending, count_results=count_results, patient_id=patient_id)
+
+        if not data:
+            data = []
+
+        for i in data[1]:
+            i.doctor_name = users_repo.get_one(db=db, id=i.doctor_id).name
+        return ServiceResult(data, status_code=status.HTTP_200_OK)
 
 
 ep_service = EPrescriptionService(EPrescription, ep_repo)

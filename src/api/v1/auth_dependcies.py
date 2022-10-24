@@ -130,7 +130,7 @@ def logged_in_patient(credentials: HTTPBasicCredentials = Depends(security), db:
     role_name = roles_service.get_one(db, user.role_id)
     role_name_obj = handle_result(role_name)
 
-    if role_name_obj.name in ['patient']:
+    if role_name_obj.name in ['admin','patient']:
         if not user:
             raise AppException.Unauthorized()
         return user
