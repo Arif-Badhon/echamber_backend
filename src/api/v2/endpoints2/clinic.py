@@ -21,3 +21,9 @@ def get_clinic(db: Session = Depends(get_db)):
 def clinic_register_by_admin(data_in: ClinicUserWithClinic, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin)):
     admin = clinic_service.register_clinic(db=db, data_in=data_in)
     return handle_result(admin)
+
+
+@router.post("/signup/user")
+def clinic_siguup_user(data_in: ClinicUserWithClinic, db: Session = Depends(get_db)):
+    user = clinic_service.register_clinic(db=db, data_in=data_in)
+    return handle_result(user)
