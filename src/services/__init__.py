@@ -55,3 +55,5 @@ from .pharmacy_every_single_stock import *
 from .pharmacy_total_current_stock import *
 from .pharmacy_invoice import *
 from .pharmacy_single_invoice import *
+from .clinic_details import *
+from .clinic_navbar import * 
