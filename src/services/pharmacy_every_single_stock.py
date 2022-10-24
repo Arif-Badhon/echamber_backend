@@ -16,6 +16,7 @@ class PharmacyEverySingleStockService(BaseService[PharmacyEverySingleStock, Phar
             medicines = ep_medicines_list_repo.get_one(db=db, id=med_id)
             i.medicine_name = medicines.name
             i.medicine_generic = medicines.generic
+            i.medicine_strength = medicines.strength
             all_stock_data.append(i)
         return all_stock 
 
