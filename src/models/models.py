@@ -796,3 +796,25 @@ class ClinicNavbar(BaseModel):
     clinic_id = Column(Integer, ForeignKey("clinic.id"))
     nav_text = Column(String(255), nullable = True)
     nav_href = Column(Text, nullable = True)
+
+
+#Clinic Service
+
+class ClinicService(BaseModel):
+    __tablename__ = "clinic_service"
+    clinic_id = Column(Integer, ForeignKey("clinic.id"))
+    servive_name =  Column(String(255), nullable = True)
+    service_details = Column(Text, nullable = True)
+    service_price = Column(Float, nullable = True)
+    image_id = Column(Integer, nullable=True)
+
+
+#Clinic Offer
+
+class ClinicOffer(BaseModel):
+    __tablename__ = "clinic_offer"
+    clinic_id = Column(Integer, ForeignKey("clinic.id"))
+    offer_name =  Column(String(255), nullable = True)
+    offer_details = Column(Text, nullable = True)
+    offer_price = Column(Float, nullable = True)
+    image_id = Column(Integer, nullable=True)
