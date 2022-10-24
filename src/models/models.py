@@ -818,3 +818,11 @@ class ClinicOffer(BaseModel):
     offer_details = Column(Text, nullable = True)
     offer_price = Column(Float, nullable = True)
     image_id = Column(Integer, nullable=True)
+ 
+
+ # Clinic With Doctor
+
+class ClinicWithDoctor(BaseModel):
+    __tablename__ = "clinic_with_doctor"
+    clinic_id = Column(Integer, ForeignKey("clinic.id"))
+    doctor_id = Column(Integer, ForeignKey("users.id"))
