@@ -68,3 +68,5 @@ from .pharmacy_invoice import *
 from .pharmacy_single_invoice import *
 from .clinic_details import *
 from .clinic_navbar import *
+from .clinic_service import *
+from .clinic_offer import *
