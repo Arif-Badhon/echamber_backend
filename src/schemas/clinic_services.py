@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from datetime import datetime
 from typing import Optional
 
-class ClinicServiceBase(BaseModel):
+class ClinicServicesBase(BaseModel):
     clinic_id: int
     servive_name: Optional[str] = None
     service_details: Optional[str] = None
@@ -10,17 +10,17 @@ class ClinicServiceBase(BaseModel):
     image_id: Optional[int] = None
 
 
-class ClinicServiceIn(ClinicServiceBase):
+class ClinicServicesIn(ClinicServicesBase):
     pass
 
 
-class ClinicServiceUpdate(BaseModel):
+class ClinicServicesUpdate(BaseModel):
     servive_name: Optional[str] = None
     service_details: Optional[str] = None
     service_price: Optional[float] = None
     image_id: Optional[int] = None
 
-class ClinicServiceOut(ClinicServiceBase):
+class ClinicServicesOut(ClinicServicesBase):
     id: int
     created_at: datetime
 

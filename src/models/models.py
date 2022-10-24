@@ -800,7 +800,7 @@ class ClinicNavbar(BaseModel):
 
 #Clinic Service
 
-class ClinicService(BaseModel):
+class ClinicServices(BaseModel):
     __tablename__ = "clinic_service"
     clinic_id = Column(Integer, ForeignKey("clinic.id"))
     servive_name =  Column(String(255), nullable = True)
