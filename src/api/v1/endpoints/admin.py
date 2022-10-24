@@ -113,7 +113,7 @@ def doctor_register(data_in: DoctorSignup, db: Session = Depends(get_db), curren
 
 
 @router.get('/doctors/active', response_model=List[Union[ResultInt, List[UserDoctorOut]]])
-def doctors_active_list(skip: int = 0, limit: int = 10, db: Session = Depends(get_db), current_user: Session = Depends(logged_in)):
+def doctors_active_list(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
     docs = admin_service.doctor_active_list(db, skip=skip, limit=limit)
     return handle_result(docs)
 
