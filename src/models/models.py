@@ -826,3 +826,11 @@ class ClinicWithDoctor(BaseModel):
     __tablename__ = "clinic_with_doctor"
     clinic_id = Column(Integer, ForeignKey("clinic.id"))
     doctor_id = Column(Integer, ForeignKey("users.id"))
+    
+
+# Clinic Patient Activity
+
+class ClinicPatientActivity(BaseModel):
+    __tablename__ = "clinic_patient_activity"
+    clinic_id = Column(Integer, ForeignKey("clinic.id"))
+    patient_id = Column(Integer, ForeignKey("users.id"))
