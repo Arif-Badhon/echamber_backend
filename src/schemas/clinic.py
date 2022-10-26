@@ -42,5 +42,6 @@ class ClinicUserWithClinic(BaseModel):
 
 
 class ClinicLogin(BaseModel):
+    hxclinic_id: str
     identifier: str
     password: str
