@@ -12,6 +12,8 @@ class PharmacyGrnBase(BaseModel):
     pharmaceuticals_name_id: Optional[int] = None
     purchase_order_id: Optional[int] = None
     pharmacy_id: Optional[int] = None
+    paid_amount:  Optional[float] = None
+    due_amount:  Optional[float] = None
 
 
 class PharmacyGrnIn(PharmacyGrnBase):
@@ -28,6 +30,8 @@ class PharmacyGrnUpdate(BaseModel):
     pharmaceuticals_name_id: Optional[int] = None
     purchase_order_id: Optional[int] = None
     pharmacy_id: Optional[int] = None
+    paid_amount:  Optional[float] = None
+    due_amount:  Optional[float] = None
 
 
 class PharmacyGrnOut(PharmacyGrnBase):
