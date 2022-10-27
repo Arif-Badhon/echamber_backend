@@ -129,9 +129,9 @@ def create(data_in: DoctorTrainingExpIn, db: Session = Depends(get_db), current_
     return handle_result(tr)
 
 
-@router.get('/training/', response_model=List[Union[ResultInt, List[DoctorTrainingExpOut]]])
-def all_training(skip: int = 0, limit: int = 15, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
-    all = doctor_training_exp_services.get_by_key(db=db, skip=skip, limit=limit, descending=False, count_results=True, user_id=current_user.id)
+@router.get('/training/{user_id}', response_model=List[Union[ResultInt, List[DoctorTrainingExpOut]]])
+def all_training(user_id: int, skip: int = 0, limit: int = 15, db: Session = Depends(get_db)):
+    all = doctor_training_exp_services.get_by_key(db=db, skip=skip, limit=limit, descending=False, count_results=True, user_id=user_id)
     return handle_result(all)
 
 
@@ -153,9 +153,9 @@ def create(data_in: DoctorProfessionalMembershipIn, db: Session = Depends(get_db
     return handle_result(mm)
 
 
-@router.get('/membership/', response_model=List[Union[ResultInt, List[DoctorProfessionalMembershipOut]]])
-def all_membership(skip: int = 0, limit: int = 15, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
-    all = doctor_professional_membership_service.get_by_key(db=db, skip=skip, limit=limit, descending=False, count_results=True, user_id=current_user.id)
+@router.get('/membership/{user_id}', response_model=List[Union[ResultInt, List[DoctorProfessionalMembershipOut]]])
+def all_membership(user_id: int, skip: int = 0, limit: int = 15, db: Session = Depends(get_db)):
+    all = doctor_professional_membership_service.get_by_key(db=db, skip=skip, limit=limit, descending=False, count_results=True, user_id=user_id)
     return handle_result(all)
 
 
@@ -171,9 +171,9 @@ def remove(id: int, db: Session = Depends(get_db), current_user: Session = Depen
     return handle_result(dl)
 
 
-@router.get('/others-activity/', response_model=List[Union[ResultInt, List[DoctorOthersActivityOut]]])
-def all_others_activity(skip: int = 0, limit: int = 15, topic: str = '', db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
-    all = doctor_others_activity_service.get_by_two_key(db=db, skip=skip, limit=limit, descending=False, count_results=True, user_id=current_user.id, topic=topic)
+@router.get('/others-activity/{user_id}', response_model=List[Union[ResultInt, List[DoctorOthersActivityOut]]])
+def all_others_activity(user_id: int, skip: int = 0, limit: int = 15, topic: str = '', db: Session = Depends(get_db)):
+    all = doctor_others_activity_service.get_by_two_key(db=db, skip=skip, limit=limit, descending=False, count_results=True, user_id=user_id, topic=topic)
     return handle_result(all)
 
 
