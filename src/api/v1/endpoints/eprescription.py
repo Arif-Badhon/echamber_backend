@@ -50,3 +50,9 @@ def single_prescription(id: int, db: Session = Depends(get_db)):
 def patient_prescriptions(skip: int = 0, limit: int = 10, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_patient)):
     e = ep_service.patient_prescriptions(db=db, skip=skip, limit=limit, descending=True, count_results=True, patient_id=current_user.id)
     return handle_result(e)
+
+
+@router.get('/doctor/ep/', response_model=List[Union[ResultInt, List[EpOutWithDoctorName]]])
+def patient_prescriptions(skip: int = 0, limit: int = 10, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
+    e = ep_service.patient_prescriptions(db=db, skip=skip, limit=limit, descending=True, count_results=True, doctor_id=current_user.id)
+    return handle_result(e)

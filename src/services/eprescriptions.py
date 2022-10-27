@@ -133,5 +133,15 @@ class EPrescriptionService(BaseService[EPrescription, EpBase, EpUpdate]):
             i.doctor_name = users_repo.get_one(db=db, id=i.doctor_id).name
         return ServiceResult(data, status_code=status.HTTP_200_OK)
 
+    def doctor_prescriptions(self, db: Session, skip: int, limit: int, descending: bool, count_results: bool, doctor_id: int):
+        data = self.repo.get_by_key(db=db, skip=skip, limit=limit, descending=descending, count_results=count_results, doctor_id=doctor_id)
+
+        if not data:
+            data = []
+
+        for i in data[1]:
+            i.patient_name = users_repo.get_one(db=db, id=i.patient_id).name
+        return ServiceResult(data, status_code=status.HTTP_200_OK)
+
 
 ep_service = EPrescriptionService(EPrescription, ep_repo)
