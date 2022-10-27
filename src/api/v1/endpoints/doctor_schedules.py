@@ -22,3 +22,9 @@ def get_all_schedule(date: date, db: Session = Depends(get_db), current_user: Se
 def range_input(data_in: RangeScheduleInput, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
     ds = doctor_schedule_service.submit_with_range(db=db, data_in=data_in, user_id=current_user.id)
     return handle_result(ds)
+
+
+@router.get('/public/{doctor_user_id}', response_model=List[DoctorScheduleOut])
+def get_all_schedule_public(doctor_user_id: int, date: date, db: Session = Depends(get_db)):
+    all_ds = doctor_schedule_service.get_doctor_all_schedule(db=db, date=date, user_id=doctor_user_id)
+    return handle_result(all_ds)
