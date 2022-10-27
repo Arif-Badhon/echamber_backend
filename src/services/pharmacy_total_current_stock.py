@@ -14,6 +14,7 @@ class PharmacyTotalCurrentStockService(BaseService[PharmacyTotalCurrentStock, Ph
             medicines = ep_medicines_list_repo.get_one(db=db, id=med_id)
             i.medicine_name = medicines.name
             i.medicine_generic = medicines.generic
+            i.medicine_strength = medicines.strength
             total_stock_data.append(i)
         return total_stock
 

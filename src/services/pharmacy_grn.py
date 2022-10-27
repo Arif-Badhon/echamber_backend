@@ -17,7 +17,9 @@ class PharmacyGrnService(BaseService[PharmacyGrn, PharmacyGrnIn, PharmacyGrnUpda
             total_cost_mrp=data_in.grn.total_cost_mrp,
             pharmaceuticals_name_id=data_in.grn.pharmaceuticals_name_id,
             purchase_order_id=data_in.grn.purchase_order_id,
-            pharmacy_id=data_in.grn.pharmacy_id
+            pharmacy_id=data_in.grn.pharmacy_id,
+            paid_amount=data_in.grn.paid_amount,
+            due_amount=data_in.grn.due_amount
         ))
 
         if data_in.single_grn and len(data_in.single_grn) != 0:

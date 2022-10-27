@@ -20,6 +20,11 @@ class ClinicUserWithClinicID(ClinicUserBase):
 class ClinicUserUpdate(BaseModel):
     user_id: int
 
+class ClinicUserHxId(BaseModel):
+    your_clinic_hxclinicid: str
+
+    class Config:
+        orm_mode = True
 
 class ClinicUserOut(ClinicUserBase):
     id: int

@@ -53,3 +53,9 @@ from .pharmacy_purchase_order import *
 from .pharmacy_grn import *
 from .pharmacy_stock import *
 from .pharmacy_invoice import *
+from .clinic_details import *
+from .clinic_navbar import *
+from .clinic_services import *
+from .clinic_offer import *
+from .clinic_with_doctor import *
+from .clinic_patient_activity import *

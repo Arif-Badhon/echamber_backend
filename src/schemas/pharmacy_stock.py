@@ -36,6 +36,7 @@ class PharmacyEverySingleStockOutWithMedicine(PharmacyEverySingleStockOut):
     pharmacy_id: Optional[int] = None
     medicine_name: Optional[str] = None 
     medicine_generic: Optional[str] = None
+    medicine_strength: Optional[str] = None
 
 
 # Total current Stock
@@ -65,3 +66,4 @@ class PharmacyTotalCurrentStockOut(PharmacyTotalCurrentStockBase):
 class PharmacyTotalCurrentStockWithMedicine(PharmacyTotalCurrentStockOut):
     medicine_name: Optional[str] = None 
     medicine_generic: Optional[str] = None
+    medicine_strength: Optional[str] = None
