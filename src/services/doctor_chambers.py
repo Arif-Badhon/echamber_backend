@@ -8,12 +8,6 @@ from fastapi import status
 
 
 class DoctorChamberService(BaseService[DoctorChamber, DoctorChamberIn, DoctorChamberUpdate]):
-    def get_by_user_id(self, db: Session, user_id: int) -> ModelType:
-        all_chamber = self.repo.get_by_user_id(db, user_id)
-        if not all_chamber:
-            return ServiceResult([], status_code=status.HTTP_200_OK)
-        else:
-            return ServiceResult(all_chamber, status_code=status.HTTP_200_OK)
 
     def create_with_user_id(self, db: Session, data_in: DoctorChamberIn, user_id: int):
         chamber_in = self.repo.create_with_user_id(db, data_in, user_id)

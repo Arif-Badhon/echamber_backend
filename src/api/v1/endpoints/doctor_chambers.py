@@ -19,9 +19,7 @@ def active_chamber(db: Session = Depends(get_db), current_user: Session = Depend
 
 @router.get('/', response_model=List[DoctorChamberOut])
 def get(db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
-    doc_chamber = doctor_chambers_service.get_by_user_id(
-        db, user_id=current_user.id)
-    print(current_user.id)
+    doc_chamber = doctor_chambers_service.get_by_key(db=db, skip=0, limit=100, descending=False, count_results=False, user_id=current_user.id)
     return handle_result(doc_chamber)
 
 
@@ -56,3 +54,9 @@ def active(id: int, db: Session = Depends(get_db), current_user: Session = Depen
 def remove(id: int, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
     remove_chamber = doctor_chambers_service.delete(db, id)
     return handle_result(remove_chamber)
+
+
+@router.get('doctor-chambers/{doctor_user_id}', response_model=List[DoctorChamberOut])
+def get(doctor_user_id: int, db: Session = Depends(get_db)):
+    doc_chamber = doctor_chambers_service.get_by_key(db=db, skip=0, limit=100, descending=False, count_results=False, user_id=doctor_user_id)
+    return handle_result(doc_chamber)
