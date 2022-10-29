@@ -37,7 +37,7 @@ def update(id: int, role_update: RoleUpdate, db: Session = Depends(get_db), curr
 
 @router.delete('/{id}')
 def delete(id: int, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin)):
-    delete = roles_service.delete(db, id)
+    delete = roles_service.delete(db, id=id)
     return handle_result(delete)
 
 

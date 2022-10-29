@@ -10,7 +10,7 @@ from fastapi import status
 class RoleService(BaseService[Role, RoleIn, RoleUpdate]):
 
     def admin_role(self, db: Session, name: str):
-        get_role = self.repo.search_name_id(db=db, name=name)
+        get_role = self.repo.search_name(db=db, name=name)
 
         if not get_role:
             first_role = self.repo.create(db=db, data_in=RoleIn(name=name))
@@ -22,10 +22,10 @@ class RoleService(BaseService[Role, RoleIn, RoleUpdate]):
         all_role = ['admin', 'moderator', 'doctor', 'patient', 'sales', 'medical_affairs', 'crm', 'pharmacy_admin']
 
         for i in all_role:
-            get_role = roles_repo.search_name_id(db=db, name=i)
+            get_role = roles_repo.search_name(db=db, name=i)
 
             if not get_role:
-                role_create = roles_repo.create(db=db, data_in=RoleIn(name=i))
+                role_create = self.repo.create(db=db, data_in=RoleIn(name=i))
         return self.get(db=db)
 
     def role_id_by_name(self, db: Session, name: str):
