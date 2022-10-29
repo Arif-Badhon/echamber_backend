@@ -2,6 +2,7 @@ from .roles import *
 from .users import *
 from .image_log import *
 from .pdf_log import *
+from .sms import *
 from .admin import *
 from .notice import *
 from .service_order import *

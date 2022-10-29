@@ -5,7 +5,8 @@ from sqlalchemy.orm import Session
 from db import get_db
 from exceptions import handle_result
 from schemas import UserCreate, UserOut, UserOutAuth, UserLogin, NewPasswordIn, UserUpdate, Token, ImageLogOut, ImageLogIn
-from services import users_service, image_log_service
+from schemas.sms import SmsIn
+from services import users_service, image_log_service, sms_service
 from fastapi.security import HTTPBasic
 from models import User
 from api.v1.auth_dependcies import logged_in
@@ -90,3 +91,8 @@ async def upload_image(file: UploadFile = File(...), db: Session = Depends(get_d
 def get_profile_pic(user_id: int, db: Session = Depends(get_db)):
     pp = image_log_service.last_profile_pic(db=db, user_id=user_id)
     return handle_result(pp)
+
+
+@router.post('/sms/')
+def sms_send(data_in: SmsIn):
+    s = sms_service.send_sms(data_in=data_in)
