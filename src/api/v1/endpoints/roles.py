@@ -41,7 +41,13 @@ def delete(id: int, db: Session = Depends(get_db), current_user: Session = Depen
     return handle_result(delete)
 
 
-@router.post('/first/{name}', response_model=RoleOut)
-def first_role(name: str, db: Session = Depends(get_db)):
-    name = roles_service.first_role(db=db, name=name)
+@router.post('/admin/registration', response_model=RoleOut)
+def admin_role(db: Session = Depends(get_db)):
+    name = roles_service.admin_role(db=db, name='admin')
     return handle_result(name)
+
+
+@router.get('/all/registration', response_model=List[RoleOut])
+def all_role_registration(db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin)):
+    all = roles_service.all_role_registration(db=db)
+    return handle_result(all)
