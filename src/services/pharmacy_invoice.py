@@ -1,4 +1,4 @@
-from services import BaseService
+from services import BaseService, pharmacy_service
 from models import PharmacyInvoice
 from schemas import PharmacyInvoiceIn, PharmacyInvoiceUpdate, PharmacyInvoiceWithSingleInvoice, PharmacySingleInvoiceWithInvoice, PharmacyTotalCurrentStockUpdate
 from repositories import pharmacy_invoice_repo, pharmacy_single_invoice_repo, pharmacy_total_current_stock_repo
@@ -8,7 +8,9 @@ from exceptions.app_exceptions import AppException
 
 class PharmacyInvoiceService(BaseService[PharmacyInvoice, PharmacyInvoiceIn, PharmacyInvoiceUpdate]):
     def create_invoice(self, data_in:PharmacyInvoiceWithSingleInvoice , db: Session, user_id: int):
-        us_id = user_id
+        validate_user = pharmacy_service.check_user_with_pharmacy(db=db, user_id=user_id, pharmacy_id=data_in.invoice.pharmacy_id)
+        if validate_user == False:
+            return ServiceResult(AppException.ServerError("Invalid Pharmacy ID"))
         invoice = pharmacy_invoice_repo.create_with_flush(db=db, data_in=PharmacyInvoiceIn(
             subtotal_amount=data_in.invoice.subtotal_amount,
             total_amount_mrp=data_in.invoice.total_amount_mrp,
@@ -42,7 +44,7 @@ class PharmacyInvoiceService(BaseService[PharmacyInvoice, PharmacyInvoiceIn, Pha
                     ))
 
                 else:
-                    return ServiceResult(AppException.ServerError("Invalid"))
+                    return ServiceResult(AppException.ServerError("Empty Medicine"))
 
         db.commit()
 
