@@ -1,6 +1,6 @@
 from datetime import datetime
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, List
 
 
 class PharmacyInvoiceBase(BaseModel):
@@ -52,11 +52,15 @@ class PharmacySingleInvoiceBase(BaseModel):
     discount: Optional[float] = None
     cost: Optional[float] = None
     medicine_id: Optional[int] = None
-    invoice_id: Optional[int] = None
+    
 
 
 class PharmacySingleInvoiceIn(PharmacySingleInvoiceBase):
     pass 
+
+
+class PharmacySingleInvoiceWithInvoice(PharmacySingleInvoiceBase):
+    invoice_id: Optional[int] = None
 
 
 class PharmacySingleInvoiceUpdate(BaseModel):
@@ -75,3 +79,8 @@ class PharmacySingleInvoiceOut(PharmacySingleInvoiceBase):
 
     class Config:
         orm_mode = True
+
+
+class PharmacyInvoiceWithSingleInvoice(BaseModel):
+    invoice: PharmacyInvoiceIn
+    single_invoice: List[PharmacySingleInvoiceIn]
