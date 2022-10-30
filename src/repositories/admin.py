@@ -79,6 +79,11 @@ class AdminRepo(BaseRepo[User, UserCreate, UserUpdate]):
         return query
 
     def all_patient(self, db: Session, phone_number: str = "0", skip: int = 0, limit: int = 15):
+
+        # for all result
+        if phone_number is None:
+            phone_number = ''
+
         patient_role = roles_repo.search_name_id(db=db, name='patient')
         query = db.query(self.model).filter(self.model.role_id == patient_role).order_by(desc(self.model.created_at)).filter(self.model.phone.like(f"%{phone_number}%")).offset(skip).limit(limit).all()
         query_all = db.query(self.model).filter(self.model.role_id == patient_role).order_by(desc(self.model.created_at)).filter(self.model.phone.like(f"%{phone_number}%")).all()
@@ -86,6 +91,9 @@ class AdminRepo(BaseRepo[User, UserCreate, UserUpdate]):
         results = len(query_all)
 
         return [{"results": results}, query]
+
+    def all_patient_filter(self):
+        return
 
 
 admin_repo = AdminRepo(User)
