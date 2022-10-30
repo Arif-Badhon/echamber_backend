@@ -92,8 +92,25 @@ class AdminRepo(BaseRepo[User, UserCreate, UserUpdate]):
 
         return [{"results": results}, query]
 
-    def all_patient_filter(self, hx_user_id: int, name: str, phone: str, gender: str, company: str, skip: int, limit: int):
-        return
+    def all_patient_filter(self, db: Session,  hx_user_id: int, name: str, phone: str, gender: str, skip: int, limit: int):
+
+        if name is None:
+            name = ''
+        if phone is None:
+            phone = ''
+        if gender is None:
+            gender = ''
+
+        if hx_user_id is not None:
+            query = db.query(self.model).filter(self.model.id == hx_user_id).offset(skip).limit(limit).all()
+            return query
+        else:
+            query = db.query(
+                self.model).filter(
+                self.model.name.like(f"%{name}%")).filter(
+                self.model.phone.like(f"%{phone}%")).filter(
+                self.model.sex.like(f"%{gender}%")).offset(skip).limit(limit).all()
+            return query
 
 
 admin_repo = AdminRepo(User)

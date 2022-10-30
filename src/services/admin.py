@@ -351,6 +351,14 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
         else:
             return ServiceResult(patients, status_code=status.HTTP_201_CREATED)
 
+    def all_patient_filter(self, db: Session,  hx_user_id: int, name: str, phone: str, gender: str, skip: int, limit: int):
+        data = self.repo.all_patient_filter(db=db,  hx_user_id=hx_user_id, name=name, phone=phone, gender=gender, skip=skip, limit=limit)
+
+        if not data:
+            return ServiceResult([], status_code=status.HTTP_200_OK)
+        else:
+            return ServiceResult(data, status_code=status.HTTP_201_CREATED)
+
     def patient_indicators(self, db: Session, user_id: int, data_in: PatientIndicatorIn, creator_id: int):
         data = patient_indicators_service.create_by_user_id(db, user_id, data_in)
 
