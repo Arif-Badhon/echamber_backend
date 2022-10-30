@@ -157,7 +157,7 @@ def all_patients(phone_number: str = None, skip: int = 0, limit: int = 15,  db: 
 
 
 @router.get('/patient/filter')
-def all_patient_filter(hx_user_id: str, name: str, phone: str, gender: str, company: str, skip: int = 0, limit: int = 15):
+def all_patient_filter(hx_user_id: int, name: str, phone: str, gender: str, company: str, skip: int = 0, limit: int = 15):
     return
 
 

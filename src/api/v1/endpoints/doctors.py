@@ -14,7 +14,7 @@ from typing import List, Union
 router = APIRouter()
 
 
-@router.post('/signup', response_model=DoctorSpecialityOut)
+@router.post('/signup', response_model=UserOut)
 def signup(doctor_in: DoctorSignup, db: Session = Depends(get_db)):
     doctor = doctors_service.signup(db, data_in=doctor_in)
     return handle_result(doctor)

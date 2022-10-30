@@ -92,7 +92,7 @@ class AdminRepo(BaseRepo[User, UserCreate, UserUpdate]):
 
         return [{"results": results}, query]
 
-    def all_patient_filter(self):
+    def all_patient_filter(self, hx_user_id: int, name: str, phone: str, gender: str, company: str, skip: int, limit: int):
         return
 
 

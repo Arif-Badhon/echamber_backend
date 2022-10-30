@@ -71,11 +71,14 @@ class DoctorService(BaseService[Doctor, DoctorIn, DoctorUpdate]):
         specialities_user = doctor_specialities_service.create(
             db, data_in=specialities_data)
 
-        if not specialities_user:
+        get_doctor = users_repo.get_one(db=db, id=handle_result(signup_user).id)
+        print(get_doctor)
+
+        if not get_doctor:
             return ServiceResult(AppException.ServerError(
-                "Problem with Doctor registration."))
+                "Doctor not register perfectly."))
         else:
-            return ServiceResult(handle_result(specialities_user), status_code=status.HTTP_201_CREATED)
+            return ServiceResult(get_doctor, status_code=status.HTTP_201_CREATED)
 
     def all_doc(self, db: Session, skip: int, limit: int):
         role_id = roles_service.role_id_by_name(db=db, name="doctor")
