@@ -13,7 +13,7 @@ class SmsBase(BaseModel):
     sms: str
 
 
-class SmsIn(BaseModel):
+class SmsIn(SmsBase):
     pass
 
 

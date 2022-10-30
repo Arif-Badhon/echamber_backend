@@ -93,6 +93,7 @@ def get_profile_pic(user_id: int, db: Session = Depends(get_db)):
     return handle_result(pp)
 
 
-@router.post('/sms/')
+@router.post('/sms')
 def sms_send(data_in: SmsIn):
     s = sms_service.send_sms(data_in=data_in)
+    return s
