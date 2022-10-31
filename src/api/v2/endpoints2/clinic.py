@@ -1,8 +1,7 @@
 from typing import List
 from fastapi import APIRouter, Depends
-# from api.v1.endpoints.doctor_chambers import get
 from exceptions.service_result import handle_result
-from schemas import ClinicOut, ClinicUserWithClinic, Token, ClinicLogin, ClinicUserHxId, ClinicWithDoctorAdd
+from schemas import ClinicOut, ClinicUserWithClinic, Token, ClinicLogin, ClinicUserHxId
 from db import get_db
 from sqlalchemy.orm import Session
 from services import clinic_service, clinic_with_doctor_service

@@ -1,6 +1,6 @@
-from services import BaseService, clinic_user_service, doctors_service
+from services import BaseService, clinic_user_service
 from models import ClinicWithDoctor
-from schemas import ClinicWithDoctorIn, ClinicWithDoctorUpdate, ClinicWithDoctorAdd, ClinicUserIn, clinic_user
+from schemas import ClinicWithDoctorIn, ClinicWithDoctorUpdate
 from repositories import clinic_with_doctor_repo
 from sqlalchemy.orm import Session
 from exceptions.service_result import handle_result
