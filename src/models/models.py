@@ -828,12 +828,12 @@ class ClinicWithDoctor(BaseModel):
     doctor_id = Column(Integer, ForeignKey("users.id"))
     
 
-# Clinic Patient Activity
+# Clinic Activity
 
-class ClinicPatientActivity(BaseModel):
-    __tablename__ = "clinic_patient_activity"
-    clinic_id = Column(Integer, ForeignKey("clinic.id"))
-    patient_id = Column(Integer, ForeignKey("users.id"))
+
+class ClinicActivity(BaseModel):
+    __tablename__ = "clinic_activity"
+    user_id = Column(Integer, ForeignKey("users.id"))
     service_name = Column(String(100), nullable=True)
     service_received_id = Column(Integer, nullable=True)
     remark = Column(String(255), nullable=True)
