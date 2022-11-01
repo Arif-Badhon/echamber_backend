@@ -157,7 +157,9 @@ def all_patients(phone_number: str = None, skip: int = 0, limit: int = 15,  db: 
 
 
 @router.get('/patient/filter', response_model=List[Union[ResultInt, List[AdminPatientsOut]]])
-def all_patient_filter(hx_user_id: int = None, name: str = None, phone: str = None, gender: str = None, skip: int = 0, limit: int = 15, db: Session = Depends(get_db)):
+def all_patient_filter(
+        hx_user_id: int = None, name: str = None, phone: str = None, gender: str = None, skip: int = 0, limit: int = 15, db: Session = Depends(get_db),
+        current_user: Session = Depends(logged_in)):
     data = admin_service.all_patient_filter(db=db,  hx_user_id=hx_user_id, name=name, phone=phone, gender=gender, skip=skip, limit=limit)
     return handle_result(data)
 
