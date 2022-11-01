@@ -102,15 +102,21 @@ class AdminRepo(BaseRepo[User, UserCreate, UserUpdate]):
             gender = ''
 
         if hx_user_id is not None:
+            query_len = len(db.query(self.model).filter(self.model.id == hx_user_id).all())
             query = db.query(self.model).filter(self.model.id == hx_user_id).offset(skip).limit(limit).all()
-            return query
+            return [{"results": query_len}, query]
         else:
+            query_len = len(db.query(
+                self.model).filter(
+                self.model.name.like(f"%{name}%")).filter(
+                self.model.phone.like(f"%{phone}%")).filter(
+                self.model.sex.like(f"%{gender}%")).all())
             query = db.query(
                 self.model).filter(
                 self.model.name.like(f"%{name}%")).filter(
                 self.model.phone.like(f"%{phone}%")).filter(
                 self.model.sex.like(f"%{gender}%")).offset(skip).limit(limit).all()
-            return query
+            return [{"results": query_len}, query]
 
 
 admin_repo = AdminRepo(User)

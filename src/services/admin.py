@@ -352,12 +352,40 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
             return ServiceResult(patients, status_code=status.HTTP_201_CREATED)
 
     def all_patient_filter(self, db: Session,  hx_user_id: int, name: str, phone: str, gender: str, skip: int, limit: int):
-        data = self.repo.all_patient_filter(db=db,  hx_user_id=hx_user_id, name=name, phone=phone, gender=gender, skip=skip, limit=limit)
+        patients = self.repo.all_patient_filter(db=db,  hx_user_id=hx_user_id, name=name, phone=phone, gender=gender, skip=skip, limit=limit)
 
-        if not data:
+        new_patients_list = []
+
+        for i in patients[1]:
+
+            register_by = admin_repo.patient_register_by_whom(db=db, patient_id=i.id)
+
+            if register_by:
+                register_detail = users_repo.get_one(db=db, id=register_by.user_id)
+                i.register_by_id = register_by.user_id
+                i.register_by_name = register_detail.name
+                i.register_by_role = roles_repo.get_one(db=db, id=register_detail.role_id).name
+            else:
+                i.register_by_id = None
+                i.register_by_name = None
+                i.register_by_role = None
+
+            # is he/she corporate
+            corporate = corporate_partner_user_repo.search_user_id(db=db, id=i.id)
+            if corporate:
+                comp_name = corporate_partners_repo.get_one(db=db, id=corporate.corporate_id)
+                i.company_name = comp_name.name
+            else:
+                i.company_name = None
+
+            new_patients_list.append(i)
+
+            patients[1] = new_patients_list
+
+        if not patients:
             return ServiceResult([], status_code=status.HTTP_200_OK)
         else:
-            return ServiceResult(data, status_code=status.HTTP_201_CREATED)
+            return ServiceResult(patients, status_code=status.HTTP_201_CREATED)
 
     def patient_indicators(self, db: Session, user_id: int, data_in: PatientIndicatorIn, creator_id: int):
         data = patient_indicators_service.create_by_user_id(db, user_id, data_in)
