@@ -85,3 +85,8 @@ class PharmacySingleGrnOut(PharmacySingleGrnBase):
 class PharmacyGrnWithSingleGrn(BaseModel):
     grn: PharmacyGrnIn
     single_grn: List[PharmacySingleGrnIn]
+
+
+class PharmacySingleGrnWithMedicine(PharmacySingleGrnOut):
+    medicine_name: Optional[str] = None 
+    medicine_generic: Optional[str] = None
