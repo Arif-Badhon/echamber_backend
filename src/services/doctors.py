@@ -23,8 +23,8 @@ class DoctorService(BaseService[Doctor, DoctorIn, DoctorUpdate]):
             return ServiceResult(data, status_code=status.HTTP_200_OK)
 
     def edit_by_user_id(self, db: Session, data_update: DoctorUpdate, user_id: int):
-        doc = self.get_by_user_id(db=db, user_id=user_id)
-        up = self.update(db=db, id=handle_result(doc).id, data_update=data_update)
+        doc = self.repo.get_by_user_id(db=db, user_id=user_id)
+        up = self.update(db=db, id=doc.id, data_update=data_update)
         return up
 
     def create_with_flush(self, db: Session, data_in: DoctorIn):
@@ -72,7 +72,6 @@ class DoctorService(BaseService[Doctor, DoctorIn, DoctorUpdate]):
             db, data_in=specialities_data)
 
         get_doctor = users_repo.get_one(db=db, id=handle_result(signup_user).id)
-        print(get_doctor)
 
         if not get_doctor:
             return ServiceResult(AppException.ServerError(

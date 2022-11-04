@@ -42,7 +42,7 @@ def new_password(new_password: NewPasswordIn,  db: Session = Depends(get_db), cu
     return handle_result(new)
 
 
-@router.put('/user/update', response_model=UserOut)
+@router.patch('/user/update', response_model=UserOut)
 def user_update(user_update: UserUpdate, db: Session = Depends(get_db), current_user: User = Depends(logged_in)):
     user = users_service.user_update(
         db, id=current_user.id, data_update=user_update)
