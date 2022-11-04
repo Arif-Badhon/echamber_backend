@@ -24,8 +24,12 @@ class DoctorService(BaseService[Doctor, DoctorIn, DoctorUpdate]):
 
     def edit_by_user_id(self, db: Session, data_update: DoctorUpdate, user_id: int):
         doc = self.repo.get_by_user_id(db=db, user_id=user_id)
-        up = self.update(db=db, id=doc.id, data_update=data_update)
-        return up
+        if not doc:
+            doc_detail = self.create(db=db, data_in=DoctorIn(user_id=user_id, **data_update.dict()))
+            return doc_detail
+        else:
+            up = self.update(db=db, id=doc.id, data_update=data_update)
+            return up
 
     def create_with_flush(self, db: Session, data_in: DoctorIn):
         data = self.repo.create_with_flush(db, data_in)

@@ -12,7 +12,7 @@ class DoctorBase(BaseModel):
     user_id: int
     bmdc: Optional[str] = None
     exp_year: Optional[int] = None
-    online_fees: Optional[float]
+    online_fees: Optional[float] = None
 
 
 class DoctorIn(DoctorBase):
@@ -22,7 +22,7 @@ class DoctorIn(DoctorBase):
 class DoctorUpdate(BaseModel):
     bmdc: Optional[str] = None
     exp_year: Optional[int] = None
-    online_fees: Optional[float]
+    online_fees: Optional[float] = None
 
 
 class DoctorOut(DoctorBase):

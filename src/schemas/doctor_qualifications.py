@@ -2,6 +2,10 @@ from pydantic import BaseModel
 from typing import Optional
 
 
+class DoctorQualificationBase(BaseModel):
+    qualification: Optional[str]
+
+
 class DoctorQualilficationIn(BaseModel):
     user_id: int
     qualification: Optional[str] = None

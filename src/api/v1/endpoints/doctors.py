@@ -3,9 +3,10 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from db import get_db
 from exceptions import handle_result
-from schemas import DoctorOut, DoctorUpdate, DoctorSpecialityOut, DoctorAcademicInfoIn, DoctorAcademicInfoOut, DoctorAcademicInfoUpdate, DoctorAcademicInfoWithUser, DoctorQualificationOut, DoctorSpecialityOut, DoctorQualilficationUpdate, DoctorSpecialityUpdate, DoctorSignup, UserOut, UserOutAuth, DoctorDetails, DoctorWorkPlaceOut, DoctorWorkPlaceIn, DoctorWorkPlaceWithUser, DoctorWorkPlaceUpdate, DoctorTrainingExpOut, DoctorTrainingExpUpdate, DoctorTrainingExpIn, DoctorTrainingExpInWithUser, DoctorProfessionalMembershipIn, DoctorProfessionalMembershipInWithUser, DoctorProfessionalMembershipOut, DoctorOthersActivityIn, DoctorOthersActivityWithUser, DoctorOthersActivityUpdate, DoctorOthersActivityOut
+from schemas import DoctorOut, DoctorUpdate, DoctorSpecialityOut, DoctorAcademicInfoIn, DoctorAcademicInfoOut, DoctorAcademicInfoUpdate, DoctorAcademicInfoWithUser, DoctorQualificationBase, DoctorQualificationOut, DoctorSpecialityBase, DoctorSpecialityIn, DoctorSpecialityOut, DoctorQualilficationUpdate, DoctorSpecialityUpdate, DoctorSignup, UserOut, UserOutAuth, DoctorDetails, DoctorWorkPlaceOut, DoctorWorkPlaceIn, DoctorWorkPlaceWithUser, DoctorWorkPlaceUpdate, DoctorTrainingExpOut, DoctorTrainingExpUpdate, DoctorTrainingExpIn, DoctorTrainingExpInWithUser, DoctorProfessionalMembershipIn, DoctorProfessionalMembershipInWithUser, DoctorProfessionalMembershipOut, DoctorOthersActivityIn, DoctorOthersActivityWithUser, DoctorOthersActivityUpdate, DoctorOthersActivityOut
 from schemas.admin import ResultInt
 from schemas.doctor_professional_membership import DoctorProfessioanlMembershipUpdate
+from schemas.doctor_qualifications import DoctorQualificationBase, DoctorQualilficationIn
 from services import doctors_service, doctor_qualifications_service, doctor_specialities_service, doctor_workplace_service, doctor_academic_info_service, doctor_training_exp_services, doctor_professional_membership_service, doctor_others_activity_service
 from api.v1.auth_dependcies import logged_in_doctor
 from typing import List, Union
@@ -49,6 +50,12 @@ def all_docs(skip: int = 0, limit: int = 15, db: Session = Depends(get_db)):
     return handle_result(docs)
 
 
+@router.post('/qualifications', response_model=DoctorQualificationOut)
+def create(data_in: DoctorQualificationBase, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
+    qualification = doctor_qualifications_service.create(db=db, data_in=DoctorQualilficationIn(user_id=current_user.id, **data_in.dict()))
+    return handle_result(qualification)
+
+
 @router.get('/qualifications', response_model=DoctorQualificationOut)
 def get(db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
     qualification = doctor_qualifications_service.get_by_user_id(
@@ -60,6 +67,12 @@ def get(db: Session = Depends(get_db), current_user: Session = Depends(logged_in
 def update(id: int, data_update: DoctorQualilficationUpdate, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
     qualification = doctor_qualifications_service.update(db, id, data_update)
     return handle_result(qualification)
+
+
+@router.post('/specialities', response_model=DoctorSpecialityOut)
+def create(data_in: DoctorSpecialityBase, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
+    speciality = doctor_specialities_service.create(db=db, data_in=DoctorSpecialityIn(user_id=current_user.id, **data_in.dict()))
+    return handle_result(speciality)
 
 
 @router.get('/specialities', response_model=DoctorSpecialityOut)
