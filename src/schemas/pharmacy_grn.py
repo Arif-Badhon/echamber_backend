@@ -90,3 +90,4 @@ class PharmacyGrnWithSingleGrn(BaseModel):
 class PharmacySingleGrnWithMedicine(PharmacySingleGrnOut):
     medicine_name: Optional[str] = None 
     medicine_generic: Optional[str] = None
+    pharmaceuticals: Optional[str] = None

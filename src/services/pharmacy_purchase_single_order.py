@@ -15,6 +15,7 @@ class PharmacyPurchaseSingleOrderService(BaseService[PharmacyPurchaseSingleOrder
             medicines = ep_medicines_list_repo.get_one(db=db, id=med_id)
             i.medicine_name = medicines.name
             i.medicine_generic = medicines.generic
+            i.pharmaceuticals = medicines.pharmaceuticals
             all_single_order_data.append(i)
         return all_purchase_single_order
 

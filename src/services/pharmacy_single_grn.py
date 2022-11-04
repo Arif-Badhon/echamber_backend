@@ -16,6 +16,7 @@ class PharmacySingleGrnService(BaseService[PharmacySingleGrn, PharmacySingleGrnI
             medicines = ep_medicines_list_repo.get_one(db=db, id=med_id)
             i.medicine_name = medicines.name
             i.medicine_generic = medicines.generic
+            i.pharmaceuticals = medicines.pharmaceuticals
             all_single_grn_data.append(i)
         return all_single_grn
 

@@ -15,6 +15,7 @@ class PharmacyTotalCurrentStockService(BaseService[PharmacyTotalCurrentStock, Ph
             i.medicine_name = medicines.name
             i.medicine_generic = medicines.generic
             i.medicine_strength = medicines.strength
+            i.pharmaceuticals = medicines.pharmaceuticals
             total_stock_data.append(i)
         return total_stock
 
