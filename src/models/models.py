@@ -633,7 +633,7 @@ class PharmaceuticalsNameList(BaseModel):
 class Pharmacy(BaseModel):
     __tablename__ = "pharmacy"
     name = Column(String(255), nullable = False)
-    trade_license = Column(String(255), nullable = False, unique = True)
+    # trade_license = Column(String(255), nullable = False, unique = True)
     detail_address = Column(Text, nullable = True)
     district = Column(String(255), nullable = True)
     sub_district = Column(String(255), nullable = True)
@@ -800,7 +800,7 @@ class ClinicNavbar(BaseModel):
     nav_href = Column(Text, nullable = True)
 
 
-#Clinic Service
+# Clinic Service
 
 class ClinicServices(BaseModel):
     __tablename__ = "clinic_service"
@@ -811,7 +811,7 @@ class ClinicServices(BaseModel):
     image_id = Column(Integer, nullable=True)
 
 
-#Clinic Offer
+# Clinic Offer
 
 class ClinicOffer(BaseModel):
     __tablename__ = "clinic_offer"
@@ -820,7 +820,7 @@ class ClinicOffer(BaseModel):
     offer_details = Column(Text, nullable = True)
     offer_price = Column(Float, nullable = True)
     image_id = Column(Integer, nullable=True)
- 
+
 
  # Clinic With Doctor
 
@@ -828,7 +828,7 @@ class ClinicWithDoctor(BaseModel):
     __tablename__ = "clinic_with_doctor"
     clinic_id = Column(Integer, ForeignKey("clinic.id"))
     doctor_id = Column(Integer, ForeignKey("users.id"))
-    
+
 
 # Clinic Activity
 
