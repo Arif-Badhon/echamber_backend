@@ -1,6 +1,6 @@
 from typing import List
 from fastapi import APIRouter, Depends
-from schemas import PharmacyOut, PharmacyUserWithPharmacy, Token, PharmacyLogin, PharmacyUpdate, UserOutAuth, PharmacyUserOut, PharmacyUserWithPharmacyID
+from schemas import PharmacyOut, PharmacyUserWithPharmacy, Token, PharmacyLogin, PharmacyUpdate, UserOutAuth, PharmacyUserHxId
 from db import get_db
 from sqlalchemy.orm import Session
 from services import pharmacy_service
@@ -17,12 +17,12 @@ def search_with_trade_license(trade_license: str, db: Session = Depends(get_db))
     return handle_result(trade)
 
 
-@router.post("/signup")
+@router.post("/signup", response_model=PharmacyUserHxId)
 def pharmacy_register_by_admin(data_in: PharmacyUserWithPharmacy, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin)):
     admin = pharmacy_service.register_pharmacy(db=db, data_in=data_in)
     return handle_result(admin)
 
-@router.post("/signup/user")
+@router.post("/signup/user", response_model=PharmacyUserHxId)
 def pharmacy_user_signup(data_in: PharmacyUserWithPharmacy, db: Session = Depends(get_db)):
     user = pharmacy_service.register_pharmacy(db=db, data_in=data_in)
     return handle_result(user)

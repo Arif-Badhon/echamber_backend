@@ -24,14 +24,14 @@ class PharmacyService(BaseService[Pharmacy, PharmacyIn, PharmacyUpdate]):
             role_name='pharmacy_admin'
         )
 
-        tr_license = self.repo.get_by_key(db=db, skip=0, limit=100, descending=False, count_results=True, trade_license=data_in.pharmacy.trade_license)
-        # print(tr_license[0]["results"])
-        if tr_license[0]["results"] != 0:
-            return ServiceResult(AppException.ServerError("Trade License Already Registered"))
+        # tr_license = self.repo.get_by_key(db=db, skip=0, limit=100, descending=False, count_results=True, trade_license=data_in.pharmacy.trade_license)
+        # # print(tr_license[0]["results"])
+        # if tr_license[0]["results"] != 0:
+        #     return ServiceResult(AppException.ServerError("Trade License Already Registered"))
 
         signup = users_service.signup(db=db, data_in=admin_signup, flush=True)
 
-        pharma = self.create_with_flush(db=db, data_in=PharmacyIn(
+        pharmacy = self.create_with_flush(db=db, data_in=PharmacyIn(
             name=data_in.pharmacy.name,
             trade_license=data_in.pharmacy.trade_license,
             detail_address=data_in.pharmacy.detail_address,
@@ -41,12 +41,19 @@ class PharmacyService(BaseService[Pharmacy, PharmacyIn, PharmacyUpdate]):
             pharmacy_is_active=data_in.pharmacy.pharmacy_is_active
         ))
 
-        pharma_user = pharmacy_user_service.create(db=db, data_in=PharmacyUserIn(user_id=handle_result(signup).id, pharmacy_id=handle_result(pharma).id))
-        return pharma_user
+        pharma_user = pharmacy_user_service.create(db=db, data_in=PharmacyUserIn(user_id=handle_result(signup).id, pharmacy_id=handle_result(pharmacy).id))
+        pharma_id = handle_result(pharmacy).id
+        hxpharma_id = "hxpharmacy"+str(pharma_id)
+        
+        return ServiceResult({"your_pharmacy_hxpharmacyid":hxpharma_id}, status_code=status.HTTP_200_OK)
 
     def pharmacy_user_login(self, db: Session, data_in: PharmacyLogin):
-        pharmacy_by_trade_license = self.search_by_trade_license(db=db, trade_license=data_in.trade_license)
-        pharmacy_id = handle_result(pharmacy_by_trade_license).id
+        # pharmacy_by_trade_license = self.search_by_trade_license(db=db, trade_license=data_in.trade_license)
+        # pharmacy_id = handle_result(pharmacy_by_trade_license).id
+
+        hxpharmacy_id = data_in.hxpharmacy_id
+        pharma_str = hxpharmacy_id.split("hxpharmacy")
+        pharmacy_id = int(pharma_str[1])
     
 
         user_from_identifier = None
@@ -62,7 +69,7 @@ class PharmacyService(BaseService[Pharmacy, PharmacyIn, PharmacyUpdate]):
         ph_with_user = handle_result(ph_check)
 
         if len(ph_with_user) == 0:
-            return ServiceResult(AppException.ServerError("Invalid pharmacy trade license or user."))
+            return ServiceResult(AppException.ServerError("Invalid Pharmacy id."))
 
 
 

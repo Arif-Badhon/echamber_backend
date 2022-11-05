@@ -17,6 +17,7 @@ class PharmacyEverySingleStockService(BaseService[PharmacyEverySingleStock, Phar
             i.medicine_name = medicines.name
             i.medicine_generic = medicines.generic
             i.medicine_strength = medicines.strength
+            i.pharmaceuticals = medicines.pharmaceuticals
             all_stock_data.append(i)
         return all_stock 
 

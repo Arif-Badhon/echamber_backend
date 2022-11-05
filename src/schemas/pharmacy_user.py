@@ -17,6 +17,12 @@ class PharmacyUserWithPharmacyID(PharmacyUserBase):
 class PharmacyUserUpdate(BaseModel):
     user_id: int
 
+class PharmacyUserHxId(BaseModel):
+    your_pharmacy_hxpharmacyid: str
+
+    class Config:
+        orm_mode = True
+
 class PharmacyUserOut(PharmacyUserBase):
     id: int
     user_id: int

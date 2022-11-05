@@ -1,6 +1,6 @@
 from typing import List, Union
 from fastapi import APIRouter, Depends
-from schemas import PharmacyGrnWithSingleGrn, ResultInt, PharmacyGrnOut, PharmacySingleGrnOut
+from schemas import PharmacyGrnWithSingleGrn, ResultInt, PharmacyGrnOut, PharmacySingleGrnWithMedicine
 from db import get_db
 from sqlalchemy.orm import Session
 from services import pharmacy_grn_service, pharmacy_single_grn_service
@@ -20,7 +20,7 @@ def search_grn(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
     return handle_result(search_grn)
 
 
-@router.get("/single/{id}", response_model=List[Union[ResultInt, List[PharmacySingleGrnOut]]])
+@router.get("/single/{id}", response_model=List[Union[ResultInt, List[PharmacySingleGrnWithMedicine]]])
 def search_single_grn(id: int, skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
-    search_single_grn = pharmacy_single_grn_service.get_by_key(db=db, skip=skip, limit=limit, descending=True, count_results=True, grn_id = id)
+    search_single_grn = pharmacy_single_grn_service.all_single_grn(db=db, skip=skip, limit=limit, grn_id = id)
     return handle_result(search_single_grn)

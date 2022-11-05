@@ -7,6 +7,7 @@ class PharmacyEverySingleStockBase(BaseModel):
     expiry_date: Optional[date] = None
     batch_number: Optional[str] = None
     medicine_id: Optional[int] = None
+    single_grn_id: Optional[int] = None
 
 
 class PharmacyEverySingleStockIn(PharmacyEverySingleStockBase):
@@ -37,6 +38,7 @@ class PharmacyEverySingleStockOutWithMedicine(PharmacyEverySingleStockOut):
     medicine_name: Optional[str] = None 
     medicine_generic: Optional[str] = None
     medicine_strength: Optional[str] = None
+    pharmaceuticals: Optional[str] = None
 
 
 # Total current Stock
@@ -67,3 +69,4 @@ class PharmacyTotalCurrentStockWithMedicine(PharmacyTotalCurrentStockOut):
     medicine_name: Optional[str] = None 
     medicine_generic: Optional[str] = None
     medicine_strength: Optional[str] = None
+    pharmaceuticals: Optional[str] = None
