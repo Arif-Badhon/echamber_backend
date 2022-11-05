@@ -44,3 +44,9 @@ def append_doctor(doctor_user_id: int, clinic_id:int,  db: Session = Depends(get
 def search_with_user_and_clinic_id(user_id: int, clinic_id: int, db: Session = Depends(get_db)):
     check = clinic_with_doctor_service.check_user_with_clinic(db=db, user_id=user_id, clinic_id=clinic_id)
     return check 
+
+
+@router.get('/get doctors')
+def get_doctors_in_clinic(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+    get_doc = clinic_with_doctor_service.get_with_pagination(db=db, skip=skip, limit=limit, descending=True, count_results=True)
+    return handle_result(get_doc)
