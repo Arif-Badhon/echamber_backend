@@ -29,7 +29,9 @@ class PharmacyPurchaseOrderService(BaseService[PharmacyPurchaseOrder, PharmacyPu
             purchase_number=data_in.purchase_order.purchase_number,
             user_id=data_in.purchase_order.user_id,
             pharmacy_id=data_in.purchase_order.pharmacy_id,
-            remarks=data_in.purchase_order.remarks
+            remarks=data_in.purchase_order.remarks,
+            expected_delivery_date=data_in.purchase_order.expected_delivery_date,
+            delivery_status=data_in.purchase_order.delivery_status
         ))
 
         if data_in.single_purchase_order and len(data_in.single_purchase_order) != 0:
