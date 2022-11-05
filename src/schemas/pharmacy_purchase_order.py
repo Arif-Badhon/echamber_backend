@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 from pydantic import BaseModel
 from typing import List, Optional
 
@@ -15,6 +15,8 @@ class PharmacyPurchaseOrderBase(BaseModel):
     user_id: Optional[int] = None
     pharmacy_id: Optional[int] = None
     remarks: Optional[str] = None
+    expected_delivery_date: Optional[date] = None
+    delivery_status: Optional[str] = None
 
 
 class PharmacyPurchaseOrderIn(PharmacyPurchaseOrderBase):
@@ -33,6 +35,8 @@ class PharmacyPurchaseOrderUpdate(BaseModel):
     user_id: Optional[int] = None
     pharmacy_id: Optional[int] = None
     remarks: Optional[str] = None
+    expected_delivery_date: Optional[date] = None
+    delivery_status: Optional[str] = None
 
 
 class PharmacyPurchaseOrderOut(PharmacyPurchaseOrderBase):
