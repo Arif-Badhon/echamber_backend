@@ -7,6 +7,7 @@ class PharmacyEverySingleStockBase(BaseModel):
     expiry_date: Optional[date] = None
     batch_number: Optional[str] = None
     medicine_id: Optional[int] = None
+    single_grn_id: Optional[int] = None
 
 
 class PharmacyEverySingleStockIn(PharmacyEverySingleStockBase):
