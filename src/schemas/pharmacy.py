@@ -44,6 +44,6 @@ class PharmacyUserWithPharmacy(BaseModel):
 # login schema
 
 class PharmacyLogin(BaseModel):
-    trade_license: str
+    hxpharmacy_id: str
     identifier: str
     password: str
