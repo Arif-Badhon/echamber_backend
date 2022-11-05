@@ -660,6 +660,8 @@ class PharmacyPurchaseOrder(BaseModel):
     pharmacy_id = Column(Integer, ForeignKey("pharmacy.id"))
     purchase_number = Column(String(100), nullable = True)
     remarks = Column(Text, nullable = True)
+    expected_delivery_date = Column(Date, nullable = True)
+    delivery_status = Column(String(100), nullable=True)
 
 # Purchase Single Order
 
