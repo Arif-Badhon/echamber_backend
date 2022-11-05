@@ -12,6 +12,12 @@ from sqlalchemy.orm import Session
 
 class ServiceOrderService(BaseService[ServiceOrder, ServiceOrderIn, ServiceOrderUpdate]):
 
+    def service_with_patient(
+            self, db: Session, service_id: int, customer_id: int, customer_name: str, customer_phone: str, address: str, service_name: str, order_date: str, order_status: str, skip: int, limit: int):
+        data = self.repo.service_with_patient(db=db, service_id=service_id, customer_id=customer_id, customer_name=customer_name, customer_phone=customer_phone, address=address,
+                                              service_name=service_name, order_date=order_date, order_status=order_status, skip=skip, limit=limit)
+        return data
+
     # All Service order with detail
     # ------------------------------
 

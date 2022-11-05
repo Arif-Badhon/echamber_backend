@@ -1,6 +1,7 @@
 from datetime import date, datetime
 from pydantic import BaseModel
 from typing import Optional
+from .users import UserOut
 
 
 class ServiceOrderBase(BaseModel):
@@ -50,6 +51,14 @@ class ServiceOrderOut(ServiceOrderBase):
     followup: Optional[bool] = None
     created_at: date
     updated_at: Optional[date] = None
+
+    class Config:
+        orm_mode = True
+
+
+class ServiceOrderoutWithUser(BaseModel):
+    ServiceOrder: ServiceOrderOut
+    User: UserOut
 
     class Config:
         orm_mode = True

@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from typing import List, Union
 from db import get_db
 from exceptions.service_result import handle_result
-from schemas import ServiceOrderIn, MedicineOrderIn, HealthPlanForPatientWithService, HealthPlanForPatientOut, AdminPanelActivityOut, ServiceOrderOut, ResultInt, MedicineOrderOut, TelemedicineServiceIn, TelemedicineOut
+from schemas import ServiceOrderIn, MedicineOrderIn, HealthPlanForPatientWithService, HealthPlanForPatientOut, AdminPanelActivityOut, ServiceOrderOut, ResultInt, MedicineOrderOut, TelemedicineServiceIn, TelemedicineOut, ServiceOrderoutWithUser
 from sqlalchemy.orm import Session
 from api.v1.auth_dependcies import logged_in_employee
 from schemas.medicine_order import MedicineOrderUpdate
@@ -18,6 +18,16 @@ def all_service_order(skip: int = 0, limit: int = 15, db: Session = Depends(get_
     data = service_order_service.all_service_order(
         db=db, skip=skip, limit=limit)
     return handle_result(data)
+
+
+@router.get('/filter', response_model=List[Union[ResultInt, List[ServiceOrderoutWithUser]]], description='Access: employee')
+def all_service_filter(
+        service_id: int = None, customer_id: int = None, customer_name: str = None, customer_phone: str = None, address: str = None, service_name: str = None, order_date: str = None, order_status: str = None,
+        skip: int = 0, limit: int = 15, db: Session = Depends(get_db),
+        current_user: Session = Depends(logged_in_employee)):
+    data = service_order_service.service_with_patient(db=db, service_id=service_id, customer_id=customer_id, customer_name=customer_name, customer_phone=customer_phone,
+                                                      address=address, service_name=service_name, order_date=order_date, order_status=order_status, skip=skip, limit=limit)
+    return data
 
 
 @router.get('/{id}', response_model=ServiceOrderOut)
