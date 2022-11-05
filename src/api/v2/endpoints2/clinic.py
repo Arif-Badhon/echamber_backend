@@ -46,7 +46,13 @@ def search_with_user_and_clinic_id(user_id: int, clinic_id: int, db: Session = D
     return check 
 
 
-@router.get('/get doctors')
+@router.get('/get-doctors')
 def get_doctors_in_clinic(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
     get_doc = clinic_with_doctor_service.get_with_pagination(db=db, skip=skip, limit=limit, descending=True, count_results=True)
     return handle_result(get_doc)
+
+
+@router.get('/search-by-clinic')
+def search_by_clinic(clinic_id: int,  db: Session = Depends(get_db)):
+    sc = clinic_with_doctor_service.search_by_clinic_id(db=db, clinic_id=clinic_id)
+    return sc
