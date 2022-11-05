@@ -18,10 +18,10 @@ router = APIRouter()
 security = HTTPBasic()
 
 
-@router.post('/signup', response_model=UserOut)
-def signup(data_in: UserCreate, db: Session = Depends(get_db)):
-    user = users_service.signup(db, data_in)
-    return handle_result(user)
+# @router.post('/signup', response_model=UserOut)
+# def signup(data_in: UserCreate, db: Session = Depends(get_db)):
+#     user = users_service.signup(db, data_in, flush=False)
+#     return handle_result(user)
 
 
 @router.post('/login', response_model=Token)
