@@ -4,6 +4,7 @@ from typing import Optional
 
 
 class ClinicActivityBase(BaseModel):
+    clinic_id: int
     user_id: int
     service_name: str
     service_received_id: int
@@ -19,6 +20,7 @@ class ClinicActivityUpdate(BaseModel):
 
 
 class ClinicActivityOut(ClinicActivityBase):
+    clinic_id: int
     user_id: int
     service_name: str
     service_recived_id: int
@@ -31,6 +33,7 @@ class ClinicActivityOut(ClinicActivityBase):
 
 
 class ClinicActivityAllOut(BaseModel):
+    clinic_id: int
     user_id: int
     user_name: str
     user_phone: str
