@@ -633,7 +633,7 @@ class PharmaceuticalsNameList(BaseModel):
 class Pharmacy(BaseModel):
     __tablename__ = "pharmacy"
     name = Column(String(255), nullable = False)
-    # trade_license = Column(String(255), nullable = False, unique = True)
+    trade_license = Column(String(255), nullable = True)
     detail_address = Column(Text, nullable = True)
     district = Column(String(255), nullable = True)
     sub_district = Column(String(255), nullable = True)
