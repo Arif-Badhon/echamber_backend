@@ -1,4 +1,4 @@
-from operator import or_
+from sqlalchemy import desc
 from models import ServiceOrder, User
 from schemas import ServiceOrderIn, ServiceOrderUpdate
 from repositories import BaseRepo
@@ -26,11 +26,20 @@ class ServiceOrderRepo(BaseRepo[ServiceOrder, ServiceOrderIn, ServiceOrderUpdate
 
         if service_id is not None:
             data = db.query(ServiceOrder, User).join(User, User.id == ServiceOrder.patient_id).filter(ServiceOrder.id == service_id).offset(skip).limit(limit).all()
-            return data
+            return [{"results": len(data)}, data]
         elif customer_id is not None:
             data = db.query(ServiceOrder, User).join(User, User.id == ServiceOrder.patient_id).filter(User.id == customer_id).offset(skip).limit(limit).all()
-            return data
+            return [{"results": len(data)}, data]
         else:
+            data_all = db.query(
+                ServiceOrder, User).join(
+                User, User.id == ServiceOrder.patient_id).filter(
+                ServiceOrder.service_name.like(f"%{service_name}%")).filter(
+                ServiceOrder.created_at.like(f"%{order_date}%")).filter(or_(
+                    ServiceOrder.order_status.like(f"%{order_status}%"),
+                    ServiceOrder.order_status == None)).filter(
+                User.name.like(f"%{customer_name}%")).filter(
+                User.phone.like(f"%{customer_phone}%")).all()
             data = db.query(
                 ServiceOrder, User).join(
                 User, User.id == ServiceOrder.patient_id).filter(
@@ -39,13 +48,9 @@ class ServiceOrderRepo(BaseRepo[ServiceOrder, ServiceOrderIn, ServiceOrderUpdate
                     ServiceOrder.order_status.like(f"%{order_status}%"),
                     ServiceOrder.order_status == None)).filter(
                 User.name.like(f"%{customer_name}%")).filter(
-                User.phone.like(f"%{customer_phone}%")).offset(skip).limit(limit).all()
+                User.phone.like(f"%{customer_phone}%")).order_by(desc(self.model.created_at)).offset(skip).limit(limit).all()
             print(len(data))
-            return [{"results": len(data)}, data]
-
-            # data = db.query(ServiceOrder).offset(skip).limit(limit).all()
-
-        return data
+            return [{"results": len(data_all)}, data]
 
 
 service_order_repo = ServiceOrderRepo(ServiceOrder)
