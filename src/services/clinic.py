@@ -1,6 +1,8 @@
-from services import BaseService, users_service
+from services import BaseService, users_service, doctor_qualifications_service, doctor_specialities_service, doctors_service
+from .clinic_with_doctor import clinic_with_doctor_service
 from models import Clinic
 from schemas import ClinicIn, ClinicUpdate, ClinicUserWithClinic, UserCreate, ClinicBase, ClinicUserIn, ClinicLogin
+from schemas import DoctorSignup, DoctorIn,  DoctorQualilficationIn, DoctorSpecialityIn
 from repositories import clinic_repo, users_repo
 from sqlalchemy.orm import Session
 from exceptions.service_result import handle_result, ServiceResult
@@ -64,6 +66,54 @@ class ClinicService(BaseService[Clinic, ClinicIn, ClinicUpdate]):
 
 
         return users_service.login(db=db, identifier=data_in.identifier, password=data_in.password)
+
+
+    def clinic_doctor_signup(self, db: Session, data_in: DoctorSignup, clinic_id: int, user_id: int):
+
+        clinic_with_user = clinic_with_doctor_service.check_user_with_clinic(db=db, user_id=user_id, clinic_id=clinic_id)
+        if clinic_with_user == False:
+            return ServiceResult(AppException.ServerError("Invalid Clinic ID"))
+
+        signup_data = UserCreate(
+            name=data_in.name,
+            email=data_in.email,
+            phone=data_in.phone,
+            sex=data_in.sex,
+            is_active=False,
+            password=data_in.password,
+            role_name='doctor'
+        )
+
+        signup_user = users_service.signup(db, data_in=signup_data, flush=True)
+
+        doctor_data = DoctorIn(
+            user_id=handle_result(signup_user).id,
+            bmdc=data_in.bmdc
+        )
+
+        doctor_user = doctors_service.create_with_flush(db, data_in=doctor_data)
+
+        qualification_data = DoctorQualilficationIn(
+            user_id=handle_result(signup_user).id,
+            qualification=data_in.qualification
+        )
+
+        qualification_user = doctor_qualifications_service.create_with_flush(
+            db, data_in=qualification_data)
+
+        specialities_data = DoctorSpecialityIn(
+            user_id=handle_result(signup_user).id,
+            speciality=data_in.speciality
+        )
+
+        specialities_user = doctor_specialities_service.create_with_flush(
+            db, data_in=specialities_data)
+
+
+        doctor_user_id = handle_result(signup_user).id
+        append = clinic_with_doctor_service.doctor_append(db=db, doctor_user_id=doctor_user_id, clinic_id=clinic_id, user_id=user_id)
+
+        return ServiceResult({"msg": "Success"}, status_code=200)
 
 
 clinic_service = ClinicService(Clinic, clinic_repo)
