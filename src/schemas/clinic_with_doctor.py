@@ -1,6 +1,9 @@
 from pydantic import BaseModel
 from datetime import datetime
 from .users import UserOut
+from .doctors import DoctorOut
+from .doctor_specialities import DoctorSpecialityOut
+from .doctor_qualifications import DoctorQualificationOut
 
 
 class ClinicWithDoctorBase(BaseModel):
@@ -30,3 +33,6 @@ class ClinicWithDoctorOut(ClinicWithDoctorBase):
 class ClinicWithDoctorDetails(BaseModel):
     ClinicWithDoctor: ClinicWithDoctorOut
     User: UserOut
+    Doctor: DoctorOut
+    DoctorQualification: DoctorQualificationOut
+    DoctorSpeciality: DoctorSpecialityOut
