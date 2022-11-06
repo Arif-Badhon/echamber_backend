@@ -1,4 +1,5 @@
-from services import BaseService, clinic_user_service, roles_service
+from services import BaseService, roles_service
+from .clinic_user import clinic_user_service
 from models import ClinicWithDoctor
 from schemas import ClinicWithDoctorIn, ClinicWithDoctorUpdate, ClinicActivityIn
 from repositories import clinic_with_doctor_repo, clinic_activity_repo, users_repo
