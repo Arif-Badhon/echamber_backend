@@ -70,8 +70,8 @@ class ClinicWithDoctorService(BaseService[ClinicWithDoctor, ClinicWithDoctorIn, 
             return ServiceResult(doctor_append, status_code=status.HTTP_201_CREATED)
 
 
-    def search_by_clinic_id(self, db: Session, clinic_id: str):
-        clinic_doctor = self.repo.search_by_clinic_id(db= db, clinic_id=clinic_id)
+    def search_by_clinic_id(self, db: Session, skip: int, limit: int, clinic_id: str):
+        clinic_doctor = self.repo.search_by_clinic_id(db= db, skip=skip, limit=limit, clinic_id=clinic_id)
         return clinic_doctor
 
 
