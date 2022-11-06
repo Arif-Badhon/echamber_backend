@@ -22,7 +22,7 @@ class PharmacyPurchaseOrderService(BaseService[PharmacyPurchaseOrder, PharmacyPu
             total_amount_dp=data_in.purchase_order.total_amount_dp,
             discount=data_in.purchase_order.discount,
             payable_amount=data_in.purchase_order.payable_amount,
-            paid_amount=data_in.purchase_order.payable_amount,
+            paid_amount=data_in.purchase_order.paid_amount,
             due_amount=data_in.purchase_order.due_amount,
             subtotal_amount=data_in.purchase_order.subtotal_amount,
             pharmaceuticals_name_id=data_in.purchase_order.pharmaceuticals_name_id,
