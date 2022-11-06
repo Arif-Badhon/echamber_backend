@@ -1,7 +1,7 @@
 from typing import List, Union
 from fastapi import APIRouter, Depends
 from exceptions.service_result import handle_result
-from schemas import ClinicOut, ClinicUserWithClinic, Token, ClinicLogin,ClinicWithDoctorDetails, ClinicUserHxId, ResultInt
+from schemas import ClinicOut, ClinicUserWithClinic, Token, ClinicLogin,ClinicWithDoctorDetails, ClinicUserHxId, ResultInt, DoctorSignup
 from db import get_db
 from sqlalchemy.orm import Session
 from services import clinic_service, clinic_with_doctor_service
@@ -56,3 +56,9 @@ def search_with_user_and_clinic_id(user_id: int, clinic_id: int, db: Session = D
 def search_doctor_by_clinic_id(clinic_id: int, skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
     sc = clinic_with_doctor_service.search_by_clinic_id(db=db, skip=skip, limit=limit, clinic_id=clinic_id)
     return sc
+
+
+@router.post('/clinic-doctor-signup')
+def clinic_doctor_signup(doctor_in: DoctorSignup, clinic_id: int,  db: Session = Depends(get_db), current_user: Session = Depends(logged_in_clinic_admin)):
+    doctor = clinic_service.clinic_doctor_signup(db=db, data_in=doctor_in, clinic_id=clinic_id, user_id = current_user.id)
+    return handle_result(doctor)
