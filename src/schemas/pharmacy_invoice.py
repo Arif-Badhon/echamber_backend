@@ -84,3 +84,9 @@ class PharmacySingleInvoiceOut(PharmacySingleInvoiceBase):
 class PharmacyInvoiceWithSingleInvoice(BaseModel):
     invoice: PharmacyInvoiceIn
     single_invoice: List[PharmacySingleInvoiceIn]
+
+
+class PharmacySingleInvoiceWithMedicine(PharmacySingleInvoiceOut):
+    medicine_name: Optional[str] = None 
+    medicine_generic: Optional[str] = None
+    pharmaceuticals: Optional[str] = None
