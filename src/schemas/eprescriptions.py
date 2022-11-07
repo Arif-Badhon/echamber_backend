@@ -22,6 +22,10 @@ class EpBase(BaseModel):
     telemedicine_order_id: Optional[int] = None
     doctor_id: int
     patient_id: int
+    patient_name: Optional[str] = None
+    patient_sex: Optional[str] = None
+    patient_age_years: Optional[int] = None
+    patient_age_months: Optional[int] = None
     age_years: Optional[int] = None
     age_months: Optional[int] = None
     current_address: Optional[str] = None
