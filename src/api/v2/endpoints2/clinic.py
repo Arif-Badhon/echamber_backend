@@ -1,11 +1,11 @@
 from typing import List, Union
 from fastapi import APIRouter, Depends
 from exceptions.service_result import handle_result
-from schemas import ClinicOut, ClinicUserWithClinic, Token, ClinicLogin,ClinicWithDoctorDetails, ClinicUserHxId, ResultInt, DoctorSignup
+from schemas import ClinicOut, ClinicUserWithClinic, Token, ClinicLogin,ClinicWithDoctorDetails, ClinicUserHxId, ResultInt, DoctorSignup, PatientSignup
 from db import get_db
 from sqlalchemy.orm import Session
-from services import clinic_service, clinic_with_doctor_service
-from api.v2.auth_dependcies import logged_in_admin, logged_in_clinic_admin
+from services import clinic_service, clinic_with_doctor_service, clinic_activity_service
+from api.v2.auth_dependcies import logged_in_admin, logged_in_clinic_admin, logged_in
 
 router = APIRouter()
 
@@ -62,3 +62,16 @@ def doctor_list(clinic_id: int, skip: int = 0, limit: int = 10, db: Session = De
 def doctor_registration_by_clinic(doctor_in: DoctorSignup, clinic_id: int,  db: Session = Depends(get_db), current_user: Session = Depends(logged_in_clinic_admin)):
     doctor = clinic_service.clinic_doctor_signup(db=db, data_in=doctor_in, clinic_id=clinic_id, user_id = current_user.id)
     return handle_result(doctor)
+
+
+@router.post('/clinic-patient-registartion')
+def patient_registration_by_clinic(patient_in: PatientSignup, clinic_id: int,  db: Session = Depends(get_db), current_user: Session = Depends(logged_in_clinic_admin)):
+    patient = clinic_service.clinic_patient_signup(db=db, data_in=patient_in, clinic_id=clinic_id, user_id = current_user.id)
+    return handle_result(patient)
+
+
+@router.get('/activity/log-clinic/all')
+def clinic_activity_log_all(skip: int = 0, limit: int = 10, db: Session = Depends(get_db), current_user: Session = Depends(logged_in)):
+    activity = clinic_activity_service.get_with_pagination(db=db, skip=skip, limit=limit, descending=True, count_results=True)
+    return handle_result(activity)
+
