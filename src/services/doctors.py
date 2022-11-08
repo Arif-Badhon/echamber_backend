@@ -5,6 +5,7 @@ from schemas.doctor_specialities import DoctorSpecialityIn
 from services import BaseService
 from .users import users_service
 from .roles import roles_service
+from .sms import sms_service
 from services.doctor_qualifications import doctor_qualifications_service
 from services.doctor_specialities import doctor_specialities_service
 from repositories import doctors_repo, users_repo, roles_repo
@@ -81,6 +82,9 @@ class DoctorService(BaseService[Doctor, DoctorIn, DoctorUpdate]):
             return ServiceResult(AppException.ServerError(
                 "Doctor not register perfectly."))
         else:
+            s = sms_service.send_sms(sms_to='88' + data_in.phone, sms='অভিনন্দন, ' + data_in.name +
+                                     ' - HEALTHx এর SMART DOCTOR পোর্টালে আপনার রেজিস্ট্রেশন সম্পন্ন হয়েছে। একাউন্টটি VERIFY হওয়া পর্যন্ত আমাদের সাথেই থাকুন।')
+            a = sms_service.send_sms(sms_to='8801841199147', sms=data_in.name+' - SMART DOCTOR পোর্টালে রেজিস্ট্রেশন করেছেন। VERIFY করে প্রোফাইলটি ACTIVE করুন।')
             return ServiceResult(get_doctor, status_code=status.HTTP_201_CREATED)
 
     def all_doc(self, db: Session, skip: int, limit: int):

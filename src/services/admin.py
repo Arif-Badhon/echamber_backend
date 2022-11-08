@@ -13,6 +13,7 @@ from repositories import admin_repo, roles_repo, admin_panel_activity_repo, user
 from sqlalchemy.orm import Session
 from exceptions import ServiceResult, AppException
 from fastapi import status
+from .sms import sms_service
 
 
 class Admin(BaseService[User, UserCreate, UserUpdate]):
@@ -251,8 +252,11 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
 
     def doctor_active_id(self, db: Session, id: int):
         active = self.repo.doctor_active_by_id(db, id)
+        doc = self.get_one(db, id)
+        s = sms_service.send_sms(sms_to='88' + handle_result(doc).phone, sms='অভিনন্দন, ' + handle_result(doc).name +
+                                 ' - HEALTHx এর SMART DOCTOR পোর্টালে আপনার DIGITAL PROFILE টি ACTIVE হয়েছে। লগ ইন করে প্রোফাইলটি কমপ্লিট করুন, আর ছড়িয়ে দিন আপনার পরিচিতি দেশব্যাপী। -ধন্যবাদ')
 
-        return self.get_one(db, id)
+        return doc
 
     def signup_patient(self, db: Session, data_in: UserCreate, creator_id: int):
         singnup_data = UserCreate(

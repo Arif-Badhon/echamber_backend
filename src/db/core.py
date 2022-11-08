@@ -12,6 +12,9 @@ class Settings(BaseSettings):
     DATABASE_URL: str = os.environ.get("DATABASE_URL")
     SECRET_KEY: str = os.environ.get("SECRET_KEY")
     ALGORITHM: str = os.environ.get("ALGORITHM")
+    SMS_USERNAME: str = os.environ.get("SMS_USERNAME")
+    SMS_PASSWORD: str = os.environ.get("SMS_PASSWORD")
+    SMS_FROM: str = os.environ.get("SMS_FROM")
 
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 7
 
