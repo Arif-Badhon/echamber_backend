@@ -1,9 +1,9 @@
-from services import BaseService, users_service, doctor_qualifications_service, doctor_specialities_service, doctors_service
+from services import BaseService, users_service, doctor_qualifications_service, doctor_specialities_service, doctors_service, user_details_service, CreateSchemaType
 from .clinic_with_doctor import clinic_with_doctor_service
 from models import Clinic
 from schemas import ClinicIn, ClinicUpdate, ClinicUserWithClinic, UserCreate, ClinicBase, ClinicUserIn, ClinicLogin
-from schemas import DoctorSignup, DoctorIn,  DoctorQualilficationIn, DoctorSpecialityIn
-from repositories import clinic_repo, users_repo
+from schemas import DoctorSignup, DoctorIn,  DoctorQualilficationIn, DoctorSpecialityIn, UserDetailIn, ClinicActivityIn
+from repositories import clinic_repo, users_repo, clinic_activity_repo
 from sqlalchemy.orm import Session
 from exceptions.service_result import handle_result, ServiceResult
 from .clinic_user import clinic_user_service
@@ -114,6 +114,56 @@ class ClinicService(BaseService[Clinic, ClinicIn, ClinicUpdate]):
         append = clinic_with_doctor_service.doctor_append(db=db, doctor_user_id=doctor_user_id, clinic_id=clinic_id, user_id=user_id)
 
         return ServiceResult({"msg": "Success"}, status_code=200)
+
+    def clinic_patient_signup(self, db: Session, data_in: CreateSchemaType, clinic_id: int, user_id: int):
+
+        clinic_with_user = clinic_with_doctor_service.check_user_with_clinic(db=db, user_id=user_id, clinic_id=clinic_id)
+        if clinic_with_user == False:
+            return ServiceResult(AppException.ServerError("Invalid Clinic ID"))      
+
+        singnup_data = UserCreate(
+            name=data_in.name,
+            email=data_in.email,
+            phone=data_in.phone,
+            sex=data_in.sex,
+            is_active=True,
+            password=data_in.password,
+            role_name='patient'
+        )
+
+        signup_user = users_service.signup(
+            db, data_in=singnup_data, flush=True)
+
+        user_details_data = UserDetailIn(
+            user_id=handle_result(signup_user).id,
+            country=data_in.country,
+            division=data_in.division,
+            district=data_in.district,
+            sub_district=data_in.sub_district,
+            post_code=data_in.post_code,
+            dob=data_in.dob
+        )
+
+        ud = user_details_service.create_with_flush(db, data_in=user_details_data)
+
+        if not ud:
+            return ServiceResult(AppException.ServerError(
+                "Problem with patient registration."))
+        else:
+            clinic_patient_data = ClinicActivityIn(
+            clinic_id = clinic_id,
+            user_id=user_id,
+            service_name="patient_registration",
+            service_received_id=handle_result(signup_user).id,
+            remark=""
+        )
+
+        register_patient = clinic_activity_repo.create(db=db, data_in=clinic_patient_data)
+
+        if not register_patient:
+            return ServiceResult(AppException.ServerError("Problem with patient registration"))
+        else:
+            return ServiceResult(register_patient, status_code=status.HTTP_201_CREATED)
 
 
 clinic_service = ClinicService(Clinic, clinic_repo)
