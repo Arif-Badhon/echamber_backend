@@ -23,13 +23,13 @@ def clinic_register_by_admin(data_in: ClinicUserWithClinic, db: Session = Depend
 
 
 @router.post("/signup/user", response_model=ClinicUserHxId)
-def clinic_siguup_user(data_in: ClinicUserWithClinic, db: Session = Depends(get_db)):
+def clinic_register_by_user(data_in: ClinicUserWithClinic, db: Session = Depends(get_db)):
     user = clinic_service.register_clinic(db=db, data_in=data_in)
     return handle_result(user)
 
 
 @router.post("/login", response_model=Token)
-def clinic_user_login(data_in: ClinicLogin, db: Session = Depends(get_db)):
+def clinic_login_by_user(data_in: ClinicLogin, db: Session = Depends(get_db)):
     login = clinic_service.clinic_user_login(db=db, data_in=data_in)
     return handle_result(login)
 
@@ -53,12 +53,12 @@ def search_with_user_and_clinic_id(user_id: int, clinic_id: int, db: Session = D
 
 
 @router.get('/search-doctor-by-clinic_id', response_model= List[Union[ResultInt, List[ClinicWithDoctorDetails]]])
-def search_doctor_by_clinic_id(clinic_id: int, skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+def doctor_list(clinic_id: int, skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
     sc = clinic_with_doctor_service.search_by_clinic_id(db=db, skip=skip, limit=limit, clinic_id=clinic_id)
     return sc
 
 
 @router.post('/clinic-doctor-signup')
-def clinic_doctor_signup(doctor_in: DoctorSignup, clinic_id: int,  db: Session = Depends(get_db), current_user: Session = Depends(logged_in_clinic_admin)):
+def doctor_registration_by_clinic(doctor_in: DoctorSignup, clinic_id: int,  db: Session = Depends(get_db), current_user: Session = Depends(logged_in_clinic_admin)):
     doctor = clinic_service.clinic_doctor_signup(db=db, data_in=doctor_in, clinic_id=clinic_id, user_id = current_user.id)
     return handle_result(doctor)
