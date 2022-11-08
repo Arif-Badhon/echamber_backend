@@ -42,4 +42,13 @@ class PharmacyPurchaseOrderService(BaseService[PharmacyPurchaseOrder, PharmacyPu
 
         return ServiceResult({"msg": "Success"}, status_code=200)
 
+
+    def get_purchase_order_with_grn(self, db: Session, skip: int, limit: int):
+        purchase_order = self.repo.get_purchase_order_with_grn(db= db, skip=skip, limit=limit)
+        return purchase_order
+
+    def get_purchase_order_without_grn(self, db: Session, skip: int, limit: int):
+        purchase_order = self.repo.get_purchase_order_without_grn(db= db, skip=skip, limit=limit)
+        return purchase_order
+
 pharmacy_purchase_order_service = PharmacyPurchaseOrderService(PharmacyPurchaseOrder, pharmacy_purchase_order_repo)
