@@ -1,16 +1,17 @@
+import typing
 from pydantic import BaseModel
-
+from typing import Optional
 
 # ServiceClassSendTextMessage(String Username, String Password, String
 # From, String To, String Message)
 
 
 class SmsBase(BaseModel):
-    username: str
-    password: str
-    sms_from: str
-    sms_to: str
-    sms: str
+    username: Optional[str] = None
+    password: Optional[str] = None
+    sms_from: Optional[str] = None
+    sms_to: Optional[str] = None
+    sms: Optional[str] = None
 
 
 class SmsIn(SmsBase):
