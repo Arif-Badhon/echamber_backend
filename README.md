@@ -6,6 +6,9 @@ ALGORITHM=HS256
 DATABASE_URL=mysql+mysqlconnector://root:@localhost:3306/echamber
 URL_ONE=http://localhost:8000
 URL_TWO=https://localhost:8000
+SMS_USERNAME=healthx
+SMS_PASSWORD=Dhaka@5599
+SMS_FROM=8801886151401
 ```
 
 # installation
