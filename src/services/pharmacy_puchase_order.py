@@ -1,5 +1,5 @@
 from exceptions import service_result
-from services import BaseService
+from services import BaseService, pharmacy_service
 from models import PharmacyPurchaseOrder
 from schemas import PharmacyPurchaseOrderIn, PharmacyPurchaseOrderUpdate, PharmacyPurchaseOrderBase, PharmacyPurchaseOrderWithSingleOrder, PharmacyPurchaseSingleOrderWithPurchaseOrder
 from repositories import pharmacy_purchase_order_repo, pharmacy_purchase_single_order_repo
@@ -42,7 +42,11 @@ class PharmacyPurchaseOrderService(BaseService[PharmacyPurchaseOrder, PharmacyPu
 
         return ServiceResult({"msg": "Success"}, status_code=200)
 
-
+    def get_purchase_order_by_pharmacy_id(self, db: Session, pharmacy_id: int, skip: int, limit: int):
+        get_purchase_order = self.repo.get_purchase_order_by_pharmacy_id(db=db, pharmacy_id=pharmacy_id, skip=skip, limit=limit)
+        return get_purchase_order
+    
+    
     def get_purchase_order_with_grn(self, db: Session, skip: int, limit: int):
         purchase_order = self.repo.get_purchase_order_with_grn(db= db, skip=skip, limit=limit)
         return purchase_order
