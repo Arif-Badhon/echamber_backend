@@ -14,6 +14,7 @@ from .corporate_partners import *
 from .health_partner import *
 from .user_details import *
 from .token import *
+from .temporary_token import *
 from .review import *
 from .mediva_device import *
 from .clinic import *

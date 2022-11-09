@@ -6,7 +6,8 @@ from db import get_db
 from exceptions import handle_result
 from schemas import UserCreate, UserOut, UserOutAuth, UserLogin, NewPasswordIn, UserUpdate, Token, ImageLogOut, ImageLogIn
 from schemas.sms import SmsIn
-from services import users_service, image_log_service, sms_service
+from schemas.temporary_token import TemporaryTokenIn
+from services import users_service, image_log_service, sms_service, temporary_token_service
 from fastapi.security import HTTPBasic
 from models import User
 from api.v1.auth_dependcies import logged_in
@@ -40,6 +41,17 @@ def new_password(new_password: NewPasswordIn,  db: Session = Depends(get_db), cu
     new = users_service.new_password(
         db, user_id=current_user.id, data_update=new_password)
     return handle_result(new)
+
+
+@router.get('/forget-password/request')
+def request_token(db: Session = Depends(get_db), current_user: Session = Depends(logged_in)):
+    tok = temporary_token_service.create_token(db=db, user_id=current_user.id)
+    return handle_result(tok)
+
+
+@router.get('/forget-password/change')
+def change_password():
+    return
 
 
 @router.patch('/user/update', response_model=UserOut)

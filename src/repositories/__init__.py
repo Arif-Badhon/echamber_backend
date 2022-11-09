@@ -20,6 +20,7 @@ from .users import *
 from .user_details import *
 from .roles import *
 from .login_log import *
+from .temporary_token import *
 from .clinic import *
 from .clinic_user import *
 from .doctors import *

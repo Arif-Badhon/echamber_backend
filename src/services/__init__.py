@@ -2,6 +2,7 @@ from .base import *
 from .roles import *
 from .admin import *
 from .sms import *
+from .temporary_token import *
 from .image_log import *
 from .pdf_log import *
 from .notice import *

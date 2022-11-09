@@ -54,6 +54,13 @@ class LoginLog(BaseModel):
     user_id = Column(Integer, ForeignKey("users.id"))
 
 
+class TemporaryToken(BaseModel):
+    __tablename__ = "temporary_token"
+    user_id = Column(Integer, nullable=True)
+    temp_token = Column(String(255), nullable=True)
+    used_status = Column(Boolean, nullable=True)
+    remarks = Column(String(255), nullable=True)
+
 class ImagesLog(BaseModel):
     __tablename__ = "image_log"
     user_id = Column(Integer, ForeignKey("users.id"))
