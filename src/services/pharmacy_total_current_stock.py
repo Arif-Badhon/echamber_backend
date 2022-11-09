@@ -6,7 +6,7 @@ from exceptions.service_result import handle_result
 from sqlalchemy.orm import Session
 
 class PharmacyTotalCurrentStockService(BaseService[PharmacyTotalCurrentStock, PharmacyTotalCurrentStockIn, PharmacyTotalCurrentStockUpdate]):
-    def total_current_stock(self, db: Session):
+    def total_current_stock(self, db: Session, skip: int, limit: int):
         total_stock = self.get(db=db)
         total_stock_data = []
         for i in handle_result(total_stock):

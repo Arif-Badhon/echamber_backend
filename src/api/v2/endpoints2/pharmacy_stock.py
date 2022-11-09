@@ -16,8 +16,8 @@ def get_single_stock(db: Session = Depends(get_db)):
 
 
 @router.get("/total-current-stock/", response_model=List[PharmacyTotalCurrentStockWithMedicine])
-def get_total_stock(db: Session = Depends(get_db)):
-    search_total = pharmacy_total_current_stock_service.total_current_stock(db=db)
+def get_total_stock(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+    search_total = pharmacy_total_current_stock_service.total_current_stock(db=db, skip=skip, limit=limit)
     return handle_result(search_total)
 
 
