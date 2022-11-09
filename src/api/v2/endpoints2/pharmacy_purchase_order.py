@@ -11,7 +11,7 @@ router = APIRouter()
 
 @router.post("/")
 def pharmacy_purchase_order_with_singleorder(data_in: PharmacyPurchaseOrderWithSingleOrder, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_pharmacy_admin)):
-    order = pharmacy_purchase_order_service.submit(db=db, data_in=data_in)
+    order = pharmacy_purchase_order_service.submit(db=db, data_in=data_in, user_id = current_user.id)
     return handle_result (order)
 
 

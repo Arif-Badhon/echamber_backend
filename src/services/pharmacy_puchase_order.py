@@ -10,7 +10,7 @@ from exceptions.app_exceptions import AppException
 
 class PharmacyPurchaseOrderService(BaseService[PharmacyPurchaseOrder, PharmacyPurchaseOrderBase, PharmacyPurchaseOrderUpdate]):
 
-    def submit(self, data_in: PharmacyPurchaseOrderWithSingleOrder, db: Session):
+    def submit(self, data_in: PharmacyPurchaseOrderWithSingleOrder, db: Session, user_id: int):
         
         pur_num = self.repo.get_by_key(db=db, skip=0, limit=100, descending=False, count_results=True, purchase_number=data_in.purchase_order.purchase_number)
 
@@ -33,11 +33,17 @@ class PharmacyPurchaseOrderService(BaseService[PharmacyPurchaseOrder, PharmacyPu
             expected_delivery_date=data_in.purchase_order.expected_delivery_date,
             delivery_status=data_in.purchase_order.delivery_status
         ))
+        if user_id != purchase_order.user_id:
+             return ServiceResult(AppException.ServerError("Invalid User ID"))
+
+        pharmacy_with_user = pharmacy_service.check_user_with_pharmacy(db=db, user_id=user_id, pharmacy_id=purchase_order.pharmacy_id)
+        if pharmacy_with_user == False:
+            return ServiceResult(AppException.ServerError("Invalid Pharmacy ID"))
 
         if data_in.single_purchase_order and len(data_in.single_purchase_order) != 0:
             for i in data_in.single_purchase_order:
                 single_order = pharmacy_purchase_single_order_repo.create_with_flush(db=db, data_in=PharmacyPurchaseSingleOrderWithPurchaseOrder(quantity=i.quantity, unit_price_dp=i.unit_price_dp, total_price_dp=i.total_price_dp, discount=i.discount, payable_prize_dp=i.payable_prize_dp, medicine_id=i.medicine_id, purchase_order_id=purchase_order.id))
-
+        
         db.commit()
 
         return ServiceResult({"msg": "Success"}, status_code=200)
