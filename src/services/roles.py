@@ -19,7 +19,7 @@ class RoleService(BaseService[Role, RoleIn, RoleUpdate]):
             return ServiceResult(AppException.ServerError("admin role exist"))
 
     def all_role_registration(self, db: Session):
-        all_role = ['admin', 'moderator', 'doctor', 'patient', 'sales', 'medical_affairs', 'crm', 'pharmacy_admin']
+        all_role = ['admin', 'moderator', 'doctor', 'patient', 'sales', 'medical_affairs', 'crm', 'pharmacy_admin', 'clinic_admin']
 
         for i in all_role:
             get_role = roles_repo.search_name(db=db, name=i)
