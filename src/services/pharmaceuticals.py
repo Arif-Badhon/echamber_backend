@@ -1,11 +1,13 @@
 from services import BaseService
 from models import Pharmaceuticals
 from schemas import PharmaceuticalIn, PharmaceuticalUpdate, UserCreate, PharmaecuticalsUserIn, PharmaceuticalUserWithPhr
-from repositories import pharmaceutical_repo
+from repositories import pharmaceuticals_repo
 from sqlalchemy.orm import Session
 from .users import users_service
 from .pharmaceuticals_user import pharmaceuticals_user_service
 from exceptions.service_result import handle_result
+from fastapi import status
+from exceptions import ServiceResult
 
 class PharmaceuticalsService(BaseService[Pharmaceuticals, PharmaceuticalIn, PharmaceuticalUpdate]):
 
@@ -39,4 +41,20 @@ class PharmaceuticalsService(BaseService[Pharmaceuticals, PharmaceuticalIn, Phar
         phr_user = pharmaceuticals_user_service.create(db = db, data_in = PharmaecuticalsUserIn(user_id = handle_result(signup).id, phr_id = handle_result(phr).id))
         return phr_user
 
-pharmaceutical_service = PharmaceuticalsService(Pharmaceuticals, pharmaceutical_repo)
+    def all_pharmaceuticals(self, db: Session, skip: int, limit: int):
+        data = self.repo.all_pharmaceuticals(db=db, skip=skip, limit=limit)
+
+        if not data:
+            return ServiceResult([], status_code=status.HTTP_200_OK)
+        else:
+            return ServiceResult(data, status_code=status.HTTP_200_OK)
+
+    def search_pharmaceuticals(self, db: Session, pharmaceuticals: str):
+        data = self.repo.search_pharmaceuticals(db=db, pharmaceuticals=pharmaceuticals)
+
+        if not data:
+            return ServiceResult([], status_code=status.HTTP_200_OK)
+        else:
+            return ServiceResult(data, status_code=status.HTTP_200_OK)
+
+pharmaceutical_service = PharmaceuticalsService(Pharmaceuticals, pharmaceuticals_repo)
