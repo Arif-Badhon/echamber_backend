@@ -5,19 +5,20 @@ from sqlalchemy.orm import Session
 from services import pharmacy_purchase_order_service, pharmacy_purchase_single_order_service
 from exceptions.service_result import handle_result
 from typing import List, Union
+from api.v2.auth_dependcies import logged_in_pharmacy_admin
 
 router = APIRouter()
 
 @router.post("/")
-def pharmacy_purchase_order_with_singleorder(data_in: PharmacyPurchaseOrderWithSingleOrder, db: Session = Depends(get_db)):
+def pharmacy_purchase_order_with_singleorder(data_in: PharmacyPurchaseOrderWithSingleOrder, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_pharmacy_admin)):
     order = pharmacy_purchase_order_service.submit(db=db, data_in=data_in)
     return handle_result (order)
 
 
-@router.get("/", response_model=List[Union[ResultInt, List[PharmacyPurchaseOrderOut]]])
-def get_all_purchase_order(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
-    search = pharmacy_purchase_order_service.get_with_pagination(db = db, skip=skip, limit=limit, descending=True, count_results=True)
-    return handle_result(search)
+@router.get("/get-by_pharmacy_id", response_model=List[Union[ResultInt, List[PharmacyPurchaseOrderOut]]])
+def get_all_purchase_order(pharmacy_id: int, skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+    search = pharmacy_purchase_order_service.get_purchase_order_by_pharmacy_id(db = db,pharmacy_id= pharmacy_id, skip=skip, limit=limit)
+    return search
 
 
 @router.get("/single-order-with-purchase-id/{id}", response_model=List[Union[ResultInt, List[PharmacyPurchaseSingleOrderWithMedicine]]])
