@@ -72,3 +72,4 @@ from .clinic_services import *
 from .clinic_offer import *
 from .clinic_with_doctor import *
 from .clinic_activity import *
+from .pharmaceuticals_name_list import *
