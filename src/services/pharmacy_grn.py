@@ -68,4 +68,9 @@ class PharmacyGrnService(BaseService[PharmacyGrn, PharmacyGrnIn, PharmacyGrnUpda
 
         return ServiceResult({"msg": "Success"}, status_code=200)
 
+
+    def get_grn_by_pharmacy_id(self, db: Session, pharmacy_id: int, skip: int, limit: int):
+        get_grn = self.repo.get_grn_by_pharmacy_id(db=db, pharmacy_id=pharmacy_id, skip=skip, limit=limit)
+        return get_grn
+
 pharmacy_grn_service = PharmacyGrnService(PharmacyGrn, pharmacy_grn_repo)
