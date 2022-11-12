@@ -1,11 +1,10 @@
-from typing import List
+from typing import List, Union
 from fastapi import APIRouter, Depends
-from api.v1.endpoints.doctor_chambers import get
 from exceptions.service_result import handle_result
-from schemas import PharmaceuticalOut, PharmaceuticalUserWithPhr, PharmaceuticalNameListOut
+from schemas import PharmaceuticalOut, PharmaceuticalUserWithPhr, PharmaceuticalNameListOut, ResultInt
 from db import get_db
 from sqlalchemy.orm import Session
-from services import pharmaceutical_service
+from services import pharmaceutical_service, pharmaceuticals_name_list_service
 from api.v1.auth_dependcies import logged_in_admin
 
 router = APIRouter()
@@ -21,13 +20,19 @@ def phr_with_user(data_in: PharmaceuticalUserWithPhr, db: Session = Depends(get_
     return handle_result(user)
 
 
-@router.get('/pharmaceuticals-name/all', response_model=List[PharmaceuticalNameListOut])
+@router.get('/pharmaceuticals-name/all', response_model=List[Union[ResultInt, List[PharmaceuticalNameListOut]]])
 def all_pharmaceuticals(skip: int = 0, limit: int = 20, db: Session = Depends(get_db)):
-    data = pharmaceutical_service.all_pharmaceuticals(db=db, skip=skip, limit=limit)
+    data = pharmaceuticals_name_list_service.all_pharmaceuticals(db=db, skip=skip, limit=limit)
     return handle_result(data)
 
 
 @router.get('/pharmaceuticals-name/{pharmaceuticals}', response_model=List[PharmaceuticalNameListOut])
 def pharmaceuticals_name_search(pharmaceuticals: str, db: Session = Depends(get_db)):
-    data = pharmaceutical_service.search_pharmaceuticals(db=db, pharmaceuticals=pharmaceuticals)
+    data = pharmaceuticals_name_list_service.search_pharmaceuticals(db=db, pharmaceuticals=pharmaceuticals)
+    return handle_result(data)
+
+
+@router.get('/pharmaceuticals-id/{id}', response_model=PharmaceuticalNameListOut)
+def pharmaceuticals_search_with_id(id: int, db: Session = Depends(get_db)):
+    data = pharmaceuticals_name_list_service.get_one(db=db, id=id)
     return handle_result(data)
