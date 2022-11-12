@@ -15,10 +15,10 @@ def grn_with_single_grn(data_in: PharmacyGrnWithSingleGrn, db: Session = Depends
     return handle_result (grn)
 
 
-@router.get("/", response_model=List[Union[ResultInt, List[PharmacyGrnOut]]])
-def search_grn(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
-    search_grn = pharmacy_grn_service.get_with_pagination(db=db, skip=skip, limit=limit, descending=True, count_results=True)
-    return handle_result(search_grn)
+@router.get("/get-grn-by-pharmacy-id/{id}", response_model=List[Union[ResultInt, List[PharmacyGrnOut]]])
+def get_grn_by_pharmacy(pharmacy_id: int, skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+    search_grn = pharmacy_grn_service.get_grn_by_pharmacy_id(db=db, pharmacy_id=pharmacy_id, skip=skip, limit=limit)
+    return search_grn
 
 
 @router.get("/single/{id}", response_model=List[Union[ResultInt, List[PharmacySingleGrnWithMedicine]]])
