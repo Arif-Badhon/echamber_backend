@@ -2,9 +2,9 @@ from fastapi import APIRouter, Depends
 from db import get_db
 from sqlalchemy.orm import Session
 from exceptions.service_result import handle_result
-from schemas import PharmacyEverySingleStockOutWithMedicine, PharmacyTotalCurrentStockWithMedicine, PharmacyTotalCurrentStockOut, PharmacyTotalCurrentStockUpdate
+from schemas import PharmacyEverySingleStockOutWithMedicine, PharmacyTotalCurrentStockWithMedicine, PharmacyTotalCurrentStockOut, PharmacyTotalCurrentStockUpdate, ResultInt
 from services import pharmacy_every_single_stock_servive, pharmacy_total_current_stock_service
-from typing import List
+from typing import List, Union
 
 router = APIRouter()
 
@@ -15,9 +15,9 @@ def get_single_stock(db: Session = Depends(get_db)):
     return handle_result(search_single)
 
 
-@router.get("/total-current-stock/", response_model=List[PharmacyTotalCurrentStockWithMedicine])
-def get_total_stock(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
-    search_total = pharmacy_total_current_stock_service.total_current_stock(db=db, skip=skip, limit=limit)
+@router.get("/total-current-stock/{pharmacy_id}", response_model=List[Union[ResultInt, List[PharmacyTotalCurrentStockWithMedicine]]])
+def get_total_stock(pharmacy_id: int, skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+    search_total = pharmacy_total_current_stock_service.total_current_stock(db=db, pharmacy_id=pharmacy_id, skip=skip, limit=limit)
     return handle_result(search_total)
 
 
