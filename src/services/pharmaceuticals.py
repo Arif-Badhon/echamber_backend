@@ -41,20 +41,4 @@ class PharmaceuticalsService(BaseService[Pharmaceuticals, PharmaceuticalIn, Phar
         phr_user = pharmaceuticals_user_service.create(db = db, data_in = PharmaecuticalsUserIn(user_id = handle_result(signup).id, phr_id = handle_result(phr).id))
         return phr_user
 
-    def all_pharmaceuticals(self, db: Session, skip: int, limit: int):
-        data = self.repo.all_pharmaceuticals(db=db, skip=skip, limit=limit)
-
-        if not data:
-            return ServiceResult([], status_code=status.HTTP_200_OK)
-        else:
-            return ServiceResult(data, status_code=status.HTTP_200_OK)
-
-    def search_pharmaceuticals(self, db: Session, pharmaceuticals: str):
-        data = self.repo.search_pharmaceuticals(db=db, pharmaceuticals=pharmaceuticals)
-
-        if not data:
-            return ServiceResult([], status_code=status.HTTP_200_OK)
-        else:
-            return ServiceResult(data, status_code=status.HTTP_200_OK)
-
 pharmaceutical_service = PharmaceuticalsService(Pharmaceuticals, pharmaceuticals_repo)
