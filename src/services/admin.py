@@ -212,6 +212,10 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
         if not created_by_employee:
             return ServiceResult(AppException.ServerError("Problem with doctor registration."))
         else:
+            s = sms_service.send_sms(sms_to='88' + data_in.phone, sms="অভিনন্দন " + data_in.name +
+                                     " HEALTHx এর Smart Doctor পোর্টালে আপনার  Digital Profile তৈরী সম্পন্ন হয়েছে। \n\n লগ-ইন তথ্য: \n ইউজার আইডি : " + data_in.phone + "\nপাসওয়ার্ড: " + data_in.password + "\n" +
+                                     "doc.healthxbd.com এ লগ-ইন করে পাসওয়ার্ডটি পরিবর্তন করে সাজিয়ে নিন নিজের প্রোফাইল আর ছড়িয়ে দিন আপনার পরিচিতি দেশব্যাপী। \n- ধন্যবাদ\n\nযোগাযোগঃ +8801322658481")
+
             return ServiceResult(created_by_employee, status_code=status.HTTP_201_CREATED)
 
     def doctor_active_list(self, db: Session, skip: int = 0, limit: int = 10):
