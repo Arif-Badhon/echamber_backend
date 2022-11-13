@@ -1,11 +1,11 @@
 from typing import List, Union
 from fastapi import APIRouter, Depends
 from exceptions.service_result import handle_result
-from schemas import ClinicOut, ClinicUserWithClinic, Token, ClinicLogin,ClinicWithDoctorDetails, ClinicUserHxId, ResultInt, DoctorSignup, PatientSignup
+from schemas import ClinicOut, ClinicUserWithClinic, Token, ClinicLogin,ClinicWithDoctorDetails, ClinicUserHxId, ResultInt, DoctorSignup, PatientSignup, ClinicActivityOut, UserOut, ClinicActivityOutWithUser
 from db import get_db
 from sqlalchemy.orm import Session
 from services import clinic_service, clinic_with_doctor_service, clinic_activity_service
-from api.v2.auth_dependcies import logged_in_admin, logged_in_clinic_admin, logged_in
+from api.v2.auth_dependcies import logged_in_admin, logged_in_clinic_admin
 
 router = APIRouter()
 
@@ -70,8 +70,19 @@ def patient_registration_by_clinic(patient_in: PatientSignup, clinic_id: int,  d
     return handle_result(patient)
 
 
-@router.get('/activity/log-clinic/all')
-def clinic_activity_log_all(skip: int = 0, limit: int = 10, db: Session = Depends(get_db), current_user: Session = Depends(logged_in)):
-    activity = clinic_activity_service.get_with_pagination(db=db, skip=skip, limit=limit, descending=True, count_results=True)
-    return handle_result(activity)
+# @router.get('/activity/log-clinic/all')
+# def clinic_activity_log_all(skip: int = 0, limit: int = 10, db: Session = Depends(get_db), current_user: Session = Depends(logged_in)):
+#     activity = clinic_activity_service.get_with_pagination(db=db, skip=skip, limit=limit, descending=True, count_results=True)
+#     return handle_result(activity)
 
+
+@router.get('/activity/log-clinic-by_clinic_id/', response_model=List[Union[ResultInt, List[ClinicActivityOut]]])
+def clinic_activity_log(clinic_id: int, skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+    activity = clinic_activity_service.get_activity_by_clinic_id(db=db, clinic_id=clinic_id, skip=skip, limit=limit)
+    return activity
+
+
+@router.get('get_clinic_patient/', response_model=List[Union[ResultInt, List[ClinicActivityOutWithUser]]])
+def get_clinic_patient_list(clinic_id: int, skip: int=0, limit: int = 10, db: Session = Depends(get_db)):
+    get_clinic = clinic_activity_service.get_clinic_patient(db=db, clinic_id=clinic_id, skip=skip, limit=limit)
+    return get_clinic

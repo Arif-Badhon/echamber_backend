@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from datetime import datetime
 from typing import Optional
+from .users import UserOut
 
 
 class ClinicActivityBase(BaseModel):
@@ -23,7 +24,7 @@ class ClinicActivityOut(ClinicActivityBase):
     clinic_id: int
     user_id: int
     service_name: str
-    service_recived_id: int
+    service_received_id: int
     remark: str
     created_at: datetime = None
 
@@ -38,9 +39,14 @@ class ClinicActivityAllOut(BaseModel):
     user_name: str
     user_phone: str
     service_name: str
-    service_recived_id: int
+    service_received_id: int
     remark: str
     created_at: datetime = None
 
     class Config:
         orm_mode = True
+
+
+class ClinicActivityOutWithUser(BaseModel):
+    ClinicActivity: ClinicActivityOut
+    User: UserOut
