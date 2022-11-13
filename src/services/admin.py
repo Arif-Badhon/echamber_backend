@@ -300,6 +300,8 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
             if not created_by_employee:
                 return ServiceResult(AppException.ServerError("Problem with patient registration."))
             else:
+                s = sms_service.send_sms(sms_to='88' + data_in.phone, sms='অভিনন্দন, ' + data_in.name +
+                                         ' - HEALTHx এর My Health পোর্টালে আপনার রেজিস্ট্রেশন সম্পন্ন হয়েছে। একাউন্টটি VERIFY হওয়া পর্যন্ত আমাদের সাথেই থাকুন।')
                 return ServiceResult(created_by_employee, status_code=status.HTTP_201_CREATED)
 
     def patient_user_update(self, id: int, data_update: UserUpdate, user_id: int, db: Session):

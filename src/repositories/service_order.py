@@ -63,7 +63,7 @@ class ServiceOrderRepo(BaseRepo[ServiceOrder, ServiceOrderIn, ServiceOrderUpdate
                 ServiceOrder, User).join(
                 User, User.id == ServiceOrder.patient_id).filter(
                 ServiceOrder.service_name.like(f"%{service_name}%")).filter(
-                ServiceOrder.created_at.like(f"%{order_date}%")).filter(
+                ServiceOrder.order_placement.like(f"%{order_date}%")).filter(
                 ServiceOrder.current_address.like(f"%{address}%")).filter(or_(
                     ServiceOrder.order_status.like(f"%{order_status}%"),
                     ServiceOrder.order_status == None)).filter(
@@ -73,7 +73,7 @@ class ServiceOrderRepo(BaseRepo[ServiceOrder, ServiceOrderIn, ServiceOrderUpdate
                 ServiceOrder, User).join(
                 User, User.id == ServiceOrder.patient_id).filter(
                 ServiceOrder.service_name.like(f"%{service_name}%")).filter(
-                ServiceOrder.created_at.like(f"%{order_date}%")).filter(
+                ServiceOrder.order_placement.like(f"%{order_date}%")).filter(
                 ServiceOrder.current_address.like(f"%{address}%")).filter(or_(
                     ServiceOrder.order_status.like(f"%{order_status}%"),
                     ServiceOrder.order_status == None)).filter(
