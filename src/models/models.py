@@ -61,6 +61,7 @@ class TemporaryToken(BaseModel):
     used_status = Column(Boolean, nullable=True)
     remarks = Column(String(255), nullable=True)
 
+
 class ImagesLog(BaseModel):
     __tablename__ = "image_log"
     user_id = Column(Integer, ForeignKey("users.id"))

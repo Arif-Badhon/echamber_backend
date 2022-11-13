@@ -43,15 +43,16 @@ def new_password(new_password: NewPasswordIn,  db: Session = Depends(get_db), cu
     return handle_result(new)
 
 
-@router.get('/forget-password/request')
-def request_token(db: Session = Depends(get_db), current_user: Session = Depends(logged_in)):
-    tok = temporary_token_service.create_token(db=db, user_id=current_user.id)
+@router.get('/forget-password/request/{user_phone}')
+def request_token(user_phone: str, db: Session = Depends(get_db)):
+    tok = temporary_token_service.create_token(db=db, user_phone=user_phone)
     return handle_result(tok)
 
 
-@router.get('/forget-password/change')
-def change_password():
-    return
+@router.get('/forget-password/token/{user_phone}/{temp_token}')
+def change_password(user_phone: str, temp_token: str,  db: Session = Depends(get_db)):
+    get_token = temporary_token_service.valid_temp_token(db=db, temp_token=temp_token, user_phone=user_phone, max_min=5)
+    return handle_result(get_token)
 
 
 @router.patch('/user/update', response_model=UserOut)
