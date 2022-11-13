@@ -214,7 +214,7 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
         else:
             s = sms_service.send_sms(sms_to='88' + data_in.phone, sms="অভিনন্দন " + data_in.name +
                                      " HEALTHx এর Smart Doctor পোর্টালে আপনার  Digital Profile তৈরী সম্পন্ন হয়েছে। \n\n লগ-ইন তথ্য: \n ইউজার আইডি : " + data_in.phone + "\nপাসওয়ার্ড: " + data_in.password + "\n" +
-                                     "doc.healthxbd.com এ লগ-ইন করে পাসওয়ার্ডটি পরিবর্তন করে সাজিয়ে নিন নিজের প্রোফাইল আর ছড়িয়ে দিন আপনার পরিচিতি দেশব্যাপী। \n- ধন্যবাদ\n\nযোগাযোগঃ +8801322658481")
+                                     "doc.healthxbd.com এ লগ-ইন করে পাসওয়ার্ডটি পরিবর্তন করে সাজিয়ে নিন নিজের প্রোফাইল আর ছড়িয়ে দিন আপনার পরিচিতি দেশব্যাপী। \n- ধন্যবাদ\n\nHEALTHx\n +8801571016461")
 
             return ServiceResult(created_by_employee, status_code=status.HTTP_201_CREATED)
 
@@ -306,7 +306,7 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
             else:
                 s = sms_service.send_sms(
                     sms_to='88' + data_in.phone, sms='অভিনন্দন, ' + data_in.name + ' - HEALTHx এর My Health পোর্টালে আপনার রেজিস্ট্রেশন সম্পন্ন হয়েছে। আপনার পাসওয়ার্ড ' + data_in.password +
-                    ' আপনি user.healthxbd.com এ লগিন হয়ে সুরক্ষার স্বার্থে পাসওয়ার্ডটি চেঞ্জ করে নিন। - ধন্যবাদ')
+                    ' আপনি user.healthxbd.com এ লগ ইন  হয়ে সুরক্ষার স্বার্থে পাসওয়ার্ডটি চেঞ্জ করে নিন। - ধন্যবাদ')
                 return ServiceResult(created_by_employee, status_code=status.HTTP_201_CREATED)
 
     def patient_user_update(self, id: int, data_update: UserUpdate, user_id: int, db: Session):
