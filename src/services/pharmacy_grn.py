@@ -1,13 +1,14 @@
-from services import BaseService
+from services import BaseService, pharmacy_service
 from models import PharmacyGrn
 from schemas import PharmacyGrnIn, PharmacyGrnUpdate, PharmacyGrnWithSingleGrn, PharmacySingleGrnWithGrn, PharmacySingleGrnForStock, PharmacyTotalCurrentStockIn, PharmacyTotalCurrentStockUpdate
 from repositories import pharmacy_grn_repo, pharmacy_single_grn_repo, pharmacy_every_single_stock_repo, pharmacy_total_current_stock_repo
 from sqlalchemy.orm import Session
 from exceptions.service_result import ServiceResult
+from exceptions.app_exceptions import AppException
 
 class PharmacyGrnService(BaseService[PharmacyGrn, PharmacyGrnIn, PharmacyGrnUpdate]):
     
-    def submit(self, data_in: PharmacyGrnWithSingleGrn, db: Session):
+    def submit(self, data_in: PharmacyGrnWithSingleGrn, db: Session, user_id: int):
         grn = pharmacy_grn_repo.create_with_flush(db = db, data_in=PharmacyGrnIn(
             total_amount_dp=data_in.grn.total_amount_dp,
             grn_number=data_in.grn.grn_number,
@@ -59,8 +60,17 @@ class PharmacyGrnService(BaseService[PharmacyGrn, PharmacyGrnIn, PharmacyGrnUpda
                         pharmacy_id=single_stock.pharmacy_id
                     ))
 
+        pharmacy_with_user = pharmacy_service.check_user_with_pharmacy(db=db, user_id=user_id, pharmacy_id=grn.pharmacy_id)
+        if pharmacy_with_user == False:
+            return ServiceResult(AppException.ServerError("Invalid Pharmacy ID"))
+
         db.commit()
 
         return ServiceResult({"msg": "Success"}, status_code=200)
+
+
+    def get_grn_by_pharmacy_id(self, db: Session, pharmacy_id: int, skip: int, limit: int):
+        get_grn = self.repo.get_grn_by_pharmacy_id(db=db, pharmacy_id=pharmacy_id, skip=skip, limit=limit)
+        return get_grn
 
 pharmacy_grn_service = PharmacyGrnService(PharmacyGrn, pharmacy_grn_repo)

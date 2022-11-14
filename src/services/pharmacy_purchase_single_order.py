@@ -25,4 +25,9 @@ class PharmacyPurchaseSingleOrderService(BaseService[PharmacyPurchaseSingleOrder
         all_purchase_single_order = self.all_single_order(db=db, skip=skip, limit=limit, purchase_order_id=purchase_order_id)
         return all_purchase_single_order
 
+    def purchase_oder_by_purchase_num(self, db: Session, skip: int, limit: int, purchase_number: str):
+        purchase_order_by_purchase_num = pharmacy_purchase_order_service.get_by_key(db=db, skip=skip, limit=limit, descending=True, count_results=True, purchase_number=purchase_number)
+        return purchase_order_by_purchase_num
+
+
 pharmacy_purchase_single_order_service = PharmacyPurchaseSingleOrderService(PharmacyPurchaseSingleOrder, pharmacy_purchase_single_order_repo)

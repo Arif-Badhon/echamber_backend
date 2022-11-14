@@ -11,4 +11,4 @@ api_router.include_router(pharmacy_grn.router, prefix='/pharmacy/grn', tags=['Ph
 api_router.include_router(pharmacy_stock.router, prefix='/pharmacy/stock', tags = ['PharmacyStock'])
 api_router.include_router(pharmacy_invoice.router, prefix='/pharmacy-invoice', tags=['Pharmacy Invoice'])
 api_router.include_router(clinic.router, prefix='/clinic', tags=['Clinic'])
-api_router.include_router(clinic_details.router, prefix='/clinic-details', tags=['Clinic Details'])
+api_router.include_router(clinic_details.router, prefix='/clinic-details', tags=['Clinic Details, Nav, Offers'])

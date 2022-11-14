@@ -24,5 +24,5 @@ class ClinicServicesOut(ClinicServicesBase):
     id: int
     created_at: datetime
 
-    class Confifg:
+    class Config:
         orm_mode = True

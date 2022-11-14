@@ -51,4 +51,9 @@ class PharmacyInvoiceService(BaseService[PharmacyInvoice, PharmacyInvoiceIn, Pha
         return ServiceResult({"msg": "Success"}, status_code=200)
 
 
+    def get_invoice_by_pharmacy_id(self, db: Session, pharmacy_id: int, skip: int, limit: int):
+        get_invoice = self.repo.get_invoice_by_pharmacy_id(db=db, pharmacy_id=pharmacy_id, skip=skip, limit=limit)
+        return get_invoice
+
+
 pharmacy_invoice_service = PharmacyInvoiceService(PharmacyInvoice, pharmacy_invoice_repo)

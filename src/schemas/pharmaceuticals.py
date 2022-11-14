@@ -49,3 +49,26 @@ class PharmaceuticalOut(PharmaceuticalBase):
 class PharmaceuticalUserWithPhr(BaseModel):
     pharmaceuticals : PharmaceuticalIn
     user : UserCreateWitoutRole
+
+
+class PharmaceuticalNameListBase(BaseModel):
+    name: str
+    details: Optional[str] = None
+    remarks: Optional[str] = None
+
+class PharmaceuticalNameListIn(PharmaceuticalNameListBase):
+    pass
+
+
+class  PharmaceuticalNameListUpdate(BaseModel):
+    name: str
+    details: Optional[str] = None
+    remarks: Optional[str] = None
+
+
+class PharmaceuticalNameListOut(BaseModel):
+    id: int
+    name: str
+
+    class Config:
+        orm_mode = True
