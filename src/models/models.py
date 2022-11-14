@@ -299,6 +299,7 @@ class Review(BaseModel):
 class Doctor(BaseModel):
     __tablename__ = "doctors"
     user_id = Column(Integer, ForeignKey("users.id"))
+    dr_title = Column(String(100), nullable=True)
     bmdc = Column(String(100), nullable=False, unique=True)
     exp_year = Column(Integer, nullable=True)
     online_fees = Column(Float, nullable=True)

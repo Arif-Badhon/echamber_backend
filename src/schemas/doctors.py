@@ -10,6 +10,7 @@ from schemas.doctor_qualifications import DoctorQualificationOut
 
 class DoctorBase(BaseModel):
     user_id: int
+    dr_title: Optional[str] = None
     bmdc: Optional[str] = None
     exp_year: Optional[int] = None
     online_fees: Optional[float] = None
@@ -20,6 +21,7 @@ class DoctorIn(DoctorBase):
 
 
 class DoctorUpdate(BaseModel):
+    dr_title: Optional[str] = None
     bmdc: Optional[str] = None
     exp_year: Optional[int] = None
     online_fees: Optional[float] = None
