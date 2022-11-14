@@ -15,10 +15,10 @@ def invoice_with_single_invoice(data_in: PharmacyInvoiceWithSingleInvoice, db: S
     return handle_result(invoice)
 
 
-@router.get('/', response_model=List[Union[ResultInt, List[PharmacyInvoiceOut]]])
-def get_all_invoice(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
-    get_invoice = pharmacy_invoice_service.get_with_pagination(db = db, skip=skip, limit=limit, descending=True, count_results=True)
-    return handle_result(get_invoice)
+@router.get('/get_invoice-by-pharmacy-id/', response_model=List[Union[ResultInt, List[PharmacyInvoiceOut]]])
+def get_all_invoice(pharmacy_id: int,skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+    get_invoice = pharmacy_invoice_service.get_invoice_by_pharmacy_id(db = db,pharmacy_id=pharmacy_id, skip=skip, limit=limit)
+    return get_invoice
 
 
 @router.get('/single-invoice/{id}', response_model=List[Union[ResultInt, List[PharmacySingleInvoiceWithMedicine]]])
