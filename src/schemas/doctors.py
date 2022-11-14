@@ -73,4 +73,5 @@ class DoctorSignup(BaseModel):
     password: str
     speciality: str
     qualification: str
+    dr_title: Optional[str] = None
     bmdc: str

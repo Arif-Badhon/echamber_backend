@@ -55,6 +55,7 @@ class DoctorService(BaseService[Doctor, DoctorIn, DoctorUpdate]):
 
         doctor_data = DoctorIn(
             user_id=handle_result(signup_user).id,
+            dr_title=data_in.dr_title,
             bmdc=data_in.bmdc
         )
 
