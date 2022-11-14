@@ -108,8 +108,14 @@ def update(id: int, data_update: DoctorWorkPlaceUpdate, db: Session = Depends(ge
 
 @router.delete('/workplace/{id}')
 def remove(id: int, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
-    delete = doctor_academic_info_service.delete(db=db, id=id)
+    delete = doctor_workplace_service.delete(db=db, id=id)
     return delete
+
+
+@router.patch('/workplace/priority/{id}')
+def priority(id: int, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
+    up = doctor_workplace_service.workplace_priority_set(db=db, id=id, user_id=current_user.id)
+    return handle_result(up)
 
 
 @router.post('/academic', response_model=DoctorAcademicInfoOut)
