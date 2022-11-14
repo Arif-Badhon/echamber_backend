@@ -6,8 +6,9 @@ from .image_log import image_log_service
 from .doctor_qualifications import doctor_qualifications_service
 from .doctor_specialities import doctor_specialities_service
 from .patient_indicators import patient_indicators_service
+from .doctor_workplace import doctor_workplace_service
 from .users import users_service
-from schemas import UserCreate, UserUpdate, AdminPanelActivityIn, UserDetailIn, PatientIndicatorIn, DoctorSignup, DoctorIn, DoctorQualilficationIn, DoctorSpecialityIn
+from schemas import UserCreate, UserUpdate, AdminPanelActivityIn, UserDetailIn, PatientIndicatorIn, DoctorSignup, DoctorIn, DoctorQualilficationIn, DoctorSpecialityIn, DoctorWorkPlaceIn
 from models import User
 from repositories import admin_repo, roles_repo, admin_panel_activity_repo, users_repo, corporate_partner_user_repo, corporate_partners_repo
 from sqlalchemy.orm import Session
@@ -184,6 +185,10 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
         )
 
         doctor_user = doctors_service.create_with_flush(db, data_in=doctor_data)
+
+        if data_in.institute != '':
+            doctor_workplace = doctor_workplace_service.create_with_flush(db=db, data_in=DoctorWorkPlaceIn(
+                institute=data_in.institute, position=data_in.position, top_priority=True, start_date=data_in.start_date, end_date=data_in.end_date))
 
         qualification_data = DoctorQualilficationIn(
             user_id=handle_result(signup_user).id,

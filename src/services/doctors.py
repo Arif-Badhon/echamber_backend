@@ -2,13 +2,15 @@ from schemas import DoctorIn, DoctorUpdate, UserCreate
 from models import Doctor
 from schemas import DoctorSignup, DoctorQualilficationIn, DoctorUpdate
 from schemas.doctor_specialities import DoctorSpecialityIn
+from schemas.doctor_workplace import DoctorWorkPlaceIn
 from services import BaseService
 from .users import users_service
 from .roles import roles_service
 from .sms import sms_service
+from .doctor_workplace import doctor_workplace_service
 from services.doctor_qualifications import doctor_qualifications_service
 from services.doctor_specialities import doctor_specialities_service
-from repositories import doctors_repo, users_repo, roles_repo
+from repositories import doctor_workplace, doctors_repo, users_repo, roles_repo
 from sqlalchemy.orm import Session
 from utils import ServiceResult, AppException, handle_result
 from fastapi import status
@@ -60,6 +62,10 @@ class DoctorService(BaseService[Doctor, DoctorIn, DoctorUpdate]):
         )
 
         doctor_user = self.create_with_flush(db, data_in=doctor_data)
+
+        if data_in.institute != '':
+            doctor_workplace = doctor_workplace_service.create_with_flush(db=db, data_in=DoctorWorkPlaceIn(
+                institute=data_in.institute, position=data_in.position, top_priority=True, start_date=data_in.start_date, end_date=data_in.end_date))
 
         qualification_data = DoctorQualilficationIn(
             user_id=handle_result(signup_user).id,

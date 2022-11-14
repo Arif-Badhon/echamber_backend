@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 from typing import List, Optional
 from pydantic import BaseModel
 from pydantic.types import constr
@@ -75,3 +75,7 @@ class DoctorSignup(BaseModel):
     qualification: str
     dr_title: Optional[str] = None
     bmdc: str
+    institute: Optional[str] = None
+    position: Optional[str] = None
+    start_date: Optional[date] = None
+    end_date: Optional[date] = None
