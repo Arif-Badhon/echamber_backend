@@ -313,6 +313,7 @@ class DoctorWorkPlace(BaseModel):
     user_id = Column(Integer, ForeignKey("users.id"))
     institute = Column(String(255), nullable=False)
     position = Column(String(255), nullable=True)
+    top_priority = Column(Boolean, nullable=True)
     start_date = Column(Date, nullable=True)
     end_date = Column(Date, nullable=True)
 

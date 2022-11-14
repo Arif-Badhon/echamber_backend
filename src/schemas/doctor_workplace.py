@@ -6,6 +6,7 @@ from typing import Optional
 class DoctorWorkPlaceBase(BaseModel):
     institute: str
     position: str
+    top_priority: Optional[str] = None
     start_date: Optional[date] = None
     end_date: Optional[date] = None
 
@@ -21,6 +22,7 @@ class DoctorWorkPlaceWithUser(DoctorWorkPlaceBase):
 class DoctorWorkPlaceUpdate(DoctorWorkPlaceBase):
     institute: Optional[str] = None
     position: Optional[str] = None
+    top_priority: Optional[str] = None
     start_date: Optional[date] = None
     end_date: Optional[date] = None
 
