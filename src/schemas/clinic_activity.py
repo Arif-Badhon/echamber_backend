@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from datetime import datetime
 from typing import Optional
 from .users import UserOut
-
+from .user_details import UserDetailOut
 
 class ClinicActivityBase(BaseModel):
     clinic_id: int
@@ -50,3 +50,4 @@ class ClinicActivityAllOut(BaseModel):
 class ClinicActivityOutWithUser(BaseModel):
     ClinicActivity: ClinicActivityOut
     User: UserOut
+    UserDetail: UserDetailOut
