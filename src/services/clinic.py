@@ -28,6 +28,7 @@ class ClinicService(BaseService[Clinic, ClinicIn, ClinicUpdate]):
 
         clinic = self.create_with_flush(db=db, data_in=ClinicBase(
             name=data_in.clinic.name,
+            clinic_license=data_in.clinic.clinic_license,
             detail_address=data_in.clinic.detail_address,
             district=data_in.clinic.district,
             sub_district=data_in.clinic.sub_district,

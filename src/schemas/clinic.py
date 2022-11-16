@@ -6,6 +6,7 @@ from .users import UserCreateWitoutRole
 
 class ClinicBase(BaseModel):
     name: str
+    clinic_license: Optional[str] = None
     detail_address: Optional[str] = None
     district: Optional[str] = None
     sub_district: Optional[str] = None
@@ -20,6 +21,7 @@ class ClinicIn(ClinicBase):
 
 class ClinicUpdate(BaseModel):
     name:Optional[str] = None
+    clinic_license: Optional[str] = None
     detail_address: Optional[str] = None
     district: Optional[str] = None
     sub_district: Optional[str] = None

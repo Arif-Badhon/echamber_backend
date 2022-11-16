@@ -778,6 +778,7 @@ class PharmacySingleInvoice(BaseModel):
 class Clinic(BaseModel):
     __tablename__ = "clinic"
     name = Column(String(255), nullable = False)
+    clinic_license = Column(String(100), nullable = True)
     detail_address = Column(Text, nullable = True)
     district = Column(String(255), nullable = True)
     sub_district = Column(String(255), nullable = True)
