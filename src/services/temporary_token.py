@@ -13,6 +13,9 @@ class TemporaryTokenService(BaseService[TemporaryToken, TemporaryTokenIn, Tempor
 
     def create_token(self, db: Session,  user_phone: str):
         user = users_service.get_by_key(db=db, skip=0, limit=10, descending=False, count_results=False, phone=user_phone)
+        if not handle_result(user):
+            return ServiceResult(AppException.ServerError("User not found"))
+
         token = StringManipulate.random_str(size=6)
         check = self.repo.get_by_key(db=db, skip=0, limit=10, descending=False, count_results=False, temp_token=token)
         if not check:

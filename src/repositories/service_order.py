@@ -3,7 +3,7 @@ from models import ServiceOrder, User
 from schemas import ServiceOrderIn, ServiceOrderUpdate
 from repositories import BaseRepo
 from sqlalchemy.orm import Session
-from sqlalchemy import or_
+from sqlalchemy import or_, func
 
 
 class ServiceOrderRepo(BaseRepo[ServiceOrder, ServiceOrderIn, ServiceOrderUpdate]):
@@ -81,6 +81,17 @@ class ServiceOrderRepo(BaseRepo[ServiceOrder, ServiceOrderIn, ServiceOrderUpdate
                 User.phone.like(f"%{customer_phone}%")).order_by(desc(self.model.created_at)).offset(skip).limit(limit).all()
 
             return [{"results": len(data_all)}, data]
+
+    def patient_with_multiservice(self, db: Session):
+        data = db.query(ServiceOrder.patient_id, func.count(ServiceOrder.patient_id)).group_by(ServiceOrder.patient_id).having(func.count(ServiceOrder.patient_id) > 1).all()
+        data_len = len(data)
+        return data_len
+
+    def patient_with_multiservice_range(self, db: Session, start_date: str, end_date: str):
+        data = db.query(ServiceOrder.patient_id, func.count(ServiceOrder.patient_id)).filter(
+            ServiceOrder.order_placement.between(start_date, end_date)).group_by(ServiceOrder.patient_id).having(func.count(ServiceOrder.patient_id) > 1).all()
+        data_len = len(data)
+        return data_len
 
 
 service_order_repo = ServiceOrderRepo(ServiceOrder)

@@ -50,6 +50,18 @@ def update_service(id: int, data_update: ServiceOrderUpdate, db: Session = Depen
     return handle_result(up)
 
 
+@router.get('/patient/multi/service-order')
+def multi_service_count(db: Session = Depends(get_db)):
+    counted_data = service_order_service.patient_with_multiservice(db=db)
+    return handle_result(counted_data)
+
+
+@router.get('/patient/multi/service-order/range/{start_date}/{end_date}')
+def multi_service_count(start_date: str, end_date: str, db: Session = Depends(get_db)):
+    counted_data = service_order_service.patient_with_multiservice_range(db=db, start_date=start_date, end_date=end_date)
+    return handle_result(counted_data)
+
+
 @router.post('/healthplan/subscribe', response_model=AdminPanelActivityOut)
 def health_plan(data_in: HealthPlanForPatientWithService, voucher_code: str, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_employee)):
     data = health_plan_for_patient_service.subscribe_with_service(db=db, data_in=data_in, voucher_code=voucher_code, employee_id=current_user.id)
