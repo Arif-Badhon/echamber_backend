@@ -50,9 +50,10 @@ def update_service(id: int, data_update: ServiceOrderUpdate, db: Session = Depen
     return handle_result(up)
 
 
-@router.get('/patient/multi-service-order')
+@router.get('/patient/multi/service-order')
 def multi_service_count(db: Session = Depends(get_db)):
-    return
+    counted_data = service_order_service.patient_with_multiservice(db=db)
+    return handle_result(counted_data)
 
 
 @router.post('/healthplan/subscribe', response_model=AdminPanelActivityOut)

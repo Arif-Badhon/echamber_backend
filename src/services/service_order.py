@@ -19,6 +19,12 @@ class ServiceOrderService(BaseService[ServiceOrder, ServiceOrderIn, ServiceOrder
                                               service_name=service_name, start_date=start_date, end_date=end_date, order_date=order_date, order_status=order_status, skip=skip, limit=limit)
         return data
 
+    def patient_with_multiservice(self, db: Session):
+        data = self.repo.patient_with_multiservice(db=db)
+        if not data:
+            return ServiceResult(AppException.ServerError("No data found"))
+        return ServiceResult(data, status_code=status.HTTP_201_CREATED)
+
     # All Service order with detail
     # ------------------------------
 
