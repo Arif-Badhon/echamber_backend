@@ -87,5 +87,11 @@ class ServiceOrderRepo(BaseRepo[ServiceOrder, ServiceOrderIn, ServiceOrderUpdate
         data_len = len(data)
         return data_len
 
+    def patient_with_multiservice_range(self, db: Session, start_date: str, end_date: str):
+        data = db.query(ServiceOrder.patient_id, func.count(ServiceOrder.patient_id)).filter(
+            ServiceOrder.order_placement.between(start_date, end_date)).group_by(ServiceOrder.patient_id).having(func.count(ServiceOrder.patient_id) > 1).all()
+        data_len = len(data)
+        return data_len
+
 
 service_order_repo = ServiceOrderRepo(ServiceOrder)
