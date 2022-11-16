@@ -83,7 +83,7 @@ class ServiceOrderRepo(BaseRepo[ServiceOrder, ServiceOrderIn, ServiceOrderUpdate
             return [{"results": len(data_all)}, data]
 
     def patient_with_multiservice(self, db: Session):
-        data = db.query(ServiceOrder.patient_id, func.count(ServiceOrder.patient_id)).group_by(ServiceOrder.patient_id).all()
+        data = db.query(ServiceOrder.patient_id, func.count(ServiceOrder.patient_id)).group_by(ServiceOrder.patient_id).having(func.count(ServiceOrder.patient_id) > 1).all()
         data_len = len(data)
         return data_len
 
