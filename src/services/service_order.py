@@ -8,6 +8,7 @@ from services import BaseService
 from .medicine_order import medicine_order_service
 from .users import users_service
 from sqlalchemy.orm import Session
+from .sms import sms_service
 
 
 class ServiceOrderService(BaseService[ServiceOrder, ServiceOrderIn, ServiceOrderUpdate]):
@@ -98,6 +99,8 @@ class ServiceOrderService(BaseService[ServiceOrder, ServiceOrderIn, ServiceOrder
                 service_order_id=handle_result(service_flash).id, **data_in[1][i].dict()))
             i += 1
 
+        patient_user = users_service.get_one(db=db, id=data_in[0].patient_id)
+
         # activitylog
         created_by_employee_data = AdminPanelActivityIn(
             user_id=user_id,
@@ -112,6 +115,9 @@ class ServiceOrderService(BaseService[ServiceOrder, ServiceOrderIn, ServiceOrder
         if not created_by_employee:
             return ServiceResult(AppException.ServerError("Problem with Medicine order."))
         else:
+            s = sms_service.send_sms(
+                sms_to='88'+handle_result(patient_user).phone,
+                sms='আপনার মেডিসিনের অর্ডার টি সঠিক ভাবে নেয়া হয়েছে। শীঘ্রই আপনার অর্ডার টি ডেলিভারি করা হবে। অর্ডার সংক্রান্ত যেকোনো তথ্য জানতে সরাসরি যোগাযোগ করুন 01571-016461, 01322-658481 এই নাম্বারে। \nধন্যবাদান্তে \nHEALTHx')
             return ServiceResult(created_by_employee, status_code=status.HTTP_201_CREATED)
 
 
