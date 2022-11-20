@@ -688,6 +688,7 @@ class PharmacyPurchaseSingleOrder(BaseModel):
     payable_prize_dp = Column(Float, nullable = True)
     purchase_order_id = Column(Integer, ForeignKey("pharmacy_purchase_order.id"))
     medicine_id = Column(Integer, nullable = False)
+    pack_size = Column(String(100), nullable = True)
 
 # Goods Received Note (GRN)
 
@@ -719,6 +720,7 @@ class PharmacySingleGrn(BaseModel):
     batch_number = Column(String(100), nullable = True)
     grn_id = Column(Integer, ForeignKey("pharmacy_grn.id"))
     medicine_id = Column(Integer, nullable = False)
+    pack_size = Column(String(100), nullable = True)
 
 # Every Single Stock
 
@@ -728,6 +730,7 @@ class PharmacyEverySingleStock(BaseModel):
     expiry_date = Column(Date, nullable = True)
     batch_number = Column(String(100), nullable = True)
     medicine_id = Column(Integer, nullable = False)
+    pack_size = Column(String(100), nullable = True)
     single_grn_id = Column(Integer, ForeignKey("pharmacy_single_grn.id"))
     pharmacy_id = Column(Integer, ForeignKey("pharmacy.id"))
 
@@ -767,6 +770,7 @@ class PharmacySingleInvoice(BaseModel):
     discount = Column(Float, nullable = True)
     cost = Column(Float, nullable = True)
     medicine_id = Column(Integer, nullable = False)
+    pack_size = Column(String(100), nullable = True)
     invoice_id = Column(Integer, ForeignKey("pharmacy_invoice.id"))
 
 
