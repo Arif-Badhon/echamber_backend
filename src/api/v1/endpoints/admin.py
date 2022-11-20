@@ -3,6 +3,7 @@ from fastapi import APIRouter, Depends
 from db import get_db
 from exceptions.service_result import handle_result
 from schemas import *
+# from schemas import UserOut, UserOutAuth, UserCreate, UserDoctorOut,  DoctorSignup, DoctorChamberOut, UserCreateWitoutRole, AdminPanelActivityOut, AdminPanelActivityAllOut, PatientIndicatorBase, NewPasswordIn, AdminPanelActivityOut, PatientIndicatorOut, HealthPartnerIn, HealthPartnerOut, ResultInt, AdminPatientsOut, DoctorUpdate, DoctorSpecialityUpdate, DoctorQualilficationUpdate, DoctorWorkPlaceUpdate, ImageLogIn, ImageLogOut, DoctorQualificationOut, DoctorSpecialityOut, DoctorWorkPlaceOut
 from sqlalchemy.orm import Session
 from schemas.doctors import DoctorOut
 from schemas.users import LoginLogLogout, UserUpdate
@@ -141,7 +142,7 @@ def chamber_list(user_id: int, db: Session = Depends(get_db), current_user: Sess
 
 
 @router.patch('/doctor/update/{user_id}', response_model=DoctorOut)
-def doctor_update(user_id: int, data_update=DoctorUpdate, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_medical_affairs)):
+def doctor_update(user_id: int, data_update: DoctorUpdate, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_medical_affairs)):
     doc_up = doctors_service.edit_by_user_id(db=db, data_update=data_update, user_id=user_id)
     return handle_result(doc_up)
 
