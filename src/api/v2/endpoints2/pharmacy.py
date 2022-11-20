@@ -1,11 +1,11 @@
-from typing import List
+from typing import List, Union
 from fastapi import APIRouter, Depends
-from schemas import PharmacyOut, PharmacyUserWithPharmacy, Token, PharmacyLogin, PharmacyUpdate, UserOutAuth, PharmacyUserHxId
+from schemas import PharmacyOut, PharmacyUserWithPharmacy, Token, PharmacyLogin, PharmacyUpdate, UserOutAuth, PharmacyUserHxId, PatientSignup, ResultInt, PharmacyActivityOut, PharmacyActivityOutWithUser
 from db import get_db
 from sqlalchemy.orm import Session
-from services import pharmacy_service
+from services import pharmacy_service, pharmacy_activity_service
 from exceptions.service_result import handle_result
-from api.v2.auth_dependcies import logged_in, logged_in_admin
+from api.v2.auth_dependcies import logged_in, logged_in_admin, logged_in_pharmacy_admin
 from models import User
 
 router = APIRouter()
@@ -54,3 +54,23 @@ def search_with_user_and_pharmacy_id(user_id: int, pharmacy_id: int, db: Session
 def search_pharmacy_with_user_id(user_id: int, db: Session = Depends(get_db)):
     search = pharmacy_service.find_pharmacy_with_user_id(db=db, user_id=user_id)
     return handle_result(search)
+
+
+
+@router.post('/pharmacy-patient-registartion')
+def patient_registration_by_pharmacy(patient_in: PatientSignup, pharmacy_id: int,  db: Session = Depends(get_db), current_user: Session = Depends(logged_in_pharmacy_admin)):
+    patient = pharmacy_service.pharmacy_patient_signup(db=db, data_in=patient_in, pharmacy_id=pharmacy_id, user_id = current_user.id)
+    return handle_result(patient)
+
+
+
+@router.get('/activity/log-pharmacy-by_pharmacy_id/', response_model=List[Union[ResultInt, List[PharmacyActivityOut]]])
+def pharmacy_activity_log(pharmacy_id: int, skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+    activity = pharmacy_activity_service.get_activity_by_pharmacy_id(db=db, pharmacy_id=pharmacy_id, skip=skip, limit=limit)
+    return activity
+
+
+@router.get('get_pharmacy_patient/', response_model=List[Union[ResultInt, List[PharmacyActivityOutWithUser]]])
+def get_pharmacy_patient_list(pharmacy_id: int, skip: int=0, limit: int = 10, db: Session = Depends(get_db)):
+    get_patient = pharmacy_activity_service.get_pharmacy_patient(db=db, pharmacy_id=pharmacy_id, skip=skip, limit=limit)
+    return get_patient
