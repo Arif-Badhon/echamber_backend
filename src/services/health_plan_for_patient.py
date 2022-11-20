@@ -10,6 +10,8 @@ from .service_order import service_order_service
 from sqlalchemy.orm import Session
 from exceptions import ServiceResult, AppException
 from fastapi import status
+from .sms import sms_service
+from .users import users_service
 
 
 class HealthPlanForPatient(BaseService[HealthPlanForPatient, HealthPlanForPatientIn, HealthPlanForPatientUpdate]):
@@ -43,9 +45,25 @@ class HealthPlanForPatient(BaseService[HealthPlanForPatient, HealthPlanForPatien
 
         created_by_employee = admin_panel_activity_repo.create(db=db, data_in=created_by_employee_data)
 
+        patient_data = users_service.get_one(db=db, id=data_in.health_plan_subscribe.user_id)
+
         if not created_by_employee:
             return ServiceResult(AppException.ServerError("Problem with Health Plan Activity"))
         else:
+            if voucher_code[0:3] == 'BHP':
+                s = sms_service.send_sms(
+                    sms_to='88' + handle_result(patient_data).phone,
+                    sms='ধন্যবাদ, আমাদের বেসিক হেলথ প্ল্যান টি নেয়ার জন্য। ভবিষ্যতে আপনার স্বাস্থ্য সম্পর্কিত যেকোনো প্রয়োজনে যোগাযোগ করুন 01571-016461, 01322-658481 এই নাম্বারে। \nধন্যবাদান্তে \nHEALTHx ')
+            elif voucher_code[0:3] == 'FHP':
+                s = sms_service.send_sms(sms_to='88' + handle_result(patient_data).phone, sms='"ফ্যামিলি হেলথ প্ল্যানে" আপনার রেজিস্ট্রেশন টি সঠিকভাবে সম্পন্ন হয়েছে। আপনার প্ল্যান টির মেয়াদ থাকছে ' +
+                                         str(data_in.service.order_completion).split(' ')[0] +
+                                         ' পর্যন্ত। প্যাকেজ সংক্রান্ত যেকোনো সেবা গ্রহনের জন্য সরাসরি যোগাযোগ করুন 01571-016461, 01322-658481 এই নাম্বারে। \nধন্যবাদান্তে \nHEALTHx')
+            elif voucher_code[0:3] == 'MHP':
+                s = sms_service.send_sms(sms_to='88' + handle_result(patient_data).phone, sms='"আমার হেলথ প্ল্যানে" আপনার রেজিস্ট্রেশন টি সঠিকভাবে সম্পন্ন হয়েছে। আপনার প্ল্যান টির মেয়াদ থাকছে ' +
+                                         str(data_in.service.order_completion).split(' ')[0] +
+                                         ' পর্যন্ত। প্যাকেজ সংক্রান্ত যেকোনো সেবা গ্রহনের জন্য সরাসরি যোগাযোগ করুন  01571-016461, 01322-658481 এই নাম্বারে।\nধন্যবাদান্তে \nHEALTHx ')
+            else:
+                print('')
             return ServiceResult(created_by_employee, status_code=status.HTTP_201_CREATED)
 
 
