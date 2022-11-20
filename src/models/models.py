@@ -770,6 +770,17 @@ class PharmacySingleInvoice(BaseModel):
     invoice_id = Column(Integer, ForeignKey("pharmacy_invoice.id"))
 
 
+# Pharmacy Activity
+
+
+class PharmacyActivity(BaseModel):
+    __tablename__ = "pharmacy_activity"
+    pharmacy_id = Column(Integer, ForeignKey("pharmacy.id"))
+    user_id = Column(Integer, ForeignKey("users.id"))
+    service_name = Column(String(100), nullable=True)
+    service_received_id = Column(Integer, nullable=True)
+    remark = Column(String(255), nullable=True)
+
 
 #=========================#
 #  Clinic Related Models  #
