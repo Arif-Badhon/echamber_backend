@@ -7,6 +7,7 @@ class PharmacyEverySingleStockBase(BaseModel):
     expiry_date: Optional[date] = None
     batch_number: Optional[str] = None
     medicine_id: Optional[int] = None
+    pack_size: Optional[str] = None
     single_grn_id: Optional[int] = None
 
 
@@ -23,6 +24,7 @@ class PharmacyEverySingleStockUpdate(BaseModel):
     expiry_date: Optional[date] = None
     batch_number: Optional[str] = None
     medicine_id: Optional[int] = None
+    pack_size: Optional[str] = None
     single_grn_id: Optional[int] = None
 
 class PharmacyEverySingleStockOut(PharmacyEverySingleStockBase):

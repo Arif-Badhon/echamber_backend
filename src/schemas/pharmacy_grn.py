@@ -54,6 +54,7 @@ class PharmacySingleGrnBase(BaseModel):
     expiry_date: Optional[date] = None
     batch_number: Optional[str] = None
     medicine_id: Optional[int] = None
+    pack_size: Optional[str] = None
 
 
 class PharmacySingleGrnIn(PharmacySingleGrnBase):
@@ -73,6 +74,7 @@ class PharmacySingleGrnUpdate(BaseModel):
     expiry_date: Optional[date] = None
     batch_number: Optional[str] = None
     medicine_id: Optional[int] = None
+    pack_size: Optional[str] = None
 
 
 class PharmacySingleGrnOut(PharmacySingleGrnBase):
