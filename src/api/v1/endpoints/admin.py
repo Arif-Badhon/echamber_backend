@@ -7,7 +7,7 @@ from schemas import *
 from sqlalchemy.orm import Session
 from schemas.doctors import DoctorOut
 from schemas.users import LoginLogLogout, UserUpdate
-from services import admin_service, doctors_service, doctor_chambers_service, patient_indicators_service, health_partner_service, login_log_services, doctor_qualifications_service, doctor_specialities_service, doctor_workplace_service, image_log_service
+from services import admin_service, doctors_service, doctor_chambers_service, patient_indicators_service, health_partner_service, login_log_services, doctor_qualifications_service, doctor_specialities_service, doctor_workplace_service, image_log_service, users_service
 from api.v1.auth_dependcies import logged_in, logged_in_admin, logged_in_employee, logged_in_moderator, logged_in_medical_affairs
 from fastapi import APIRouter, Depends, UploadFile, File, HTTPException, status
 from utils import UploadFileUtils
@@ -139,6 +139,12 @@ def doctor_active(id: int, db: Session = Depends(get_db), current_user: Session 
 def chamber_list(user_id: int, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_moderator)):
     chambers = doctor_chambers_service.get_by_user_id(db=db, user_id=user_id)
     return handle_result(chambers)
+
+
+@router.patch('/doctor/user/update/{id}', response_model=UserOut)
+def user_update(id: int, data_update: UserUpdate, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_medical_affairs)):
+    data = users_service.update(db=db, id=id, data_update=data_update)
+    return handle_result(data)
 
 
 @router.patch('/doctor/update/{user_id}', response_model=DoctorOut)
