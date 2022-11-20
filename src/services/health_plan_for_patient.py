@@ -17,9 +17,11 @@ class HealthPlanForPatient(BaseService[HealthPlanForPatient, HealthPlanForPatien
     def subscribe_with_service(self, db: Session, voucher_code: str, employee_id: int, data_in: HealthPlanForPatientWithService):
         service = service_order_service.create_with_flush(db=db, data_in=ServiceOrderIn(**data_in.dict()['service']))
 
-        # healthplan id
+        # healthplan by voucher
         by_voucher = healtth_plan_list_service.get_by_key(db=db, skip=0, limit=10, descending=False, count_results=False, voucher_code=voucher_code)
-        health_plan_id = handle_result(by_voucher)[0].id
+        health_plan = handle_result(by_voucher)
+        health_plan_id = health_plan[0].id
+        health_plan_name = health_plan[0].name
 
         if not health_plan_id:
             return ServiceResult(AppException.ServerError("Wrong Voucher Code."))
