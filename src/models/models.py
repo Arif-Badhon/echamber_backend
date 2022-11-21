@@ -819,7 +819,7 @@ class ClinicDetails(BaseModel):
     title_bg_image_id = Column(Integer, nullable=True)
     about = Column(Text, nullable = False)
     about_image_id = Column(Integer, nullable=True)
-    contuct_us = Column(Text, nullable = True)
+    contact_us = Column(Text, nullable = True)
     starting_time = Column(Time, nullable = True)
     ending_time = Column(Time, nullable = True)
     footer = Column(Text, nullable = True)
