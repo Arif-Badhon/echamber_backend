@@ -21,9 +21,10 @@ class PharmacyPurchaseOrderRepo(BaseRepo[PharmacyPurchaseOrder, PharmacyPurchase
     #     purchase_with_grn = db.query(self.model).filter(self.model.id == PharmacyGrn.purchase_order_id).offset(skip).limit(limit).all()
     #     return [all_purchase, purchase_with_grn]
 
-    def get_purchase_order_without_grn(self, db: Session):
-        data = db.query(self.model).filter(self.model.id.not_in(db.query(PharmacyGrn.purchase_order_id).all())).all()
-        return data
+    def get_purchase_order_without_grn(self, db: Session, pharmacy_id: int, skip: int, limit: int):
+        data_count = db.query(self.model).filter(self.model.pharmacy_id == pharmacy_id).filter(self.model.id.not_in(db.query(PharmacyGrn.purchase_order_id))).all()
+        data = db.query(self.model).filter(self.model.pharmacy_id == pharmacy_id).filter(self.model.id.not_in(db.query(PharmacyGrn.purchase_order_id))).offset(skip).limit(limit).all()
+        return [{"results": len(data_count)}, data]
 
 
 pharmacy_purchase_order_repo = PharmacyPurchaseOrderRepo(PharmacyPurchaseOrder)

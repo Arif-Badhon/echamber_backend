@@ -59,8 +59,8 @@ class PharmacyPurchaseOrderService(BaseService[PharmacyPurchaseOrder, PharmacyPu
         purchase_order = self.repo.get_purchase_order_with_grn(db=db, skip=skip, limit=limit)
         return purchase_order
 
-    def get_purchase_order_without_grn(self, db: Session):
-        purchase_order = self.repo.get_purchase_order_without_grn(db=db)
+    def get_purchase_order_without_grn(self, db: Session, pharmacy_id: int, skip: int, limit: int):
+        purchase_order = self.repo.get_purchase_order_without_grn(db=db, pharmacy_id=pharmacy_id, skip=skip, limit=limit)
         return purchase_order
 
 
