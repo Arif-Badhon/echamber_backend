@@ -171,6 +171,18 @@ def doctor_workplace_update(id: int, data_update: DoctorWorkPlaceUpdate, db: Ses
     return handle_result(data)
 
 
+@router.post('/doctor/workplace/create', response_model=DoctorWorkPlaceOut)
+def doctor_workplace_create(data_in: DoctorWorkPlaceWithUser, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_medical_affairs)):
+    create = doctor_workplace_service.create(db=db, data_in=data_in)
+    return handle_result(create)
+
+
+@router.patch('/workplace/priority/{id}/{user_id}')
+def priority(id: int, user_id: int,  db: Session = Depends(get_db), current_user: Session = Depends(logged_in_medical_affairs)):
+    up = doctor_workplace_service.workplace_priority_set(db=db, id=id, user_id=user_id)
+    return handle_result(up)
+
+
 @router.post('/profile-pic/{user_id}', response_model=ImageLogOut, description='<h2>Alert: </h2> <b>image should be < 300 kb</b>')
 async def upload_image(user_id: int, file: UploadFile = File(...), db: Session = Depends(get_db), current_user: Session = Depends(logged_in_medical_affairs)):
 
