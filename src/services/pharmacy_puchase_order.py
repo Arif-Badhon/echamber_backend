@@ -42,7 +42,7 @@ class PharmacyPurchaseOrderService(BaseService[PharmacyPurchaseOrder, PharmacyPu
 
         if data_in.single_purchase_order and len(data_in.single_purchase_order) != 0:
             for i in data_in.single_purchase_order:
-                single_order = pharmacy_purchase_single_order_repo.create_with_flush(db=db, data_in=PharmacyPurchaseSingleOrderWithPurchaseOrder(quantity=i.quantity, unit_price_dp=i.unit_price_dp, total_price_dp=i.total_price_dp, discount=i.discount, payable_prize_dp=i.payable_prize_dp, medicine_id=i.medicine_id, purchase_order_id=purchase_order.id))
+                single_order = pharmacy_purchase_single_order_repo.create_with_flush(db=db, data_in=PharmacyPurchaseSingleOrderWithPurchaseOrder(quantity=i.quantity, unit_price_dp=i.unit_price_dp, total_price_dp=i.total_price_dp, discount=i.discount, payable_prize_dp=i.payable_prize_dp, medicine_id=i.medicine_id, pack_size=i.pack_size, purchase_order_id=purchase_order.id))
         
         db.commit()
 

@@ -35,6 +35,7 @@ class PharmacyGrnService(BaseService[PharmacyGrn, PharmacyGrnIn, PharmacyGrnUpda
                     expiry_date=i.expiry_date,
                     batch_number=i.batch_number,
                     medicine_id=i.medicine_id,
+                    pack_size=i.pack_size,
                     grn_id=grn.id
                 ))
 
@@ -43,6 +44,7 @@ class PharmacyGrnService(BaseService[PharmacyGrn, PharmacyGrnIn, PharmacyGrnUpda
                     expiry_date=i.expiry_date,
                     batch_number=i.batch_number,
                     medicine_id=i.medicine_id,
+                    pack_size=i.pack_size,
                     single_grn_id=single_grn.id,
                     pharmacy_id=data_in.grn.pharmacy_id
                 ))

@@ -52,6 +52,7 @@ class PharmacySingleInvoiceBase(BaseModel):
     discount: Optional[float] = None
     cost: Optional[float] = None
     medicine_id: Optional[int] = None
+    pack_size: Optional[str] = None
     
 
 
@@ -70,6 +71,7 @@ class PharmacySingleInvoiceUpdate(BaseModel):
     discount: Optional[float] = None
     cost: Optional[float] = None
     medicine_id: Optional[int] = None
+    pack_size: Optional[str] = None
     invoice_id: Optional[int] = None
 
 

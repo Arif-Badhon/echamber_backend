@@ -34,6 +34,7 @@ class PharmacyInvoiceService(BaseService[PharmacyInvoice, PharmacyInvoiceIn, Pha
                     discount=i.discount,
                     cost=i.cost,
                     medicine_id=i.medicine_id,
+                    pack_size=i.pack_size,
                     invoice_id=invoice.id
                 ))
 

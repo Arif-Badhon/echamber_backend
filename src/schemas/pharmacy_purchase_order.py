@@ -56,6 +56,7 @@ class PharmacyPurchaseSingleOrderBase(BaseModel):
     discount: Optional[float] = None
     payable_prize_dp: Optional[float] = None
     medicine_id: Optional[int] = None
+    pack_size: Optional[str] = None
 
 
 class PharmacyPurchaseSingleOrderIn(PharmacyPurchaseSingleOrderBase):
@@ -72,6 +73,7 @@ class PharmacyPurchaseSingleOrderUpdate(BaseModel):
     discount: Optional[float] = None
     payable_prize_dp: Optional[float] = None
     medicine_id: Optional[int] = None
+    pack_size: Optional[str] = None
 
 
 class PharmacyPurchaseSingleOrderOut(PharmacyPurchaseSingleOrderBase):
