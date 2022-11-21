@@ -16,6 +16,12 @@ def get_clinic(db: Session = Depends(get_db)):
     return handle_result(get_all_clinic)
 
 
+@router.get('/get-by-id/{id}', response_model=ClinicOut)
+def get_clinic_by_id(id: int, db: Session = Depends(get_db)):
+    get = clinic_service.get_one(db=db, id=id)
+    return handle_result(get)
+
+
 @router.post("/signup", response_model=ClinicUserHxId)
 def clinic_register_by_admin(data_in: ClinicUserWithClinic, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin)):
     admin = clinic_service.register_clinic(db=db, data_in=data_in)
