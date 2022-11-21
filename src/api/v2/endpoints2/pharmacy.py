@@ -70,7 +70,7 @@ def pharmacy_activity_log(pharmacy_id: int, skip: int = 0, limit: int = 10, db: 
     return activity
 
 
-@router.get('get_pharmacy_patient/', response_model=List[Union[ResultInt, List[PharmacyActivityOutWithUser]]])
+@router.get('/get_pharmacy_patient/' , response_model=List[Union[ResultInt, List[PharmacyActivityOutWithUser]]])
 def get_pharmacy_patient_list(pharmacy_id: int, skip: int=0, limit: int = 10, db: Session = Depends(get_db)):
     get_patient = pharmacy_activity_service.get_pharmacy_patient(db=db, pharmacy_id=pharmacy_id, skip=skip, limit=limit)
     return get_patient
