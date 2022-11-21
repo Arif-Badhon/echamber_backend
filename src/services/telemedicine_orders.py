@@ -8,6 +8,8 @@ from typing import List, Union
 from .service_order import service_order_service
 from exceptions import ServiceResult, AppException
 from fastapi import status
+from .sms import sms_service
+from .users import users_service
 
 
 class TelemedicineService(BaseService[TeleMedicineOrder, TelemedicineInWithService, TelemedicineUpdate]):
@@ -30,9 +32,14 @@ class TelemedicineService(BaseService[TeleMedicineOrder, TelemedicineInWithServi
         created_by_employee = admin_panel_activity_repo.create(
             db=db, data_in=created_by_employee_data)
 
+        user = users_service.get_one(db=db, id=data_in.telemedicine.patient_id)
+
         if not created_by_employee:
             return ServiceResult(AppException.ServerError("Problem with Telemedicine order."))
         else:
+            s = sms_service.send_sms(
+                sms_to='88' + handle_result(user).phone,
+                sms='ধন্যবাদ, আমাদের টেলিমেডিসিন সেবা টি নেয়ার জন্য। আশা করছি  ভবিষ্যতে আপনাদের স্বাস্থ্য সুরক্ষায় এভাবে সহযোগিতা করতে পারবো। \nHEALTHx এর সাথেই থাকুন। \nযেকোনো প্রয়োজনে যোগাযোগ করুন 01571-016461, 01322-658481 এই নাম্বারে। \nধন্যবাদান্তে \nHEALTHx ')
             return ServiceResult(created_by_employee, status_code=status.HTTP_201_CREATED)
 
 

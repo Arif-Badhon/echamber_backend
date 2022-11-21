@@ -55,7 +55,7 @@ class ServiceOrderRepo(BaseRepo[ServiceOrder, ServiceOrderIn, ServiceOrderUpdate
                     ServiceOrder.order_status.like(f"%{order_status}%"),
                     ServiceOrder.order_status == None)).filter(
                 User.name.like(f"%{customer_name}%")).filter(
-                User.phone.like(f"%{customer_phone}%")).order_by(desc(self.model.created_at)).offset(skip).limit(limit).all()
+                User.phone.like(f"%{customer_phone}%")).order_by(desc(self.model.order_placement)).offset(skip).limit(limit).all()
 
             return [{"results": len(data_all)}, data]
         else:
@@ -78,7 +78,7 @@ class ServiceOrderRepo(BaseRepo[ServiceOrder, ServiceOrderIn, ServiceOrderUpdate
                     ServiceOrder.order_status.like(f"%{order_status}%"),
                     ServiceOrder.order_status == None)).filter(
                 User.name.like(f"%{customer_name}%")).filter(
-                User.phone.like(f"%{customer_phone}%")).order_by(desc(self.model.created_at)).offset(skip).limit(limit).all()
+                User.phone.like(f"%{customer_phone}%")).order_by(desc(self.model.order_placement)).offset(skip).limit(limit).all()
 
             return [{"results": len(data_all)}, data]
 

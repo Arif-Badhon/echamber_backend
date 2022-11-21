@@ -50,7 +50,7 @@ def get_purchase_order(purchase_number: str, skip: int = 0, limit: int = 10, db:
     search_purchase_order = pharmacy_purchase_single_order_service.purchase_oder_by_purchase_num(db=db, skip=skip, limit=limit, purchase_number= purchase_number)
     return handle_result(search_purchase_order)
 
-# @router.get("/purchase-order-without-grn")
-# def get_all_purchase_order_without_grn(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
-#     search = pharmacy_purchase_order_service.get_purchase_order_without_grn(db = db, skip=skip, limit=limit)
-#     return search
+@router.get("/purchase-order-without-grn", response_model=List[Union[ResultInt, List[PharmacyPurchaseOrderOut]]])
+def get_all_purchase_order_without_grn(pharmacy_id: int, skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+    search = pharmacy_purchase_order_service.get_purchase_order_without_grn(db = db, pharmacy_id=pharmacy_id, skip=skip, limit=limit)
+    return search

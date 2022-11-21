@@ -2,11 +2,15 @@ from typing import List, Union
 from fastapi import APIRouter, Depends
 from db import get_db
 from exceptions.service_result import handle_result
-from schemas import UserOut, UserOutAuth, UserCreate, UserDoctorOut,  DoctorSignup, DoctorChamberOut, UserCreateWitoutRole, AdminPanelActivityOut, AdminPanelActivityAllOut, PatientIndicatorBase, NewPasswordIn, AdminPanelActivityOut, PatientIndicatorOut, HealthPartnerIn, HealthPartnerOut, ResultInt, AdminPatientsOut
+from schemas import *
+# from schemas import UserOut, UserOutAuth, UserCreate, UserDoctorOut,  DoctorSignup, DoctorChamberOut, UserCreateWitoutRole, AdminPanelActivityOut, AdminPanelActivityAllOut, PatientIndicatorBase, NewPasswordIn, AdminPanelActivityOut, PatientIndicatorOut, HealthPartnerIn, HealthPartnerOut, ResultInt, AdminPatientsOut, DoctorUpdate, DoctorSpecialityUpdate, DoctorQualilficationUpdate, DoctorWorkPlaceUpdate, ImageLogIn, ImageLogOut, DoctorQualificationOut, DoctorSpecialityOut, DoctorWorkPlaceOut
 from sqlalchemy.orm import Session
+from schemas.doctors import DoctorOut
 from schemas.users import LoginLogLogout, UserUpdate
-from services import admin_service, doctor_chambers_service, patient_indicators_service, health_partner_service, login_log_services
+from services import admin_service, doctors_service, doctor_chambers_service, patient_indicators_service, health_partner_service, login_log_services, doctor_qualifications_service, doctor_specialities_service, doctor_workplace_service, image_log_service, users_service
 from api.v1.auth_dependcies import logged_in, logged_in_admin, logged_in_employee, logged_in_moderator, logged_in_medical_affairs
+from fastapi import APIRouter, Depends, UploadFile, File, HTTPException, status
+from utils import UploadFileUtils
 
 
 router = APIRouter()
@@ -103,6 +107,7 @@ def health_partner_create(data_in: HealthPartnerIn, db: Session = Depends(get_db
     health_partner = health_partner_service.create(db=db, data_in=data_in)
     return handle_result(health_partner)
 
+
 # Admin for doctors
 
 
@@ -136,8 +141,69 @@ def chamber_list(user_id: int, db: Session = Depends(get_db), current_user: Sess
     return handle_result(chambers)
 
 
-# Admin for patient
+@router.patch('/doctor/user/update/{id}', response_model=UserOut)
+def user_update(id: int, data_update: UserUpdate, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_medical_affairs)):
+    data = users_service.update(db=db, id=id, data_update=data_update)
+    return handle_result(data)
 
+
+@router.patch('/doctor/update/{user_id}', response_model=DoctorOut)
+def doctor_update(user_id: int, data_update: DoctorUpdate, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_medical_affairs)):
+    doc_up = doctors_service.edit_by_user_id(db=db, data_update=data_update, user_id=user_id)
+    return handle_result(doc_up)
+
+
+@router.patch('/doctor/qualification/update/{id}', response_model=DoctorQualificationOut)
+def qualification_update(id: int, data_update: DoctorQualilficationUpdate, db: Session = Depends(get_db), curren_user: Session = Depends(logged_in_medical_affairs)):
+    data = doctor_qualifications_service.update(db=db, id=id, data_update=data_update)
+    return handle_result(data)
+
+
+@router.patch('/doctor/speciality/update/{id}', response_model=DoctorSpecialityOut)
+def speciality_update(id: int, data_update: DoctorSpecialityUpdate, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_medical_affairs)):
+    data = doctor_specialities_service.update(db=db, id=id, data_update=data_update)
+    return handle_result(data)
+
+
+@router.patch('/doctor/workplace/update/{id}', response_model=DoctorWorkPlaceOut)
+def doctor_workplace_update(id: int, data_update: DoctorWorkPlaceUpdate, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_medical_affairs)):
+    data = doctor_workplace_service.update(db=db, id=id, data_update=data_update)
+    return handle_result(data)
+
+
+@router.post('/doctor/workplace/create', response_model=DoctorWorkPlaceOut)
+def doctor_workplace_create(data_in: DoctorWorkPlaceWithUser, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_medical_affairs)):
+    create = doctor_workplace_service.create(db=db, data_in=data_in)
+    return handle_result(create)
+
+
+@router.patch('/workplace/priority/{id}/{user_id}')
+def priority(id: int, user_id: int,  db: Session = Depends(get_db), current_user: Session = Depends(logged_in_medical_affairs)):
+    up = doctor_workplace_service.workplace_priority_set(db=db, id=id, user_id=user_id)
+    return handle_result(up)
+
+
+@router.post('/profile-pic/{user_id}', response_model=ImageLogOut, description='<h2>Alert: </h2> <b>image should be < 300 kb</b>')
+async def upload_image(user_id: int, file: UploadFile = File(...), db: Session = Depends(get_db), current_user: Session = Depends(logged_in_medical_affairs)):
+
+    up_img = UploadFileUtils(file=file)
+
+    # prefix is the short service name
+    new_image_name = up_img.upload_image(prefix='propic', path='./assets/img/profile', accepted_extensions=['jpg', 'jpeg', 'png'])
+
+    # save in db
+    image_in_db = image_log_service.create(db=db, data_in=ImageLogIn(user_id=user_id, service_name='propic', image_string=new_image_name))
+
+    return handle_result(image_in_db)
+
+
+@router.get('/profile-pic/{user_id}', response_model=ImageLogOut, description='<h2>Alert: images/profile/(image url)</b>')
+def get_profile_pic(user_id: int, db: Session = Depends(get_db)):
+    pp = image_log_service.last_profile_pic(db=db, user_id=user_id)
+    return handle_result(pp)
+
+
+# Admin for patient
 @router.post('/patient/create', response_model=AdminPanelActivityOut)
 def register_patient(data_in: UserCreate, db: Session = Depends(get_db), current_user: Session = Depends(logged_in)):
     patient_created = admin_service.signup_patient(db=db, data_in=data_in, creator_id=current_user.id)
