@@ -813,12 +813,15 @@ class ClinicUser(BaseModel):
 class ClinicDetails(BaseModel):
     __tablename__ = "clinic_details"
     clinic_id = Column(Integer, ForeignKey("clinic.id"))
+    logo_image_id = Column(Integer, nullable=True)
     title = Column(String(255), nullable = False)
     sub_title = Column(Text, nullable = True)
     title_bg_image_id = Column(Integer, nullable=True)
     about = Column(Text, nullable = False)
     about_image_id = Column(Integer, nullable=True)
     contuct_us = Column(Text, nullable = True)
+    starting_time = Column(Time, nullable = True)
+    ending_time = Column(Time, nullable = True)
     footer = Column(Text, nullable = True)
 
 
