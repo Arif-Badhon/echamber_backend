@@ -490,8 +490,8 @@ class EPrescription(BaseModel):
     __tablename__ = "eprescriptions"
     cause_of_consultation = Column(String(255), nullable=True)
     telemedicine_order_id = Column(Integer, nullable=True)
-    doctor_id = Column(Integer, ForeignKey("users.id"))
-    patient_id = Column(Integer, ForeignKey("users.id"))
+    doctor_id = Column(Integer, nullable=True)
+    patient_id = Column(Integer, nullable=True)
     patient_name = Column(String(100), nullable=True)
     patient_sex =  Column(String(10), nullable=True)
     patient_age_years = Column(Integer, nullable=True)

@@ -20,8 +20,8 @@ from .patient_indicators import PatientIndicatorBase, PatientIndicatorOut
 class EpBase(BaseModel):
     cause_of_consultation: Optional[str] = None
     telemedicine_order_id: Optional[int] = None
-    doctor_id: int
-    patient_id: int
+    doctor_id: Optional[int] = None
+    patient_id: Optional[int] = None
     patient_name: Optional[str] = None
     patient_sex: Optional[str] = None
     patient_age_years: Optional[int] = None
