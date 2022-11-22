@@ -56,5 +56,9 @@ class PharmacyInvoiceService(BaseService[PharmacyInvoice, PharmacyInvoiceIn, Pha
         get_invoice = self.repo.get_invoice_by_pharmacy_id(db=db, pharmacy_id=pharmacy_id, skip=skip, limit=limit)
         return get_invoice
 
+    def get_total_sale(self, db: Session, pharmacy_id: int):
+        get_sale = self. repo.get_total_sale(db=db, pharmacy_id=pharmacy_id)
+        return get_sale
+
 
 pharmacy_invoice_service = PharmacyInvoiceService(PharmacyInvoice, pharmacy_invoice_repo)

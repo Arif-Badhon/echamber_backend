@@ -25,3 +25,9 @@ def get_all_invoice(pharmacy_id: int,skip: int = 0, limit: int = 10, db: Session
 def get_single_invoice_with_invoice_id(id: int, skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
     search_single_invoice = pharmacy_single_invoice_service.all_single_invoice(db=db, skip=skip, limit=limit, invoice_id = id)
     return handle_result(search_single_invoice)
+
+
+@router.get('/sale')
+def get_sales(pharmacy_id: int, db: Session = Depends(get_db)):
+    get_total = pharmacy_invoice_service.get_total_sale(db=db, pharmacy_id=pharmacy_id)
+    return get_total
