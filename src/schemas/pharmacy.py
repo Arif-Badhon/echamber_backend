@@ -6,7 +6,7 @@ from .users import UserCreateWitoutRole
 
 class PharmacyBase(BaseModel):
     name: str
-    trade_license: str
+    trade_license: Optional[str] = None
     detail_address: Optional[str] = None
     district: Optional[str] = None
     sub_district: Optional[str] = None
