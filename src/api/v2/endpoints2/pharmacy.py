@@ -34,7 +34,7 @@ def pharmacy_user_login(data_in: PharmacyLogin, db: Session = Depends(get_db)):
 
 
 @router.patch('/{id}', response_model=PharmacyOut)
-def update_pharmacy(id: int, data_update: PharmacyUpdate, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin)):
+def update_pharmacy(id: int, data_update: PharmacyUpdate, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_pharmacy_admin)):
     update_ph = pharmacy_service.update(db=db, data_update=data_update, id=id)
     return handle_result(update_ph)
 
