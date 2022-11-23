@@ -30,9 +30,11 @@ class ServiceOrderRepo(BaseRepo[ServiceOrder, ServiceOrderIn, ServiceOrderUpdate
         #     end_date = ''
 
         if service_id is not None:
+            data_all = db.query(ServiceOrder, User).join(User, User.id == ServiceOrder.patient_id).filter(ServiceOrder.id == service_id).all()
             data = db.query(ServiceOrder, User).join(User, User.id == ServiceOrder.patient_id).filter(ServiceOrder.id == service_id).offset(skip).limit(limit).all()
-            return [{"results": len(data)}, data]
+            return [{"results": len(data_all)}, data]
         elif customer_id is not None:
+            data_all = db.query(ServiceOrder, User).join(User, User.id == ServiceOrder.patient_id).filter(User.id == customer_id).all()
             data = db.query(ServiceOrder, User).join(User, User.id == ServiceOrder.patient_id).filter(User.id == customer_id).offset(skip).limit(limit).all()
             return [{"results": len(data)}, data]
         elif start_date is not None:
