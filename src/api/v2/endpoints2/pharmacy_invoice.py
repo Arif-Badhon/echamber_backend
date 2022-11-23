@@ -21,7 +21,7 @@ def get_all_invoice(pharmacy_id: int,skip: int = 0, limit: int = 10, db: Session
     return get_invoice
 
 @router.get('/filter')
-def sales_filter(pharmacy_id: int = None, customer_id: int = None, start_date: str = None, end_date: str = None, single_date: str = None, skip: int =0, limit: int=15, db: Session = Depends(get_db)):
+def sales_filter(pharmacy_id: int, customer_id: int = None, start_date: str = None, end_date: str = None, single_date: str = None, skip: int =0, limit: int=15, db: Session = Depends(get_db)):
     data = pharmacy_invoice_service.invoice_filter(db=db, pharmacy_id=pharmacy_id, customer_id=customer_id, start_date=start_date, end_date=end_date, single_date=single_date, skip=skip, limit=limit)
     return handle_result(data)
 
