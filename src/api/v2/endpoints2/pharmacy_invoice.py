@@ -20,6 +20,11 @@ def get_all_invoice(pharmacy_id: int,skip: int = 0, limit: int = 10, db: Session
     get_invoice = pharmacy_invoice_service.get_invoice_by_pharmacy_id(db = db,pharmacy_id=pharmacy_id, skip=skip, limit=limit)
     return get_invoice
 
+@router.get('/filter')
+def sales_filter(pharmacy_id: int = None, customer_id: int = None, start_date: str = None, end_date: str = None, single_date: str = None, skip: int =0, limit: int=15, db: Session = Depends(get_db)):
+    data = pharmacy_invoice_service.invoice_filter(db=db, pharmacy_id=pharmacy_id, customer_id=customer_id, start_date=start_date, end_date=end_date, single_date=single_date, skip=skip, limit=limit)
+    return handle_result(data)
+
 
 @router.get('/single-invoice/{id}', response_model=List[Union[ResultInt, List[PharmacySingleInvoiceWithMedicine]]])
 def get_single_invoice_with_invoice_id(id: int, skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
@@ -27,7 +32,7 @@ def get_single_invoice_with_invoice_id(id: int, skip: int = 0, limit: int = 10, 
     return handle_result(search_single_invoice)
 
 
-@router.get('/sale')
-def get_sales(pharmacy_id: int, db: Session = Depends(get_db)):
-    get_total = pharmacy_invoice_service.get_total_sale(db=db, pharmacy_id=pharmacy_id)
+@router.get('/sales-amount')
+def get_sales(pharmacy_id: int, customer_id: int = None, start_date: str = None, end_date: str = None,  db: Session = Depends(get_db)):
+    get_total = pharmacy_invoice_service.get_total_sale(db=db, pharmacy_id=pharmacy_id, customer_id=customer_id, start_date=start_date, end_date=end_date)
     return get_total

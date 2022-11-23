@@ -11,11 +11,30 @@ class PhamracyInvoiceRepo(BaseRepo[PharmacyInvoice, PharmacyInvoiceIn, PharmacyI
         data =  db.query(self.model).filter(self.model.pharmacy_id == pharmacy_id).offset(skip).limit(limit).all()
         return [{"results": len(data_count)}, data]
 
+    def invoice_filter(self, db: Session, pharmacy_id: int, customer_id: int, start_date: str, end_date: str, single_date: str, skip: int, limit: int):
+        
+        if customer_id is not None:
+            data_count = db.query(self.model).filter(self.model.customer_id == customer_id).filter(self.model.pharmacy_id == pharmacy_id).all()
+            data = db.query(self.model).filter(self.model.customer_id == customer_id).filter(self.model.pharmacy_id == pharmacy_id).offset(skip).limit(limit).all()
+            return [{"results": len(data_count)}, data]
+        elif start_date is not None:
+            data_count = db.query(self.model).filter(self.model.created_at.between(start_date, end_date)).filter(self.model.pharmacy_id == pharmacy_id).all()
+            data = db.query(self.model).filter(self.model.created_at.between(start_date, end_date)).filter(self.model.pharmacy_id == pharmacy_id).offset(skip).limit(limit).all()
+            return [{"results": len(data_count)}, data]
+        else:
+            data_count = db.query(self.model).filter(self.model.created_at.like(f"%{single_date}%")).filter(self.model.pharmacy_id == pharmacy_id).all()
+            data = db.query(self.model).filter(self.model.created_at.like(f"%{single_date}%")).filter(self.model.pharmacy_id == pharmacy_id).offset(skip).limit(limit).all()
+            return [{"results": len(data_count)}, data]
 
 
-    def get_total_sale(self, db: Session, pharmacy_id: int):
+    def get_total_sale(self, db: Session, pharmacy_id: int, customer_id: int, start_date: str, end_date: str):
 
-        data = db.query(func.sum(self.model.customer_id)).filter(self.model.pharmacy_id == pharmacy_id).all()
-        return data[0][0]
+        if customer_id is not None:
+            data = db.query(func.sum(self.model.paid_amount)).filter(self.model.pharmacy_id == pharmacy_id).filter(self.model.customer_id == customer_id).all()
+            return data[0][0]
+
+        if start_date is not None:
+            data = db.query(func.sum(self.model.paid_amount)).filter(self.model.pharmacy_id == pharmacy_id).filter(self.model.created_at.between(start_date, end_date)).all()
+            return data[0][0]
 
 pharmacy_invoice_repo = PhamracyInvoiceRepo(PharmacyInvoice)
