@@ -426,4 +426,27 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
                 return ServiceResult(created_by_employee, status_code=status.HTTP_201_CREATED)
 
 
+    def pharmacy_active_list(self, db: Session, skip: int, limit: int):
+        data = self.repo.pharmacy_active_list(db=db, skip=skip, limit=limit)
+        if not data:
+            return ServiceResult(AppException.ServerError("no active pharmacy"))
+        else:
+            return ServiceResult(data, status_code=status.HTTP_201_CREATED)
+
+    def pharmacy_inactive_list(self, db: Session, skip: int, limit: int):
+        data = self.repo.pharmacy_inactive_list(db=db, skip=skip, limit=limit)
+        if not data:
+            return ServiceResult(AppException.ServerError("no inactive pharmacy"))
+        else:
+            return ServiceResult(data, status_code=status.HTTP_201_CREATED)
+    
+    def pharmacy_active_switcher(self, db: Session, id: int):
+        data = self.repo.pharmacy_active_switcher(db=db, id=id)
+
+        if not data:
+            return ServiceResult(AppException.ServerError("Pharmacy active status not changed"))
+        else:
+            return ServiceResult(data, status_code=status.HTTP_201_CREATED)
+
+
 admin_service = Admin(User, admin_repo)

@@ -240,3 +240,21 @@ def patient_indicator(user_id: int, data_in: PatientIndicatorBase, db: Session =
 def patient_indicator_get(key: str, user_id: int, skip: int = 0, limit: int = 10, db: Session = Depends(get_db), current_user: Session = Depends(logged_in)):
     indicators = patient_indicators_service.get_by_key(db=db, key=key, user_id=user_id, skip=skip, limit=limit)
     return handle_result(indicators)
+
+
+@router.patch('/switch/active/pharmacy/{id}', response_model=PharmacyOut)
+def pharmacy_active_switcher(id: int, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_moderator)):
+    act = admin_service.pharmacy_active_switcher(db=db, id=id)
+    return handle_result(act)
+
+
+@router.get('/active-pharmacy', response_model=List[Union[ResultInt, List[PharmacyOut]]])
+def active_pharmacy(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+    ap = admin_service.pharmacy_active_list(db=db, skip=skip, limit=limit)
+    return handle_result(ap)
+
+
+@router.get('/inactive-pharmacy', response_model=List[Union[ResultInt, List[PharmacyOut]]])
+def inactive_pharmacy(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+    inap = admin_service.pharmacy_inactive_list(db=db, skip=skip, limit=limit)
+    return handle_result(inap)
