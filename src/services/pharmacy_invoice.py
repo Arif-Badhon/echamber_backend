@@ -57,8 +57,8 @@ class PharmacyInvoiceService(BaseService[PharmacyInvoice, PharmacyInvoiceIn, Pha
         get_invoice = self.repo.get_invoice_by_pharmacy_id(db=db, pharmacy_id=pharmacy_id, skip=skip, limit=limit)
         return get_invoice
 
-    def invoice_filter(self, db: Session, pharmacy_id: int, customer_id: int, start_date: str, end_date: str, single_date: str, skip: int, limit: int):
-        get_invoice = self.repo.invoice_filter(db=db, pharmacy_id=pharmacy_id, customer_id=customer_id, start_date=start_date, end_date=end_date, single_date=single_date, skip=skip, limit=limit)
+    def invoice_filter(self, db: Session, pharmacy_id: int, customer_id: int, start_date: str, end_date: str, skip: int, limit: int):
+        get_invoice = self.repo.invoice_filter(db=db, pharmacy_id=pharmacy_id, customer_id=customer_id, start_date=start_date, end_date=end_date, skip=skip, limit=limit)
         if not get_invoice:
             return ServiceResult(AppException.ServerError("No data found"))
         return ServiceResult(get_invoice, status_code=status.HTTP_201_CREATED)

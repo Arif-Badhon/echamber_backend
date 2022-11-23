@@ -11,27 +11,22 @@ class PhamracyInvoiceRepo(BaseRepo[PharmacyInvoice, PharmacyInvoiceIn, PharmacyI
         data =  db.query(self.model).filter(self.model.pharmacy_id == pharmacy_id).offset(skip).limit(limit).all()
         return [{"results": len(data_count)}, data]
 
-    def invoice_filter(self, db: Session, pharmacy_id: int, customer_id: int, start_date: str, end_date: str, single_date: str, skip: int, limit: int):
+    def invoice_filter(self, db: Session, pharmacy_id: int, customer_id: int, start_date: str, end_date: str, skip: int, limit: int):
         
         if start_date is None:
             start_date = ''
         if end_date is None:
             end_date = ''
-        if single_date is None:
-            single_date = ''
         
         if customer_id is not None:
-            data_count = db.query(self.model).filter(self.model.customer_id == customer_id).filter(self.model.pharmacy_id == pharmacy_id).filter(self.model.created_at.between(start_date, end_date)).all()
-            data = db.query(self.model).filter(self.model.customer_id == customer_id).filter(self.model.pharmacy_id == pharmacy_id).filter(self.model.created_at.between(start_date, end_date)).offset(skip).limit(limit).all()
+            data_count = db.query(self.model).filter(self.model.customer_id == customer_id).filter(self.model.pharmacy_id == pharmacy_id).all()
+            data = db.query(self.model).filter(self.model.customer_id == customer_id).filter(self.model.pharmacy_id == pharmacy_id).offset(skip).limit(limit).all()
             return [{"results": len(data_count)}, data]
         elif len(start_date) !=0 :
             data_count = db.query(self.model).filter(self.model.created_at.between(start_date, end_date)).filter(self.model.pharmacy_id == pharmacy_id).all()
             data = db.query(self.model).filter(self.model.created_at.between(start_date, end_date)).filter(self.model.pharmacy_id == pharmacy_id).offset(skip).limit(limit).all()
             return [{"results": len(data_count)}, data]
-        elif len(single_date) != 0:
-            data_count = db.query(self.model).filter(self.model.created_at.like(f"%{single_date}%")).filter(self.model.pharmacy_id == pharmacy_id).all()
-            data = db.query(self.model).filter(self.model.created_at.like(f"%{single_date}%")).filter(self.model.pharmacy_id == pharmacy_id).offset(skip).limit(limit).all()
-            return [{"results": len(data_count)}, data]
+    
         else:
             data_count =  db.query(self.model).filter(self.model.pharmacy_id == pharmacy_id).all()
             data =  db.query(self.model).filter(self.model.pharmacy_id == pharmacy_id).offset(skip).limit(limit).all()
