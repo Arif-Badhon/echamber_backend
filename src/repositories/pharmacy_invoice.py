@@ -15,14 +15,14 @@ class PhamracyInvoiceRepo(BaseRepo[PharmacyInvoice, PharmacyInvoiceIn, PharmacyI
         
         if start_date is None:
             start_date = ''
+        if end_date is None:
+            end_date = ''
         if single_date is None:
             single_date = ''
-
-        print(customer_id)
         
         if customer_id is not None:
-            data_count = db.query(self.model).filter(self.model.customer_id == customer_id).filter(self.model.pharmacy_id == pharmacy_id).all()
-            data = db.query(self.model).filter(self.model.customer_id == customer_id).filter(self.model.pharmacy_id == pharmacy_id).offset(skip).limit(limit).all()
+            data_count = db.query(self.model).filter(self.model.customer_id == customer_id).filter(self.model.pharmacy_id == pharmacy_id).filter(self.model.created_at.between(start_date, end_date)).all()
+            data = db.query(self.model).filter(self.model.customer_id == customer_id).filter(self.model.pharmacy_id == pharmacy_id).filter(self.model.created_at.between(start_date, end_date)).offset(skip).limit(limit).all()
             return [{"results": len(data_count)}, data]
         elif len(start_date) !=0 :
             data_count = db.query(self.model).filter(self.model.created_at.between(start_date, end_date)).filter(self.model.pharmacy_id == pharmacy_id).all()
