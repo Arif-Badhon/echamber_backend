@@ -2,6 +2,7 @@ from repositories import BaseRepo, roles_repo
 from models import ClinicActivity, User, UserDetail
 from schemas import ClinicActivityIn, ClinicActivityUpdate
 from sqlalchemy.orm import Session
+from sqlalchemy import desc
 
 class ClinicActivityRepo(BaseRepo[ClinicActivity, ClinicActivityIn, ClinicActivityUpdate]):
     
@@ -17,7 +18,7 @@ class ClinicActivityRepo(BaseRepo[ClinicActivity, ClinicActivityIn, ClinicActivi
         print(role_id)
 
         data_count = db.query(self.model, User).join(self.model, self.model.service_received_id == User.id).filter(User.role_id == role_id).filter(self.model.clinic_id == clinic_id).all()
-        data = db.query(self.model, User, UserDetail).join(self.model, self.model.service_received_id == User.id).filter(User.role_id == role_id).filter(self.model.clinic_id == clinic_id).filter(self.model.service_received_id == UserDetail.user_id).offset(skip).limit(limit).all()
+        data = db.query(self.model, User, UserDetail).join(self.model, self.model.service_received_id == User.id).filter(User.role_id == role_id).filter(self.model.clinic_id == clinic_id).filter(self.model.service_received_id == UserDetail.user_id).order_by(desc(self.model.created_at)).offset(skip).limit(limit).all()
         return [{"results": len(data_count)}, data]
 
 clinic_activity_repo = ClinicActivityRepo(ClinicActivity)
