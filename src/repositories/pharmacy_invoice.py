@@ -2,13 +2,13 @@ from repositories import BaseRepo
 from models import PharmacyInvoice, User
 from schemas import PharmacyInvoiceIn, PharmacyInvoiceUpdate
 from sqlalchemy.orm import Session
-from sqlalchemy.sql import func
+from sqlalchemy.sql import func, desc
 
 class PhamracyInvoiceRepo(BaseRepo[PharmacyInvoice, PharmacyInvoiceIn, PharmacyInvoiceUpdate]):
 
     def get_invoice_by_pharmacy_id(self, db: Session, pharmacy_id: int, skip: int, limit: int):
         data_count =  db.query(self.model).filter(self.model.pharmacy_id == pharmacy_id).all()
-        data =  db.query(self.model).filter(self.model.pharmacy_id == pharmacy_id).offset(skip).limit(limit).all()
+        data =  db.query(self.model).filter(self.model.pharmacy_id == pharmacy_id).order_by(desc(self.model.created_at)).offset(skip).limit(limit).all()
         return [{"results": len(data_count)}, data]
 
     def invoice_filter(self, db: Session, pharmacy_id: int, customer_id: int, customer_name: str, customer_phone: str, start_date: str, end_date: str, skip: int, limit: int):
