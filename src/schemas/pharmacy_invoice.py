@@ -1,6 +1,7 @@
 from datetime import datetime
 from pydantic import BaseModel
 from typing import Optional, List
+from .users import UserOut
 
 
 class PharmacyInvoiceBase(BaseModel):
@@ -92,3 +93,8 @@ class PharmacySingleInvoiceWithMedicine(PharmacySingleInvoiceOut):
     medicine_name: Optional[str] = None 
     medicine_generic: Optional[str] = None
     pharmaceuticals: Optional[str] = None
+
+
+class PharmacyInvoiceWithUser(BaseModel):
+    PharmacyInvoice: PharmacyInvoiceOut
+    User: UserOut
