@@ -440,13 +440,26 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
         else:
             return ServiceResult(data, status_code=status.HTTP_201_CREATED)
     
-    def pharmacy_active_switcher(self, db: Session, id: int):
+    def pharmacy_active_switcher(self, db: Session, id: int, creator_id: int):
         data = self.repo.pharmacy_active_switcher(db=db, id=id)
 
         if not data:
             return ServiceResult(AppException.ServerError("Pharmacy active status not changed"))
         else:
-            return ServiceResult(data, status_code=status.HTTP_201_CREATED)
+            created_by_employee_data = AdminPanelActivityIn(
+                user_id=creator_id,
+                service_name="pharmacy_active_deactive",
+                service_recived_id=id,
+                remark=""
+            )
+
+            created_by_employee = admin_panel_activity_repo.create(db=db, data_in=created_by_employee_data)
+
+        if not created_by_employee:
+            return ServiceResult(AppException.ServerError(
+                "Problem with employee registration."))
+        else:
+            return ServiceResult(created_by_employee, status_code=status.HTTP_201_CREATED)
 
 
 admin_service = Admin(User, admin_repo)

@@ -242,9 +242,9 @@ def patient_indicator_get(key: str, user_id: int, skip: int = 0, limit: int = 10
     return handle_result(indicators)
 
 
-@router.patch('/switch/active/pharmacy/{id}', response_model=PharmacyOut)
+@router.patch('/switch/active/pharmacy/{id}', response_model=AdminPanelActivityOut)
 def pharmacy_active_switcher(id: int, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_moderator)):
-    act = admin_service.pharmacy_active_switcher(db=db, id=id)
+    act = admin_service.pharmacy_active_switcher(db=db, id=id, creator_id=current_user.id)
     return handle_result(act)
 
 
