@@ -242,6 +242,8 @@ def patient_indicator_get(key: str, user_id: int, skip: int = 0, limit: int = 10
     return handle_result(indicators)
 
 
+# Pharmacy
+
 @router.patch('/switch/active/pharmacy/{id}', response_model=AdminPanelActivityOut)
 def pharmacy_active_switcher(id: int, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_moderator)):
     act = admin_service.pharmacy_active_switcher(db=db, id=id, creator_id=current_user.id)
@@ -258,3 +260,23 @@ def active_pharmacy(skip: int = 0, limit: int = 10, db: Session = Depends(get_db
 def inactive_pharmacy(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
     inap = admin_service.pharmacy_inactive_list(db=db, skip=skip, limit=limit)
     return handle_result(inap)
+
+
+# CLinic
+
+@router.patch('/switch/active/clinic/{id}', response_model=AdminPanelActivityOut)
+def clinic_active_switcher(id: int, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_moderator)):
+    active = admin_service.clinic_active_switcher(db=db, id=id, creator_id=current_user.id)
+    return handle_result(active)
+
+
+@router.get('/active-clinic', response_model=List[Union[ResultInt, List[ClinicOut]]])
+def active_clinic(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+    ac = admin_service.clinic_active_list(db=db, skip=skip, limit=limit)
+    return handle_result(ac)
+
+
+@router.get('/inactive-clinic', response_model=List[Union[ResultInt, List[ClinicOut]]])
+def inactive_clinic(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+    inac = admin_service.clinic_inactive_list(db=db, skip=skip, limit=limit)
+    return handle_result(inac)

@@ -425,6 +425,7 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
             else:
                 return ServiceResult(created_by_employee, status_code=status.HTTP_201_CREATED)
 
+    # Pharmacy
 
     def pharmacy_active_list(self, db: Session, skip: int, limit: int):
         data = self.repo.pharmacy_active_list(db=db, skip=skip, limit=limit)
@@ -457,7 +458,45 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
 
         if not created_by_employee:
             return ServiceResult(AppException.ServerError(
-                "Problem with employee registration."))
+                "Problem with pharmacy activation."))
+        else:
+            return ServiceResult(created_by_employee, status_code=status.HTTP_201_CREATED)
+
+
+    # Clinic
+
+    def clinic_active_list(self, db: Session, skip: int, limit: int):
+        data = self.repo.clinic_active_list(db=db, skip=skip, limit=limit)
+        if not data:
+            return ServiceResult(AppException.ServerError("no active clinic"))
+        else:
+            return ServiceResult(data, status_code=status.HTTP_201_CREATED)
+
+    def clinic_inactive_list(self, db: Session, skip: int, limit: int):
+        data = self.repo.clinic_inactive_list(db=db, skip=skip, limit=limit)
+        if not data:
+            return ServiceResult(AppException.ServerError("no inactive clinic"))
+        else:
+            return ServiceResult(data, status_code=status.HTTP_201_CREATED)
+    
+    def clinic_active_switcher(self, db: Session, id: int, creator_id: int):
+        data = self.repo.clinic_active_switcher(db=db, id=id)
+
+        if not data:
+            return ServiceResult(AppException.ServerError("clinic active status not changed"))
+        else:
+            created_by_employee_data = AdminPanelActivityIn(
+                user_id=creator_id,
+                service_name="clinic_active_deactive",
+                service_recived_id=id,
+                remark=""
+            )
+
+            created_by_employee = admin_panel_activity_repo.create(db=db, data_in=created_by_employee_data)
+
+        if not created_by_employee:
+            return ServiceResult(AppException.ServerError(
+                "Problem with clinic activation."))
         else:
             return ServiceResult(created_by_employee, status_code=status.HTTP_201_CREATED)
 

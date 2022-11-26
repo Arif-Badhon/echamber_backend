@@ -3,8 +3,9 @@ from sqlalchemy.orm import Session
 from repositories import BaseRepo
 from .roles import roles_repo
 from .pharmacy import pharmacy_repo
-from schemas import UserCreate, UserUpdate, PharmacyUpdate
-from models import User, Doctor, DoctorQualification, DoctorSpeciality, AdminPanelActivity, Pharmacy
+from .clinic import clinic_repo
+from schemas import UserCreate, UserUpdate, PharmacyUpdate, ClinicUpdate
+from models import User, Doctor, DoctorQualification, DoctorSpeciality, AdminPanelActivity, Pharmacy, Clinic
 
 
 class AdminRepo(BaseRepo[User, UserCreate, UserUpdate]):
@@ -120,6 +121,8 @@ class AdminRepo(BaseRepo[User, UserCreate, UserUpdate]):
             return [{"results": query_len}, query]
 
     
+    # Pharmacy
+
     def pharmacy_active_list(self, db: Session, skip: int, limit: int):
         data_count = db.query(Pharmacy).filter(Pharmacy.pharmacy_is_active == True).all()
         data = db.query(Pharmacy).filter(Pharmacy.pharmacy_is_active == True).offset(skip).limit(limit).all()
@@ -134,6 +137,24 @@ class AdminRepo(BaseRepo[User, UserCreate, UserUpdate]):
     def pharmacy_active_switcher(self, db: Session, id: int):
         current_status = pharmacy_repo.get_one(db=db, id=id).pharmacy_is_active
         data = pharmacy_repo.update(db=db, id=id, data_update=PharmacyUpdate(pharmacy_is_active=not current_status))
+        return data
+
+    # Clinic
+
+    def clinic_active_list(self, db: Session, skip: int, limit: int):
+        data_count = db.query(Clinic).filter(Clinic.clinic_is_active == True).all()
+        data = db.query(Clinic).filter(Clinic.clinic_is_active == True).offset(skip).limit(limit).all()
+        return [{"results": len(data_count)}, data]
+
+
+    def clinic_inactive_list(self, db: Session, skip: int, limit: int):
+        data_count = db.query(Clinic).filter(Clinic.clinic_is_active == False).all()
+        data = db.query(Clinic).filter(Clinic.clinic_is_active == False).offset(skip).limit(limit).all()
+        return [{"results": len(data_count)}, data]
+
+    def clinic_active_switcher(self, db: Session, id: int):
+        current_status = clinic_repo.get_one(db=db, id=id).clinic_is_active
+        data = clinic_repo.update(db=db, id=id, data_update=ClinicUpdate(clinic_is_active=not current_status))
         return data
 
 
