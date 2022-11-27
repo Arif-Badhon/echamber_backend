@@ -102,7 +102,7 @@ def get(user_id: int, skip: int = 0, limit: int = 30, db: Session = Depends(get_
 
 @router.patch('/workplace/{id}', response_model=DoctorWorkPlaceOut)
 def update(id: int, data_update: DoctorWorkPlaceUpdate, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
-    edit = doctor_workplace_service.update(db=db, id=id, data_update=data_update)
+    edit = doctor_workplace_service.update_before_check(db=db, id=id, data_update=data_update, user_id=current_user.id)
     return handle_result(edit)
 
 

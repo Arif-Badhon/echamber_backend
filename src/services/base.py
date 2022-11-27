@@ -83,6 +83,12 @@ class BaseService(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
             return ServiceResult(AppException.NotAccepted())
         return ServiceResult(data, status_code=status.HTTP_202_ACCEPTED)
 
+    def update_before_check(self, db: Session, id: int, data_update: UpdateSchemaType, **kwargs):
+        get_data = self.repo.get_by_two_key(db=db, skip=0, limit=10, descending=False, count_results=False, id=id, **kwargs)
+        if not get_data:
+            return ServiceResult(AppException.ServerError("Access denied"))
+        return self.update(db=db, id=id, data_update=data_update)
+
     def delete(self, db: Session, id: int):
         remove = self.repo.delete(db, id)
         if remove:
