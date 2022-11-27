@@ -72,3 +72,4 @@ class PharmacyTotalCurrentStockWithMedicine(PharmacyTotalCurrentStockOut):
     medicine_generic: Optional[str] = None
     medicine_strength: Optional[str] = None
     pharmaceuticals: Optional[str] = None
+    form: Optional[str] = None
