@@ -16,7 +16,7 @@ def get_detals(db: Session = Depends(get_db), current_user=Depends(logged_in)):
     return handle_result(user_detais)
 
 
-@router.put('/', response_model=UserDetailOut)
+@router.patch('/', response_model=UserDetailOut)
 def update_details(data_update: UserDetailUpdate, db: Session = Depends(get_db), current_user=Depends(logged_in)):
     update_user_detail = user_details_service.update_by_user_id(
         db, user_id=current_user.id, data_update=data_update)
