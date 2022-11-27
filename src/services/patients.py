@@ -1,6 +1,6 @@
 from exceptions.app_exceptions import AppException
 from exceptions.service_result import ServiceResult, handle_result
-from repositories import patients_repo
+from repositories import patients_repo, user_details_repo
 from services import users_service, user_details_service
 from models import Patient
 from schemas import PatientIn, PatientUpdate, UserCreate, UserDetailIn
@@ -12,13 +12,13 @@ from fastapi import status
 
 class PatientService(BaseService[Patient, PatientIn, PatientUpdate]):
     def get_by_user_id(self, db: Session, user_id: int):
-        patient_detail = self.repo.get_by_user_id(db, user_id)
+        patient_detail = user_details_repo.get_by_user_id(db, user_id)
         if not patient_detail:
             return ServiceResult(AppException.NotFound("Patient not found"))
         else:
             return ServiceResult(patient_detail, status_code=status.HTTP_200_OK)
-    
-    def search_by_patient_name(self, db: Session, name: str, skip:int, limit: int):
+
+    def search_by_patient_name(self, db: Session, name: str, skip: int, limit: int):
         patients = self.repo.search_by_patient_name(db=db, name=name, skip=skip, limit=limit)
 
         data = []
@@ -27,7 +27,7 @@ class PatientService(BaseService[Patient, PatientIn, PatientUpdate]):
             detail = user_details_service.get_by_user_id(db=db, id=i.id)
             if not detail:
                 i.dob = None
-                i.division = None 
+                i.division = None
                 # i.blood_group = None
             else:
                 i.dob = handle_result(detail).dob

@@ -29,7 +29,7 @@ def get_patient(db: Session = Depends(get_db), current_user=Depends(logged_in_pa
     return handle_result(patient)
 
 
-@router.put('/', response_model=PatientOut)
+@router.patch('/', response_model=PatientOut)
 def update(patient_update: PatientBase, db: Session = Depends(get_db), current_user=Depends(logged_in_patient)):
     patient = patients_service.update_by_user_id(
         db, user_id=current_user.id, data_update=patient_update)
