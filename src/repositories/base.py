@@ -58,6 +58,13 @@ class BaseRepo(Generic[ModelType, CreateSchemaType, UpdateSchemaType], ABSRepo):
             return [{"results": len(query)}, data]
         return data
 
+    def get_by_key_first(self, db: Session, **kwargs):
+        search_key = list(kwargs.items())[0][0]
+        search_value = list(kwargs.items())[0][1]
+
+        query = db.query(self.model).filter(getattr(self.model, search_key) == search_value).first()
+        return query
+
     def get_by_key(self, db: Session, skip: int, limit: int, descending: bool = False, count_results: bool = False, **kwargs):
         search_key = list(kwargs.items())[0][0]
         search_value = list(kwargs.items())[0][1]

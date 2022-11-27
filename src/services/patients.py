@@ -11,12 +11,12 @@ from fastapi import status
 
 
 class PatientService(BaseService[Patient, PatientIn, PatientUpdate]):
-    def get_by_user_id(self, db: Session, user_id: int):
-        patient_detail = user_details_repo.get_by_user_id(db, user_id)
-        if not patient_detail:
-            return ServiceResult(AppException.NotFound("Patient not found"))
-        else:
-            return ServiceResult(patient_detail, status_code=status.HTTP_200_OK)
+    # def get_by_user_id(self, db: Session, user_id: int):
+    #     patient_detail = user_details_repo.get_by_user_id(db, user_id)
+    #     if not patient_detail:
+    #         return ServiceResult(AppException.NotFound("Patient not found"))
+    #     else:
+    #         return ServiceResult(patient_detail, status_code=status.HTTP_200_OK)
 
     def search_by_patient_name(self, db: Session, name: str, skip: int, limit: int):
         patients = self.repo.search_by_patient_name(db=db, name=name, skip=skip, limit=limit)
@@ -24,7 +24,7 @@ class PatientService(BaseService[Patient, PatientIn, PatientUpdate]):
         data = []
 
         for i in patients:
-            detail = user_details_service.get_by_user_id(db=db, id=i.id)
+            detail = user_details_service.get_by_key_first(db=db, user_id=i.id)
             if not detail:
                 i.dob = None
                 i.division = None
@@ -41,7 +41,7 @@ class PatientService(BaseService[Patient, PatientIn, PatientUpdate]):
             return ServiceResult(data, status_code=status.HTTP_200_OK)
 
     def update_by_user_id(self, db: Session, user_id: int, data_update: UpdateSchemaType):
-        exist = self.repo.get_by_user_id(db, user_id)
+        exist = self.repo.get_by_key_first(db=db, user_id=user_id)
         if not exist:
             new_data = PatientIn(
                 user_id=user_id,
@@ -50,7 +50,7 @@ class PatientService(BaseService[Patient, PatientIn, PatientUpdate]):
                 occupation=data_update.occupation
             )
             self.create(db, data_in=new_data)
-            check = self.repo.get_by_user_id(db, user_id)
+            check = self.repo.get_by_key_first(db=db, user_id=user_id)
             return ServiceResult(check, status_code=status.HTTP_202_ACCEPTED)
         else:
             data = self.repo.update_by_user_id(db, user_id, data_update)

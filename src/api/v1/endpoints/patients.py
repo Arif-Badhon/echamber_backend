@@ -7,7 +7,7 @@ from schemas import PatientOut, PatientSignup, UserDetailOut, NewPasswordIn, Tok
 from db import get_db
 from schemas import PatientBase, UserOut, UserOutAuth
 from schemas.medicine_order import MedicineOrderOut
-from services import patients_service, service_order_service, medicine_order_service, health_plan_for_patient_service
+from services import patients_service, service_order_service, medicine_order_service, health_plan_for_patient_service, user_details_service
 
 router = APIRouter()
 
@@ -25,7 +25,7 @@ def auth(patient: Session = Depends(logged_in_patient)):
 
 @router.get('/', response_model=PatientOut)
 def get_patient(db: Session = Depends(get_db), current_user=Depends(logged_in_patient)):
-    patient = patients_service.get_by_user_id(db, user_id=current_user.id)
+    patient = patients_service.get_by_key_first(db=db, user_id=current_user.id)
     return handle_result(patient)
 
 

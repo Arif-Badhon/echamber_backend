@@ -39,6 +39,10 @@ class ABSRepo(ABC):
         pass
 
     @abstractmethod
+    def get_by_key_first(self, db: Session, **kwargs):
+        pass
+
+    @abstractmethod
     def get_by_key(self, db: Session, skip: int, limit: int, descending: bool, count_results: bool, **kwargs):
         pass
 

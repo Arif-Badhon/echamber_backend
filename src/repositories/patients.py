@@ -5,11 +5,11 @@ from sqlalchemy.orm import Session
 
 
 class PatientRepo(BaseRepo[Patient, PatientIn, PatientUpdate]):
-    def get_by_user_id(self, db: Session, user_id: int):
-        role_id_by_repo = roles_repo.search_name_id('patient')
-        return db.query(self.model).filter(User.role_id == role_id_by_repo).filter(self.model.user_id == user_id).first()
+    # def get_by_user_id(self, db: Session, user_id: int):
+    #     role_id_by_repo = roles_repo.search_name_id(db=db, name='patient')
+    #     return db.query(self.model).filter(User.role_id == role_id_by_repo).filter(self.model.user_id == user_id).first()
 
-    def search_by_patient_name(self, db: Session, name: str, skip:int, limit:int):
+    def search_by_patient_name(self, db: Session, name: str, skip: int, limit: int):
         role_id_by_repo = roles_repo.search_name_id(db=db, name='patient')
         data = db.query(User).filter(User.role_id == role_id_by_repo).filter(User.name.like(f'%{name}%')).offset(skip).limit(limit).all()
         return data
