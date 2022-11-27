@@ -51,6 +51,7 @@ class UserOutAuth(UserBase):
     id: int
     phone: str
     role_name: Optional[str]
+    created_at: Optional[datetime] = None
 
     class Config:
         orm_mode = True
