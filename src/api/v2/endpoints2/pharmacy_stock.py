@@ -34,7 +34,7 @@ def expired_medicine(pharmacy_id: int, skip: int = 0, limit: int = 10, db: Sessi
     return handle_result(em)
 
 
-@router.get('/nearly-expired-medicines/{pharmacy_id}')
+@router.get('/nearly-expired-medicines/{pharmacy_id}', response_model=List[Union[ResultInt, List[PharmacyEverySingleStockOutWithMedicine]]])
 def nearly_expired_medicine(pharmacy_id: int, skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
     nem = pharmacy_every_single_stock_servive.get_nearly_expired_medicine(db=db, pharmacy_id=pharmacy_id, skip=skip, limit=limit)
     return handle_result(nem)
