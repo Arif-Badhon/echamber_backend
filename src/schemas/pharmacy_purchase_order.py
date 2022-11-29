@@ -6,6 +6,7 @@ from typing import List, Optional
 class PharmacyPurchaseOrderBase(BaseModel):
     total_amount_dp: Optional[float] = None
     discount: Optional[float] = None
+    discount_amount: Optional[float] = None
     payable_amount: Optional[float] = None
     paid_amount: Optional[float] = None
     due_amount: Optional[float] = None
@@ -26,6 +27,7 @@ class PharmacyPurchaseOrderIn(PharmacyPurchaseOrderBase):
 class PharmacyPurchaseOrderUpdate(BaseModel):
     total_amount_dp: Optional[float] = None
     discount: Optional[float] = None
+    discount_amount: Optional[float] = None
     payable_amount: Optional[float] = None
     paid_amount: Optional[float] = None
     due_amount: Optional[float] = None
@@ -54,6 +56,7 @@ class PharmacyPurchaseSingleOrderBase(BaseModel):
     unit_price_dp: Optional[float] = None
     total_price_dp: Optional[float] = None
     discount: Optional[float] = None
+    discount_amount: Optional[float] = None
     payable_prize_dp: Optional[float] = None
     medicine_id: Optional[int] = None
     pack_size: Optional[str] = None
@@ -71,6 +74,7 @@ class PharmacyPurchaseSingleOrderUpdate(BaseModel):
     unit_price_dp: Optional[float] = None
     total_price_dp: Optional[float] = None
     discount: Optional[float] = None
+    discount_amount: Optional[float] = None
     payable_prize_dp: Optional[float] = None
     medicine_id: Optional[int] = None
     pack_size: Optional[str] = None

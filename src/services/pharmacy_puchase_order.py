@@ -20,6 +20,7 @@ class PharmacyPurchaseOrderService(BaseService[PharmacyPurchaseOrder, PharmacyPu
         purchase_order = pharmacy_purchase_order_repo.create_with_flush(db=db, data_in=PharmacyPurchaseOrderBase(
             total_amount_dp=data_in.purchase_order.total_amount_dp,
             discount=data_in.purchase_order.discount,
+            discount_amount=data_in.purchase_order.discount_amount,
             payable_amount=data_in.purchase_order.payable_amount,
             paid_amount=data_in.purchase_order.paid_amount,
             due_amount=data_in.purchase_order.due_amount,
@@ -43,7 +44,7 @@ class PharmacyPurchaseOrderService(BaseService[PharmacyPurchaseOrder, PharmacyPu
             for i in data_in.single_purchase_order:
                 single_order = pharmacy_purchase_single_order_repo.create_with_flush(db=db,
                                                                                      data_in=PharmacyPurchaseSingleOrderWithPurchaseOrder(
-                                                                                         quantity=i.quantity, unit_price_dp=i.unit_price_dp, total_price_dp=i.total_price_dp, discount=i.discount,
+                                                                                         quantity=i.quantity, unit_price_dp=i.unit_price_dp, total_price_dp=i.total_price_dp, discount=i.discount,discount_amount=i.discount_amount,
                                                                                          payable_prize_dp=i.payable_prize_dp, medicine_id=i.medicine_id, pack_size=i.pack_size,
                                                                                          purchase_order_id=purchase_order.id))
 
