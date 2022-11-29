@@ -8,6 +8,7 @@ class PharmacyGrnBase(BaseModel):
     total_amount_mrp: Optional[float] = None
     total_vat_mrp: Optional[float] = None
     total_discount_mrp: Optional[float] = None
+    discount_amount: Optional[float] = None
     total_cost_mrp: Optional[float] = None
     pharmaceuticals_name_id: Optional[int] = None
     purchase_order_id: Optional[int] = None
@@ -26,6 +27,7 @@ class PharmacyGrnUpdate(BaseModel):
     total_amount_mrp: Optional[float] = None
     total_vat_mrp: Optional[float] = None
     total_discount_mrp: Optional[float] = None
+    discount_amount: Optional[float] = None
     total_cost_mrp: Optional[float] = None
     pharmaceuticals_name_id: Optional[int] = None
     purchase_order_id: Optional[int] = None
@@ -50,6 +52,7 @@ class PharmacySingleGrnBase(BaseModel):
     mrp: Optional[float] = None
     vat: Optional[float] = None
     discount: Optional[float] = None
+    discount_amount: Optional[float] = None
     cost: Optional[float] = None
     expiry_date: Optional[date] = None
     batch_number: Optional[str] = None
@@ -70,6 +73,7 @@ class PharmacySingleGrnUpdate(BaseModel):
     mrp: Optional[float] = None
     vat: Optional[float] = None
     discount: Optional[float] = None
+    discount_amount: Optional[float] = None
     cost: Optional[float] = None
     expiry_date: Optional[date] = None
     batch_number: Optional[str] = None

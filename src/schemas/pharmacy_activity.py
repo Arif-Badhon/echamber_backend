@@ -29,6 +29,6 @@ class PharmacyActivityOut(PharmacyActivityBase):
 
 
 class PharmacyActivityOutWithUser(BaseModel):
-    PharmacyActivity: PharmacyActivityOut
+    # PharmacyActivity: PharmacyActivityOut
     User: UserOut
     UserDetail: UserDetailOut

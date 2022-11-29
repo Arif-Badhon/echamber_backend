@@ -5,6 +5,7 @@ from exceptions.service_result import handle_result
 from schemas import PharmacyEverySingleStockOutWithMedicine, PharmacyTotalCurrentStockWithMedicine, PharmacyTotalCurrentStockOut, PharmacyTotalCurrentStockUpdate, ResultInt
 from services import pharmacy_every_single_stock_servive, pharmacy_total_current_stock_service
 from typing import List, Union
+from repositories import pharmacy_every_single_stock_repo
 
 router = APIRouter()
 
@@ -25,3 +26,15 @@ def get_total_stock(pharmacy_id: int, skip: int = 0, limit: int = 10, db: Sessio
 def update_total_stock(id: int, data_update: PharmacyTotalCurrentStockUpdate, db: Session = Depends(get_db)):
     update_total_stock = pharmacy_total_current_stock_service.update(db=db, data_update=data_update, id=id)
     return handle_result(update_total_stock)
+
+
+@router.get('/expired-medicines/{pharmacy_id}', response_model=List[Union[ResultInt, List[PharmacyEverySingleStockOutWithMedicine]]])
+def expired_medicine(pharmacy_id: int, skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+    em = pharmacy_every_single_stock_servive.get_expired_medicine(db=db, pharmacy_id=pharmacy_id, skip=skip, limit=limit)
+    return handle_result(em)
+
+
+@router.get('/nearly-expired-medicines/{pharmacy_id}', response_model=List[Union[ResultInt, List[PharmacyEverySingleStockOutWithMedicine]]])
+def nearly_expired_medicine(pharmacy_id: int, skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+    nem = pharmacy_every_single_stock_servive.get_nearly_expired_medicine(db=db, pharmacy_id=pharmacy_id, skip=skip, limit=limit)
+    return handle_result(nem)

@@ -34,7 +34,7 @@ def pharmacy_user_login(data_in: PharmacyLogin, db: Session = Depends(get_db)):
 
 
 @router.patch('/{id}', response_model=PharmacyOut)
-def update_pharmacy(id: int, data_update: PharmacyUpdate, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin)):
+def update_pharmacy(id: int, data_update: PharmacyUpdate, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_pharmacy_admin)):
     update_ph = pharmacy_service.update(db=db, data_update=data_update, id=id)
     return handle_result(update_ph)
 
@@ -50,7 +50,7 @@ def search_with_user_and_pharmacy_id(user_id: int, pharmacy_id: int, db: Session
     return check 
 
 
-@router.get("/user-pharmacy")
+@router.get("/user-pharmacy", response_model=PharmacyOut)
 def search_pharmacy_with_user_id(user_id: int, db: Session = Depends(get_db)):
     search = pharmacy_service.find_pharmacy_with_user_id(db=db, user_id=user_id)
     return handle_result(search)
@@ -70,7 +70,7 @@ def pharmacy_activity_log(pharmacy_id: int, skip: int = 0, limit: int = 10, db: 
     return activity
 
 
-@router.get('get_pharmacy_patient/', response_model=List[Union[ResultInt, List[PharmacyActivityOutWithUser]]])
+@router.get('/get_pharmacy_patient/' , response_model=List[Union[ResultInt, List[PharmacyActivityOutWithUser]]])
 def get_pharmacy_patient_list(pharmacy_id: int, skip: int=0, limit: int = 10, db: Session = Depends(get_db)):
     get_patient = pharmacy_activity_service.get_pharmacy_patient(db=db, pharmacy_id=pharmacy_id, skip=skip, limit=limit)
     return get_patient

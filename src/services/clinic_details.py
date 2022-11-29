@@ -13,12 +13,15 @@ class ClinicDetailsService(BaseService[ClinicDetails, ClinicDetailsIn, ClinicDet
         
         clinic_details = self.create_with_flush(db=db, data_in=ClinicDetailsIn(
             clinic_id=data_in.clinic_id,
+            logo_image_id=data_in.logo_image_id,
             title=data_in.title,
             sub_title=data_in.sub_title,
             title_bg_image_id=data_in.title_bg_image_id,
             about=data_in.about,
             about_image_id=data_in.about_image_id,
-            contuct_us=data_in.contuct_us,
+            contact_us=data_in.contact_us,
+            starting_time=data_in.starting_time,
+            ending_time=data_in.ending_time,
             footer=data_in.footer
         ))
 

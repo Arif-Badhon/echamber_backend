@@ -1,6 +1,7 @@
 from datetime import datetime
 from pydantic import BaseModel
 from typing import Optional, List
+from .users import UserOut
 
 
 class PharmacyInvoiceBase(BaseModel):
@@ -11,6 +12,7 @@ class PharmacyInvoiceBase(BaseModel):
     due_amount: Optional[float] = None
     remarks: Optional[str] = None
     discount: Optional[float] = None
+    discount_amount: Optional[float] = None
     vat: Optional[float] = None
     invoice_number: Optional[str] = None
     customer_id: Optional[int] = None
@@ -29,6 +31,7 @@ class PharmacyInvoiceUpdate(BaseModel):
     due_amount: Optional[float] = None
     remarks: Optional[str] = None
     discount: Optional[float] = None
+    discount_amount: Optional[float] = None
     vat: Optional[float] = None
     invoice_number: Optional[str] = None
     customer_id: Optional[int] = None
@@ -50,6 +53,7 @@ class PharmacySingleInvoiceBase(BaseModel):
     quantity: Optional[int] = None
     unit_prize: Optional[float] = None
     discount: Optional[float] = None
+    discount_amount: Optional[float] = None
     cost: Optional[float] = None
     medicine_id: Optional[int] = None
     pack_size: Optional[str] = None
@@ -69,6 +73,7 @@ class PharmacySingleInvoiceUpdate(BaseModel):
     quantity: Optional[int] = None
     unit_prize: Optional[float] = None
     discount: Optional[float] = None
+    discount_amount: Optional[float] = None
     cost: Optional[float] = None
     medicine_id: Optional[int] = None
     pack_size: Optional[str] = None
@@ -92,3 +97,8 @@ class PharmacySingleInvoiceWithMedicine(PharmacySingleInvoiceOut):
     medicine_name: Optional[str] = None 
     medicine_generic: Optional[str] = None
     pharmaceuticals: Optional[str] = None
+
+
+class PharmacyInvoiceWithUser(BaseModel):
+    PharmacyInvoice: PharmacyInvoiceOut
+    User: UserOut

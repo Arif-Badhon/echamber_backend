@@ -2,7 +2,7 @@ from repositories import BaseRepo, roles_repo
 from models import PharmacyActivity, User, UserDetail
 from schemas import PharmacyActivityIn, PharmacyActivityUpdate
 from sqlalchemy.orm import Session
-
+from sqlalchemy.sql import func
 
 
 class PharmacyActivityRepo(BaseRepo[PharmacyActivity, PharmacyActivityIn, PharmacyActivityUpdate]):
@@ -14,10 +14,10 @@ class PharmacyActivityRepo(BaseRepo[PharmacyActivity, PharmacyActivityIn, Pharma
     def get_pharmacy_patient(self, db: Session, pharmacy_id: int, skip: int, limit: int):
 
         role_id = roles_repo.search_name_id(db=db, name='patient')
-        print(role_id)
 
-        data_count = db.query(self.model, User).join(self.model, self.model.service_received_id == User.id).filter(User.role_id == role_id).filter(self.model.pharmacy_id == pharmacy_id).all()
-        data = db.query(self.model, User, UserDetail).join(self.model, self.model.service_received_id == User.id).filter(User.role_id == role_id).filter(self.model.pharmacy_id == pharmacy_id).filter(self.model.service_received_id == UserDetail.user_id).offset(skip).limit(limit).all()
+        data_count = db.query(User, UserDetail).filter(User.id.in_(db.query(func.distinct(self.model.service_received_id)))).filter(User.role_id==role_id).filter(User.id==UserDetail.user_id).filter(self.model.pharmacy_id == pharmacy_id).all()
+
+        data = db.query(User, UserDetail).filter(User.id.in_(db.query(func.distinct(self.model.service_received_id)))).filter(User.role_id==role_id).filter(User.id==UserDetail.user_id).filter(self.model.pharmacy_id == pharmacy_id).offset(skip).limit(limit).all()
         return [{"results": len(data_count)}, data]
 
 

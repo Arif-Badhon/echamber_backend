@@ -5,6 +5,7 @@ from repositories import pharmacy_invoice_repo, pharmacy_single_invoice_repo, ph
 from sqlalchemy.orm import Session
 from exceptions.service_result import ServiceResult
 from exceptions.app_exceptions import AppException
+from fastapi import status
 
 class PharmacyInvoiceService(BaseService[PharmacyInvoice, PharmacyInvoiceIn, PharmacyInvoiceUpdate]):
     def create_invoice(self, data_in:PharmacyInvoiceWithSingleInvoice , db: Session, user_id: int):
@@ -19,6 +20,7 @@ class PharmacyInvoiceService(BaseService[PharmacyInvoice, PharmacyInvoiceIn, Pha
             due_amount=data_in.invoice.due_amount,
             remarks=data_in.invoice.remarks,
             discount=data_in.invoice.discount,
+            discount_amount=data_in.invoice.discount_amount,
             vat=data_in.invoice.vat,
             invoice_number=data_in.invoice.invoice_number,
             customer_id=data_in.invoice.customer_id,
@@ -32,6 +34,7 @@ class PharmacyInvoiceService(BaseService[PharmacyInvoice, PharmacyInvoiceIn, Pha
                     quantity=i.quantity,
                     unit_prize=i.unit_prize,
                     discount=i.discount,
+                    discount_amount=i.discount_amount,
                     cost=i.cost,
                     medicine_id=i.medicine_id,
                     pack_size=i.pack_size,
@@ -55,6 +58,16 @@ class PharmacyInvoiceService(BaseService[PharmacyInvoice, PharmacyInvoiceIn, Pha
     def get_invoice_by_pharmacy_id(self, db: Session, pharmacy_id: int, skip: int, limit: int):
         get_invoice = self.repo.get_invoice_by_pharmacy_id(db=db, pharmacy_id=pharmacy_id, skip=skip, limit=limit)
         return get_invoice
+
+    def invoice_filter(self, db: Session, pharmacy_id: int, customer_id: int, customer_name:str, customer_phone:str, start_date: str, end_date: str, skip: int, limit: int):
+        get_invoice = self.repo.invoice_filter(db=db, pharmacy_id=pharmacy_id, customer_id=customer_id, customer_name=customer_name, customer_phone=customer_phone,start_date=start_date, end_date=end_date, skip=skip, limit=limit)
+        if not get_invoice:
+            return ServiceResult(AppException.ServerError("No data found"))
+        return ServiceResult(get_invoice, status_code=status.HTTP_201_CREATED)
+
+    def get_total_sale(self, db: Session, pharmacy_id: int, customer_id: int, start_date: str, end_date: str):
+        get_sale = self. repo.get_total_sale(db=db, pharmacy_id=pharmacy_id, customer_id=customer_id, start_date=start_date, end_date=end_date)
+        return get_sale
 
 
 pharmacy_invoice_service = PharmacyInvoiceService(PharmacyInvoice, pharmacy_invoice_repo)
