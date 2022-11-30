@@ -224,8 +224,8 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
 
             return ServiceResult(created_by_employee, status_code=status.HTTP_201_CREATED)
 
-    def doctor_active_list(self, db: Session, skip: int = 0, limit: int = 10):
-        all_doc = self.repo.doctors_active_list(db, skip, limit)
+    def doctor_active_list(self, db: Session, start_date: str, end_date: str,  skip: int = 0, limit: int = 10):
+        all_doc = self.repo.doctors_active_list(db=db, start_date=start_date, end_date=end_date, skip=skip, limit=limit)
 
         data_with_images = []
         for i in all_doc[1]:
@@ -242,8 +242,8 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
         else:
             return ServiceResult(data, status_code=status.HTTP_200_OK)
 
-    def doctor_inactive_list(self, db: Session, skip: int = 0, limit: int = 10):
-        all_doc = self.repo.doctors_inactive_list(db, skip, limit)
+    def doctor_inactive_list(self, db: Session, start_date: str, end_date: str, skip: int = 0, limit: int = 10):
+        all_doc = self.repo.doctors_inactive_list(db=db, start_date=start_date, end_date=end_date, skip=skip, limit=limit)
 
         data_with_images = []
         for i in all_doc[1]:
@@ -368,8 +368,8 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
         else:
             return ServiceResult(patients, status_code=status.HTTP_201_CREATED)
 
-    def all_patient_filter(self, db: Session,  hx_user_id: int, name: str, phone: str, gender: str, skip: int, limit: int):
-        patients = self.repo.all_patient_filter(db=db,  hx_user_id=hx_user_id, name=name, phone=phone, gender=gender, skip=skip, limit=limit)
+    def all_patient_filter(self, db: Session,  hx_user_id: int, name: str, phone: str, gender: str, start_date: str, end_date: str, skip: int, limit: int):
+        patients = self.repo.all_patient_filter(db=db,  hx_user_id=hx_user_id, name=name, phone=phone, gender=gender, start_date=start_date, end_date=end_date, skip=skip, limit=limit)
 
         new_patients_list = []
 
@@ -440,7 +440,7 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
             return ServiceResult(AppException.ServerError("no inactive pharmacy"))
         else:
             return ServiceResult(data, status_code=status.HTTP_201_CREATED)
-    
+
     def pharmacy_active_switcher(self, db: Session, id: int, creator_id: int):
         data = self.repo.pharmacy_active_switcher(db=db, id=id)
 
@@ -462,7 +462,6 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
         else:
             return ServiceResult(created_by_employee, status_code=status.HTTP_201_CREATED)
 
-
     # Clinic
 
     def clinic_active_list(self, db: Session, skip: int, limit: int):
@@ -478,7 +477,7 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
             return ServiceResult(AppException.ServerError("no inactive clinic"))
         else:
             return ServiceResult(data, status_code=status.HTTP_201_CREATED)
-    
+
     def clinic_active_switcher(self, db: Session, id: int, creator_id: int):
         data = self.repo.clinic_active_switcher(db=db, id=id)
 

@@ -118,14 +118,14 @@ def doctor_register(data_in: DoctorSignup, db: Session = Depends(get_db), curren
 
 
 @router.get('/doctors/active', response_model=List[Union[ResultInt, List[UserDoctorOut]]])
-def doctors_active_list(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
-    docs = admin_service.doctor_active_list(db, skip=skip, limit=limit)
+def doctors_active_list(start_date: str = '2022-01-01', end_date: str = '2022-12-31', skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+    docs = admin_service.doctor_active_list(db, start_date=start_date, end_date=end_date, skip=skip, limit=limit)
     return handle_result(docs)
 
 
 @router.get('/doctors/inactive', response_model=List[Union[ResultInt, List[UserDoctorOut]]])
-def doctors_inactive_list(skip: int = 0, limit: int = 10, db: Session = Depends(get_db), current_user: Session = Depends(logged_in)):
-    docs = admin_service.doctor_inactive_list(db, skip=skip, limit=limit)
+def doctors_inactive_list(start_date: str = '2022-01-01', end_date: str = '2022-12-31', skip: int = 0, limit: int = 10, db: Session = Depends(get_db), current_user: Session = Depends(logged_in)):
+    docs = admin_service.doctor_inactive_list(db=db, start_date=start_date, end_date=end_date, skip=skip, limit=limit)
     return handle_result(docs)
 
 
@@ -224,9 +224,9 @@ def all_patients(phone_number: str = None, skip: int = 0, limit: int = 15,  db: 
 
 @router.get('/user/filter', response_model=List[Union[ResultInt, List[AdminPatientsOut]]])
 def all_patient_filter(
-        hx_user_id: int = None, name: str = None, phone: str = None, gender: str = None, skip: int = 0, limit: int = 15, db: Session = Depends(get_db),
+        hx_user_id: int = None, name: str = None, phone: str = None, gender: str = None, start_date: str = '2022-01-01',  end_date: str = '2022-12-31', skip: int = 0, limit: int = 15, db: Session = Depends(get_db),
         current_user: Session = Depends(logged_in)):
-    data = admin_service.all_patient_filter(db=db,  hx_user_id=hx_user_id, name=name, phone=phone, gender=gender, skip=skip, limit=limit)
+    data = admin_service.all_patient_filter(db=db,  hx_user_id=hx_user_id, name=name, phone=phone, gender=gender, start_date=start_date, end_date=end_date, skip=skip, limit=limit)
     return handle_result(data)
 
 
