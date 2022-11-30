@@ -332,8 +332,8 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
         else:
             return ServiceResult(created_by_employee, status_code=status.HTTP_201_CREATED)
 
-    def all_patient(self, db: Session, phone_number: str, skip: int, limit: int):
-        patients = admin_repo.all_patient(db=db, phone_number=phone_number, skip=skip, limit=limit)
+    def all_patient(self, db: Session, phone_number: str, start_date:str, end_date:str, skip: int, limit: int):
+        patients = admin_repo.all_patient(db=db, phone_number=phone_number, start_date=start_date, end_date=end_date, skip=skip, limit=limit)
 
         new_patients_list = []
 

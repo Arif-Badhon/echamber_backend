@@ -303,6 +303,13 @@ class Doctor(BaseModel):
     bmdc = Column(String(100), nullable=False, unique=True)
     exp_year = Column(Integer, nullable=True)
     online_fees = Column(Float, nullable=True)
+    online_healthx_fees = Column(Float, nullable=True)
+    online_vat = Column(Float, nullable=True)
+    online_total_fees =Column(Float, nullable=True)
+    followup_fees = Column(Float, nullable=True)
+    followup_healthx_fees = Column(Float, nullable=True)
+    followup_vat = Column(Float, nullable=True)
+    followup_total_fees =Column(Float, nullable=True)
 
     user_doctor = relationship("User", back_populates="doctor")
 

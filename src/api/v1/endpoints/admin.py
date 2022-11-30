@@ -217,8 +217,10 @@ def edit_user(id: int, data_update: UserUpdate, db: Session = Depends(get_db), c
 
 
 @router.get('/patient/all', response_model=List[Union[ResultInt, List[AdminPatientsOut]]])
-def all_patients(phone_number: str = None, skip: int = 0, limit: int = 15,  db: Session = Depends(get_db), current_user: Session = Depends(logged_in)):
-    patients = admin_service.all_patient(db=db, phone_number=phone_number, skip=skip, limit=limit)
+def all_patients(
+        phone_number: str = None, start_date: str = '2022-01-01', end_date: str = '2022-12-31', skip: int = 0, limit: int = 15, db: Session = Depends(get_db),
+        current_user: Session = Depends(logged_in)):
+    patients = admin_service.all_patient(db=db, phone_number=phone_number, start_date=start_date, end_date=end_date, skip=skip, limit=limit)
     return handle_result(patients)
 
 
