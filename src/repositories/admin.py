@@ -104,23 +104,24 @@ class AdminRepo(BaseRepo[User, UserCreate, UserUpdate]):
             gender = ''
 
         if hx_user_id is not None:
-            query_len = len(db.query(self.model).filter(self.model.id == hx_user_id).all())
-            query = db.query(self.model).filter(self.model.id == hx_user_id).offset(skip).limit(limit).all()
+            query_len = len(db.query(self.model).filter(self.model.id == hx_user_id).filter(self.model.is_active == True).all())
+            query = db.query(self.model).filter(self.model.id == hx_user_id).filter(self.model.is_active == True).offset(skip).limit(limit).all()
             return [{"results": query_len}, query]
         else:
             query_len = len(db.query(
                 self.model).filter(
+                self.model.is_active == True).filter(
                 self.model.name.like(f"%{name}%")).filter(
                 self.model.phone.like(f"%{phone}%")).filter(
                 self.model.sex.like(f"{gender}%")).all())
             query = db.query(
                 self.model).filter(
+                self.model.is_active == True).filter(
                 self.model.name.like(f"%{name}%")).filter(
                 self.model.phone.like(f"%{phone}%")).filter(
                 self.model.sex.like(f"{gender}%")).order_by(desc(self.model.created_at)).offset(skip).limit(limit).all()
             return [{"results": query_len}, query]
 
-    
     # Pharmacy
 
     def pharmacy_active_list(self, db: Session, skip: int, limit: int):
@@ -128,12 +129,11 @@ class AdminRepo(BaseRepo[User, UserCreate, UserUpdate]):
         data = db.query(Pharmacy).filter(Pharmacy.pharmacy_is_active == True).offset(skip).limit(limit).all()
         return [{"results": len(data_count)}, data]
 
-
     def pharmacy_inactive_list(self, db: Session, skip: int, limit: int):
         data_count = db.query(Pharmacy).filter(Pharmacy.pharmacy_is_active == False).all()
         data = db.query(Pharmacy).filter(Pharmacy.pharmacy_is_active == False).offset(skip).limit(limit).all()
         return [{"results": len(data_count)}, data]
-    
+
     def pharmacy_active_switcher(self, db: Session, id: int):
         current_status = pharmacy_repo.get_one(db=db, id=id).pharmacy_is_active
         data = pharmacy_repo.update(db=db, id=id, data_update=PharmacyUpdate(pharmacy_is_active=not current_status))
@@ -145,7 +145,6 @@ class AdminRepo(BaseRepo[User, UserCreate, UserUpdate]):
         data_count = db.query(Clinic).filter(Clinic.clinic_is_active == True).all()
         data = db.query(Clinic).filter(Clinic.clinic_is_active == True).offset(skip).limit(limit).all()
         return [{"results": len(data_count)}, data]
-
 
     def clinic_inactive_list(self, db: Session, skip: int, limit: int):
         data_count = db.query(Clinic).filter(Clinic.clinic_is_active == False).all()

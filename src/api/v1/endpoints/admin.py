@@ -222,7 +222,7 @@ def all_patients(phone_number: str = None, skip: int = 0, limit: int = 15,  db: 
     return handle_result(patients)
 
 
-@router.get('/patient/filter', response_model=List[Union[ResultInt, List[AdminPatientsOut]]])
+@router.get('/user/filter', response_model=List[Union[ResultInt, List[AdminPatientsOut]]])
 def all_patient_filter(
         hx_user_id: int = None, name: str = None, phone: str = None, gender: str = None, skip: int = 0, limit: int = 15, db: Session = Depends(get_db),
         current_user: Session = Depends(logged_in)):
