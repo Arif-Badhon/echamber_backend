@@ -15,11 +15,11 @@ class DoctorBase(BaseModel):
     exp_year: Optional[int] = None
     online_fees: Optional[float] = None
     online_healthx_fees: Optional[float] = None
-    online_vat_fees: Optional[float] = None
+    online_vat: Optional[float] = None
     online_total_fees: Optional[float] = None
     followup_fees: Optional[float] = None
     followup_healthx_fees: Optional[float] = None
-    followup_vat_fees: Optional[float] = None
+    followup_vat: Optional[float] = None
     followup_total_fees: Optional[float] = None
 
 
