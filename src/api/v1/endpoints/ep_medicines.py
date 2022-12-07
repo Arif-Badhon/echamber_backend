@@ -18,6 +18,12 @@ def search_medicine(search_medicine: str,  skip: int = 0, limit: int = 10, db: S
     return handle_result(med)
 
 
+@router.get('/all', response_model=List[Union[ResultInt, List[MedicineOut]]])
+def search_medicine_with_result(search_medicine: str = None, skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+    med = ep_medicine_list_service.search_medicine_with_result(db=db, search_medicine=search_medicine, skip=skip, limit=limit)
+    return handle_result(med)
+
+
 @router.post('/', response_model=MedicineOut)
 def medicine_input(data_in: MedicineIn, db: Session = Depends(get_db), current_user: Session = Depends(logged_in)):
     medi = ep_medicine_list_service.create(db=db, data_in=MedicineInWithUser(**data_in.dict(), add_status='pending', added_by_id=current_user.id))
