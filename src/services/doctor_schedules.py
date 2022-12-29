@@ -1,11 +1,11 @@
 from datetime import timedelta, date
 from models import DoctorSchedule
-from schemas import DoctorScheduleIn, DoctorScheduleUpdate, RangeScheduleInput
+from schemas import DoctorScheduleIn, DoctorScheduleUpdate, RangeScheduleInput, AdminPanelActivityIn
 from services import BaseService
-from repositories import doctor_schedule_repo
+from repositories import doctor_schedule_repo, admin_panel_activity_repo
 from sqlalchemy.orm import Session
 from utils import TimeString
-from exceptions import ServiceResult
+from exceptions import ServiceResult, AppException
 from fastapi import status
 
 
@@ -55,6 +55,20 @@ class DoctorScheduleService(BaseService[DoctorSchedule, DoctorScheduleIn, Doctor
             day_increment += 1
 
         return ServiceResult({"msg": "Shedules created"}, status_code=200)
+
+    def booked_by_employee(self, db: Session, schedule_id: int, patient_id: int, employee_id: int):
+        update_schedule = self.repo.update(db=db, data_update=DoctorScheduleUpdate(booked_by_patient_id=patient_id), id=schedule_id)
+
+        if not update_schedule:
+            return ServiceResult(AppException.ServerError(
+                "Problem with booking."))
+
+        service_by = admin_panel_activity_repo.create(db=db, data_in=AdminPanelActivityIn(user_id=employee_id, service_name='schedule_booked_for_patient', service_recived_id=patient_id, remark=''))
+        if not service_by:
+            return ServiceResult(AppException.ServerError(
+                    "Problem with employee registration."))
+        else:    
+            return ServiceResult(update_schedule, status_code=status.HTTP_202_ACCEPTED)
 
 
 doctor_schedule_service = DoctorScheduleService(DoctorSchedule, doctor_schedule_repo)

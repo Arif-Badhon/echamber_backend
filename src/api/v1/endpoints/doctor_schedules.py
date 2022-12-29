@@ -6,7 +6,7 @@ from db import get_db
 from fastapi import Depends
 from sqlalchemy.orm import Session
 from services import doctor_schedule_service
-from api.v1.auth_dependcies import logged_in_doctor
+from api.v1.auth_dependcies import logged_in_doctor, logged_in_employee
 from datetime import date
 
 router = APIRouter()
@@ -28,3 +28,9 @@ def range_input(data_in: RangeScheduleInput, db: Session = Depends(get_db), curr
 def get_all_schedule_public(doctor_user_id: int, date: date, db: Session = Depends(get_db)):
     all_ds = doctor_schedule_service.get_doctor_all_schedule(db=db, date=date, user_id=doctor_user_id)
     return handle_result(all_ds)
+
+
+@router.patch('/booked_by_employee/{schedule_id}/{patient_id}', response_model=DoctorScheduleOut)
+def booked_by_employee(schedule_id: int, patient_id: int, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_employee)):
+    booked = doctor_schedule_service.booked_by_employee(db=db, schedule_id=schedule_id, employee_id=current_user.id, patient_id=patient_id)
+    return handle_result(booked)

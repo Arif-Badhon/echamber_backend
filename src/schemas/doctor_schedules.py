@@ -18,7 +18,13 @@ class DoctorScheduleIn(DoctorScheduleBase):
 
 
 class DoctorScheduleUpdate(DoctorScheduleBase):
-    pass
+    date: date = None
+    time_min: conint(gt=-1, lt=1441) = None
+    am_pm: Literal['am', 'pm'] = None
+    online: bool = None
+    chamber_id: Optional[int] = None
+    booked_by_patient_id: Optional[int] = None
+    duration_min: conint(gt=-1, lt=1441) = None
 
 
 class DoctorScheduleOut(DoctorScheduleBase):
