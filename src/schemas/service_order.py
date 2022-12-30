@@ -15,6 +15,7 @@ class ServiceOrderBase(BaseModel):
     payable_amount: Optional[int] = None
     payment_by_customer: Optional[int] = None
     payment_pending: Optional[int] = None
+    delivery_fee: Optional[int] = None
     payment_method: Optional[str] = None
     payment_status: Optional[str] = None
     last_payment_date: Optional[datetime] = None

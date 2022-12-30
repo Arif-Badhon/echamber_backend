@@ -115,6 +115,7 @@ class ServiceOrder(BaseModel):
     payable_amount = Column(Integer, nullable=False)
     payment_by_customer = Column(Integer, nullable=False)
     payment_pending = Column(Integer, nullable=False)
+    delivery_fee = Column(Integer, nullable=True)
     payment_method = Column(String(100), nullable=True)
     payment_status = Column(String(100), nullable=True)
     last_payment_date = Column(DateTime, nullable=True)
