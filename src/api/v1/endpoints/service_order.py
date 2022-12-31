@@ -44,6 +44,12 @@ def patient_services(id: int, skip: int = 0, limit: int = 15, db: Session = Depe
     return handle_result(pt)
 
 
+@router.get('/by-provider/{id}', response_model=List[Union[ResultInt, List[ServiceOrderOut]]])
+def all_service_by_provider(id: int, skip:int=0, limit:int=15, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_employee)):
+    data = service_order_service.get_by_key(db=db, skip=skip, limit=limit, descending=True, count_results=True, service_provider_id=id)
+    return handle_result(data)
+
+
 @router.patch('/{id}', response_model=ServiceOrderOut)
 def update_service(id: int, data_update: ServiceOrderUpdate, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_employee)):
     up = service_order_service.update(db=db, id=id, data_update=data_update)
