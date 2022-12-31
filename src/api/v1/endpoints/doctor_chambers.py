@@ -1,7 +1,7 @@
 from typing import List
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from api.v1.auth_dependcies import get_db, logged_in_doctor
+from api.v1.auth_dependcies import get_db, logged_in_doctor, logged_in_medical_affairs
 from exceptions import handle_result
 from services import doctor_chambers_service
 from schemas import DoctorChamberOut, DoctorChamberBase, DoctorChamberUpdate
@@ -60,3 +60,9 @@ def remove(id: int, db: Session = Depends(get_db), current_user: Session = Depen
 def get(doctor_user_id: int, db: Session = Depends(get_db)):
     doc_chamber = doctor_chambers_service.get_by_key(db=db, skip=0, limit=100, descending=False, count_results=False, user_id=doctor_user_id)
     return handle_result(doc_chamber)
+
+
+@router.post('created_by/medical_affairs/{doctor_id}', response_model=DoctorChamberOut)
+def chamber_created_by_admin_panel(doctor_id: int, chamber_in: DoctorChamberBase, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_medical_affairs)):
+    data = doctor_chambers_service.create_with_user_id(db=db, data_in=chamber_in, user_id=doctor_id)
+    return handle_result(data)
