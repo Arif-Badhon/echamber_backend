@@ -6,7 +6,7 @@ from db import get_db
 from fastapi import Depends
 from sqlalchemy.orm import Session
 from services import doctor_schedule_service
-from api.v1.auth_dependcies import logged_in_doctor, logged_in_employee
+from api.v1.auth_dependcies import logged_in_doctor, logged_in_employee, logged_in_medical_affairs
 from datetime import date
 
 router = APIRouter()
@@ -21,6 +21,12 @@ def get_all_schedule(date: date, db: Session = Depends(get_db), current_user: Se
 @router.post('/range/', response_model=Msg, description='weekday = mon, tue, wed, thu, fri, sat, sun')
 def range_input(data_in: RangeScheduleInput, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
     ds = doctor_schedule_service.submit_with_range(db=db, data_in=data_in, user_id=current_user.id)
+    return handle_result(ds)
+
+
+@router.post('/range/by_medical_affairs/{doctor_id}', response_model=Msg, description='weekday = mon, tue, wed, thu, fri, sat, sun')
+def range_input_by_medical_affairs(doctor_id:int, data_in: RangeScheduleInput, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_medical_affairs)):
+    ds = doctor_schedule_service.submit_with_range(db=db, data_in=data_in, user_id=doctor_id)
     return handle_result(ds)
 
 
