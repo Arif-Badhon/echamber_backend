@@ -23,9 +23,11 @@ class EpBase(BaseModel):
     doctor_id: Optional[int] = None
     patient_id: Optional[int] = None
     patient_name: Optional[str] = None
+    patient_phone: Optional[str] = None # newly added - antor
     patient_sex: Optional[str] = None
     patient_age_years: Optional[int] = None
     patient_age_months: Optional[int] = None
+    blood_group: Optional[str] = None
     age_years: Optional[int] = None
     age_months: Optional[int] = None
     current_address: Optional[str] = None
