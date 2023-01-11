@@ -139,9 +139,26 @@ class EPrescriptionService(BaseService[EPrescription, EpBase, EpUpdate]):
         if not data:
             data = []
 
-        for i in data[1]:
-            i.patient_name = users_repo.get_one(db=db, id=i.patient_id).name
+        # for i in data[1]:
+        #     i.patient_name = users_repo.get_one(db=db, id=i.patient_id).name
         return ServiceResult(data, status_code=status.HTTP_200_OK)
+
+    def all_prescriptions(self, db: Session, skip: int, limit: int, descending: bool, count_results: bool):
+        data = self.repo.get_with_pagination(db=db, skip=skip, limit=limit, descending=descending, count_results=count_results)
+
+        if not data:
+            data = []
+
+        return ServiceResult(data, status_code=status.HTTP_200_OK)
+
+    # Antor #
+    # def single_prescription_by_id(self, db: Session, user_id: int, skip: int, limit: int, descending: bool, count_results: bool):
+    #     data = self.repo.get_by_key(db=db, user_id=user_id, skip=skip, limit=limit, descending=descending, count_results=count_results)
+
+    #     if not data:
+    #         data = []
+
+    #     return ServiceResult(data, status_code=status.HTTP_200_OK)
 
 
 ep_service = EPrescriptionService(EPrescription, ep_repo)

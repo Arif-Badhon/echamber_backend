@@ -7,7 +7,7 @@ from services import patients_service, ep_service, doctor_ep_header_service
 from sqlalchemy.orm import Session
 from fastapi import Depends
 from schemas import EpPatientSearchOut, EpOut, EpOutWithDoctorName, EpAllOut, EpDiagnosisOut, DoctorEpHeaderOut, DoctorEpHeaderUpdate, ResultInt
-from api.v1.auth_dependcies import logged_in_doctor, logged_in_patient
+from api.v1.auth_dependcies import logged_in_doctor, logged_in_moderator, logged_in_patient
 
 router = APIRouter()
 
@@ -53,6 +53,17 @@ def patient_prescriptions(skip: int = 0, limit: int = 10, db: Session = Depends(
 
 
 @router.get('/doctor/ep/', response_model=List[Union[ResultInt, List[EpOutWithDoctorName]]])
-def patient_prescriptions(skip: int = 0, limit: int = 10, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
-    e = ep_service.patient_prescriptions(db=db, skip=skip, limit=limit, descending=True, count_results=True, doctor_id=current_user.id)
+def doctor_prescriptions(skip: int = 0, limit: int = 10, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
+    e = ep_service.doctor_prescriptions(db=db, skip=skip, limit=limit, descending=True, count_results=True, doctor_id=current_user.id)
     return handle_result(e)
+
+### antor ### 
+@router.get('/all/', response_model=List[Union[ResultInt, List[EpOutWithDoctorName]]])
+def all_prescriptions(skip: int = 0, limit: int = 10, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_moderator)):
+    e = ep_service.all_prescriptions(db=db, skip=skip, limit=limit, descending=True, count_results=True)
+    return handle_result(e)
+
+# @router.get('/single/ep/{user_id}', response_model=List[Union[ResultInt, List[EpOutWithDoctorName]]])
+# def single_prescription_by_id(user_id: int, skip: int = 0, limit: int = 10, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_moderator)):
+#     e = ep_service.single_prescription_by_id(db=db, user_id=user_id, skip=skip, limit=limit, descending=True, count_results=True)
+#     return handle_result(e)
