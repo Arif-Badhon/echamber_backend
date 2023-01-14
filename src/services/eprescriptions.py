@@ -16,8 +16,11 @@ class EPrescriptionService(BaseService[EPrescription, EpBase, EpUpdate]):
         ep = ep_repo.create_with_flush(
             db=db,
             data_in=EpBase(
-                cause_of_consultation=data_in.cause_of_consultation, telemedicine_order_id=data_in.telemedicine_order_id, doctor_id=data_in.doctor_id, patient_id=data_in.patient_id,
-                age_years=data_in.age_years, age_months=data_in.age_months, current_address=data_in.current_address, remarks=data_in.remarks))
+                cause_of_consultation=data_in.cause_of_consultation, telemedicine_order_id=data_in.telemedicine_order_id, 
+                doctor_id=data_in.doctor_id, patient_id=data_in.patient_id, patient_name=data_in.patient_name, 
+                patient_phone=data_in.patient_phone, patient_sex=data_in.patient_sex, blood_group=data_in.blood_group, 
+                age_years=data_in.age_years, age_months=data_in.age_months, current_address=data_in.current_address, 
+                remarks=data_in.remarks))
 
         # chief complaints
         if data_in.chief_complaints and len(data_in.chief_complaints) != 0:
@@ -105,6 +108,10 @@ class EPrescriptionService(BaseService[EPrescription, EpBase, EpUpdate]):
             "telemedicine_order_id": ep_data.telemedicine_order_id,
             "doctor_id": ep_data.doctor_id,
             "patient_id": ep_data.patient_id,
+            "patient_name": ep_data.patient_name,
+            "patient_phone": ep_data.patient_phone,
+            "patient_sex": ep_data.patient_sex,
+            "blood_group": ep_data.blood_group,
             "age_years": ep_data.age_years,
             "age_months": ep_data.age_months,
             "current_address": ep_data.current_address,
@@ -133,22 +140,24 @@ class EPrescriptionService(BaseService[EPrescription, EpBase, EpUpdate]):
             i.doctor_name = users_repo.get_one(db=db, id=i.doctor_id).name
         return ServiceResult(data, status_code=status.HTTP_200_OK)
 
-    def doctor_prescriptions(self, db: Session, skip: int, limit: int, descending: bool, count_results: bool, doctor_id: int):
-        data = self.repo.get_by_key(db=db, skip=skip, limit=limit, descending=descending, count_results=count_results, doctor_id=doctor_id)
+    def doctor_prescriptions(self, db: Session, start_date: str, end_date: str, skip: int, limit: int, descending: bool, count_results: bool, doctor_id: int):
+        data = self.repo.get_by_key_and_date(db=db, start_date=start_date, end_date=end_date, skip=skip, limit=limit, descending=descending, count_results=count_results, doctor_id=doctor_id)
 
         if not data:
             data = []
 
-        # for i in data[1]:
-        #     i.patient_name = users_repo.get_one(db=db, id=i.patient_id).name
+        for i in data[1]:
+            i.doctor_name = users_repo.get_one(db=db, id=i.doctor_id).name
         return ServiceResult(data, status_code=status.HTTP_200_OK)
 
-    def all_prescriptions(self, db: Session, skip: int, limit: int, descending: bool, count_results: bool):
-        data = self.repo.get_with_pagination(db=db, skip=skip, limit=limit, descending=descending, count_results=count_results)
+    def all_prescriptions(self, db: Session, start_date: str, end_date: str, skip: int, limit: int, descending: bool, count_results: bool):
+        data = self.repo.get_with_pagination_and_date(db=db, start_date=start_date, end_date=end_date, skip=skip, limit=limit, descending=descending, count_results=count_results)
 
         if not data:
             data = []
 
+        for i in data[1]:
+            i.doctor_name = users_repo.get_one(db=db, id=i.doctor_id).name
         return ServiceResult(data, status_code=status.HTTP_200_OK)
 
     # Antor #
