@@ -7,7 +7,7 @@ from services import patients_service, ep_service, doctor_ep_header_service
 from sqlalchemy.orm import Session
 from fastapi import Depends
 from schemas import EpPatientSearchOut, EpOut, EpOutWithDoctorName, EpAllOut, EpDiagnosisOut, DoctorEpHeaderOut, DoctorEpHeaderUpdate, ResultInt
-from api.v1.auth_dependcies import logged_in_doctor, logged_in_employee, logged_in_moderator, logged_in_patient
+from api.v1.auth_dependcies import logged_in, logged_in_doctor, logged_in_employee, logged_in_moderator, logged_in_patient
 from utils import beginning_date, current_date
 
 router = APIRouter()
@@ -19,9 +19,9 @@ def patient_search_by_name(name: str, skip: int = 0, limit: int = 10, db: Sessio
     return handle_result(patients)
 
 
-@router.get('/doctor-ep-header', response_model=List[DoctorEpHeaderOut])
-def doctor_ep_header_by_user(db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
-    header = doctor_ep_header_service.get_by_key(db=db, skip=0, limit=10, descending=False, count_results=False, user_id=current_user.id)
+@router.get('/doctor-ep-header/{doctor_id}', response_model=List[DoctorEpHeaderOut])
+def doctor_ep_header_by_user(doctor_id: int, db: Session = Depends(get_db)):
+    header = doctor_ep_header_service.get_by_key(db=db, skip=0, limit=10, descending=False, count_results=False, user_id=doctor_id)
     return handle_result(header)
 
 # , response_model=List[DoctorEpHeaderOut]
