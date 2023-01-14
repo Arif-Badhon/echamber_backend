@@ -58,6 +58,21 @@ class BaseRepo(Generic[ModelType, CreateSchemaType, UpdateSchemaType], ABSRepo):
             return [{"results": len(query)}, data]
         return data
 
+    # newly added - antor
+    def get_with_pagination_and_date(self, db: Session, start_date: str, end_date: str, skip: int, limit: int, descending: bool = False, count_results: bool = False):
+
+        query = db.query(self.model).filter(self.model.created_at.between(start_date, end_date)).all()
+
+        if descending == True:
+            data = db.query(self.model).filter(self.model.created_at.between(start_date, end_date)).order_by(
+                desc(self.model.created_at)).offset(skip).limit(limit).all()
+        else:
+            data = db.query(self.model).filter(self.model.created_at.between(start_date, end_date)).offset(skip).limit(limit).all()
+
+        if count_results == True:
+            return [{"results": len(query)}, data]
+        return data
+
     def get_by_key_first(self, db: Session, **kwargs):
         search_key = list(kwargs.items())[0][0]
         search_value = list(kwargs.items())[0][1]
@@ -78,6 +93,25 @@ class BaseRepo(Generic[ModelType, CreateSchemaType, UpdateSchemaType], ABSRepo):
         else:
             data = db.query(self.model).filter(
                 getattr(self.model, search_key) == search_value).offset(skip).limit(limit).all()
+
+        if count_results == True:
+            return [{"results": len(query)}, data]
+        return data
+
+    # newly added - antor
+    def get_by_key_and_date(self, db: Session, start_date: str, end_date: str, skip: int, limit: int, descending: bool = False, count_results: bool = False, **kwargs):
+        search_key = list(kwargs.items())[0][0]
+        search_value = list(kwargs.items())[0][1]
+
+        query = db.query(self.model).filter(
+            getattr(self.model, search_key) == search_value).filter(self.model.created_at.between(start_date, end_date)).all()
+
+        if descending == True:
+            data = db.query(self.model).filter(getattr(self.model, search_key) == search_value).filter(self.model.created_at.between(start_date, end_date)).order_by(
+                desc(self.model.created_at)).offset(skip).limit(limit).all()
+        else:
+            data = db.query(self.model).filter(
+                getattr(self.model, search_key) == search_value).filter(self.model.created_at.between(start_date, end_date)).offset(skip).limit(limit).all()
 
         if count_results == True:
             return [{"results": len(query)}, data]
