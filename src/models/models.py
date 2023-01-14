@@ -503,8 +503,6 @@ class EPrescription(BaseModel):
     patient_name = Column(String(100), nullable=True)
     patient_phone = Column(String(30), nullable=True) # newly added - antor
     patient_sex =  Column(String(10), nullable=True)
-    patient_age_years = Column(Integer, nullable=True)
-    patient_age_months = Column(Integer, nullable=True)
     blood_group = Column(String(5), nullable=True) # newly added - antor
     age_years = Column(Integer, nullable=True)
     age_months = Column(Integer, nullable=True)
