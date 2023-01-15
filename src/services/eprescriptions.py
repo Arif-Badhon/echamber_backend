@@ -150,6 +150,7 @@ class EPrescriptionService(BaseService[EPrescription, EpBase, EpUpdate]):
             i.doctor_name = users_repo.get_one(db=db, id=i.doctor_id).name
         return ServiceResult(data, status_code=status.HTTP_200_OK)
 
+    # Antor #
     def all_prescriptions(self, db: Session, start_date: str, end_date: str, skip: int, limit: int, descending: bool, count_results: bool):
         data = self.repo.get_with_pagination_and_date(db=db, start_date=start_date, end_date=end_date, skip=skip, limit=limit, descending=descending, count_results=count_results)
 
@@ -159,15 +160,22 @@ class EPrescriptionService(BaseService[EPrescription, EpBase, EpUpdate]):
         for i in data[1]:
             i.doctor_name = users_repo.get_one(db=db, id=i.doctor_id).name
         return ServiceResult(data, status_code=status.HTTP_200_OK)
+    
+    def prescription_count(self, db: Session, start_date: str, end_date: str, skip: int, limit: int, descending: bool, count_results: bool):
+        data = self.repo.get_with_pagination_and_date(db=db, start_date=start_date, end_date=end_date, skip=skip, limit=limit, descending=descending, count_results=count_results)
 
-    # Antor #
-    # def single_prescription_by_id(self, db: Session, user_id: int, skip: int, limit: int, descending: bool, count_results: bool):
-    #     data = self.repo.get_by_key(db=db, user_id=user_id, skip=skip, limit=limit, descending=descending, count_results=count_results)
+        if not data:
+            data = []
 
-    #     if not data:
-    #         data = []
+        return ServiceResult(data, status_code=status.HTTP_200_OK)
 
-    #     return ServiceResult(data, status_code=status.HTTP_200_OK)
+    def single_prescription_by_user_id(self, db: Session, patient_id: int, skip: int, limit: int, descending: bool, count_results: bool):
+        data = self.repo.get_by_key(db=db, patient_id=patient_id, skip=skip, limit=limit, descending=descending, count_results=count_results)
+
+        if not data:
+            data = []
+
+        return ServiceResult(data, status_code=status.HTTP_200_OK)
 
 
 ep_service = EPrescriptionService(EPrescription, ep_repo)
