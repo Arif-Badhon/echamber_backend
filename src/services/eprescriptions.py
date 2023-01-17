@@ -175,6 +175,8 @@ class EPrescriptionService(BaseService[EPrescription, EpBase, EpUpdate]):
         if not data:
             data = []
 
+        for i in data[1]:
+            i.doctor_name = users_repo.get_one(db=db, id=i.doctor_id).name
         return ServiceResult(data, status_code=status.HTTP_200_OK)
 
 
