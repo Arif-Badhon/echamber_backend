@@ -136,8 +136,6 @@ class EPrescriptionService(BaseService[EPrescription, EpBase, EpUpdate]):
         if not data:
             data = []
 
-        for i in data[1]:
-            i.doctor_name = users_repo.get_one(db=db, id=i.doctor_id).name
         return ServiceResult(data, status_code=status.HTTP_200_OK)
 
     def doctor_prescriptions(self, db: Session, start_date: str, end_date: str, skip: int, limit: int, descending: bool, count_results: bool, doctor_id: int):
@@ -157,8 +155,6 @@ class EPrescriptionService(BaseService[EPrescription, EpBase, EpUpdate]):
         if not data:
             data = []
 
-        for i in data[1]:
-            i.doctor_name = users_repo.get_one(db=db, id=i.doctor_id).name
         return ServiceResult(data, status_code=status.HTTP_200_OK)
     
     def prescription_count(self, db: Session, start_date: str, end_date: str, skip: int, limit: int, descending: bool, count_results: bool):
@@ -174,9 +170,7 @@ class EPrescriptionService(BaseService[EPrescription, EpBase, EpUpdate]):
 
         if not data:
             data = []
-            
-        for i in data[1]:
-            i.doctor_name = users_repo.get_one(db=db, id=i.doctor_id).name
+
         return ServiceResult(data, status_code=status.HTTP_200_OK)
 
 
