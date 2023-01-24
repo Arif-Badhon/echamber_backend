@@ -2,6 +2,7 @@ from datetime import date, datetime
 from pydantic import BaseModel
 from typing import Optional
 from schemas import ServiceOrderIn
+from schemas.health_plan import HealthPlanListOut
 
 
 class TelemedicineBase(BaseModel):
@@ -36,3 +37,11 @@ class TelemedicineOut(TelemedicineBase):
 class TelemedicineServiceIn(BaseModel):
     service: ServiceOrderIn
     telemedicine: TelemedicineIn
+
+
+class TelemedicineWithHealthplanOut(BaseModel):
+    telemedicine: TelemedicineOut
+    plan: HealthPlanListOut
+
+    class Config:
+        orm_mode = True

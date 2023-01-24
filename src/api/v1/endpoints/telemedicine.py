@@ -5,12 +5,14 @@ from typing import List, Union
 from sqlalchemy.orm import Session
 from db import get_db
 from api.v1.auth_dependcies import logged_in, logged_in_moderator
+from schemas.telemedicine_orders import TelemedicineWithHealthplanOut
 from services import telemedicine_service
 
 
 router = APIRouter()
 
 # List[Union[ResultInt, List[AdminPanelActivityOut]]]
+
 
 
 @router.get('/', response_model=List[Union[ResultInt, List[TelemedicineOut]]])
@@ -29,3 +31,9 @@ def single_telemedicine(id: int, db: Session = Depends(get_db), current_user: Se
 def update(id: int, data_update: TelemedicineUpdate, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_moderator)):
     edit = telemedicine_service.update(db=db, id=id, data_update=data_update)
     return handle_result(edit)
+
+
+@router.get('/telemedicine-with-plan')
+def telemedicine_with_plan(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+    data = telemedicine_service.telemedicine_wth_plan(db=db, skip=skip, limit=limit)
+    return handle_result(data)

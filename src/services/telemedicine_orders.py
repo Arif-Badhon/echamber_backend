@@ -1,7 +1,8 @@
+from unittest import skip
 from exceptions.service_result import handle_result
 from services import BaseService
 from repositories import telemedicine_repo, admin_panel_activity_repo
-from models import TeleMedicineOrder
+from models import TeleMedicineOrder, HealthPlanList
 from schemas import TelemedicineIn, TelemedicineInWithService, TelemedicineUpdate, ServiceOrderIn, AdminPanelActivityIn, TelemedicineServiceIn
 from sqlalchemy.orm import Session
 from typing import List, Union
@@ -43,5 +44,12 @@ class TelemedicineService(BaseService[TeleMedicineOrder, TelemedicineInWithServi
             return ServiceResult(created_by_employee, status_code=status.HTTP_201_CREATED)
 
 
-telemedicine_service = TelemedicineService(
-    TeleMedicineOrder, telemedicine_repo)
+    def telemedicine_wth_plan(self, db: Session, skip: str, limit: str):
+        data = telemedicine_repo.telemedicine_with_plan(db=db, skip=skip, limit=limit)
+        
+        if not data:
+            return ServiceResult([], status_code=status.HTTP_200_OK)
+        else:
+            return ServiceResult(data, status_code=status.HTTP_200_OK)
+
+telemedicine_service = TelemedicineService(TeleMedicineOrder, telemedicine_repo)
