@@ -68,8 +68,9 @@ def actirvity_log_service(user_id: int, service_name: str = 'patient_register', 
 def all_login_log(skip: int = 0, limit: int = 10, db: Session = Depends(get_db), currenct_user: Session = Depends(logged_in_employee)):
     l_log = login_log_services.all_log_with_user(db=db, skip=skip, limit=limit)
     return handle_result(l_log)
-# Admin for employee
 
+
+# Admin for employee
 
 @router.get('/employee/all', response_model=List[Union[ResultInt, List[UserOutAuth]]])
 def all_employee(skip: int = 0, limit: int = 10, db: Session = Depends(get_db), current_user: Session = Depends(logged_in)):
@@ -90,6 +91,7 @@ def empployee_create(data_in: UserCreate, db: Session = Depends(get_db), current
 
 
 # Admin for health partner
+
 @router.get('/health-partner/all', response_model=List[HealthPartnerOut])
 def health_partner_all(db: Session = Depends(get_db), current_user: Session = Depends(logged_in)):
     health_partner = health_partner_service.get(db=db)
@@ -110,7 +112,6 @@ def health_partner_create(data_in: HealthPartnerIn, db: Session = Depends(get_db
 
 # Admin for doctors
 
-
 @router.post('/doctor/register', response_model=AdminPanelActivityOut, description='<b>access:</b> admin and medical affairs')
 def doctor_register(data_in: DoctorSignup, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_medical_affairs)):
     doctor_reg = admin_service.doctor_register(db=db, data_in=data_in, creator_id=current_user.id)
@@ -118,8 +119,14 @@ def doctor_register(data_in: DoctorSignup, db: Session = Depends(get_db), curren
 
 
 @router.get('/doctors/active', response_model=List[Union[ResultInt, List[UserDoctorOut]]])
-def doctors_active_list(start_date: str = beginning_date, end_date: str = current_date, skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
-    docs = admin_service.doctor_active_list(db, start_date=start_date, end_date=end_date, skip=skip, limit=limit)
+def doctors_active_list(name: str = None, phone: str= None, speciality: str = None, district: str = None, bmdc: str = None, start_date: str = beginning_date, end_date: str = current_date, skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+    docs = admin_service.doctor_active_list(db, name=name, phone=phone, speciality=speciality, district=district, bmdc=bmdc, start_date=start_date, end_date=end_date, skip=skip, limit=limit)
+    return handle_result(docs)
+
+
+@router.get('/doctors/active/area', response_model=List[Union[ResultInt, List[UserDoctorOut]]])
+def doctors_active_list_with_area(name: str = None, speciality: str = None, district: str = None, start_date: str = beginning_date, end_date: str = current_date, skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+    docs = admin_service.doctor_active_list_with_area(db, name=name, speciality=speciality, district=district, start_date=start_date, end_date=end_date, skip=skip, limit=limit)
     return handle_result(docs)
 
 
@@ -204,6 +211,7 @@ def get_profile_pic(user_id: int, db: Session = Depends(get_db)):
 
 
 # Admin for patient
+
 @router.post('/patient/create', response_model=AdminPanelActivityOut)
 def register_patient(data_in: UserCreate, db: Session = Depends(get_db), current_user: Session = Depends(logged_in)):
     patient_created = admin_service.signup_patient(db=db, data_in=data_in, creator_id=current_user.id)

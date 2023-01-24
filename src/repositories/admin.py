@@ -5,7 +5,7 @@ from .roles import roles_repo
 from .pharmacy import pharmacy_repo
 from .clinic import clinic_repo
 from schemas import UserCreate, UserUpdate, PharmacyUpdate, ClinicUpdate
-from models import User, Doctor, DoctorQualification, DoctorSpeciality, AdminPanelActivity, Pharmacy, Clinic
+from models import User, Doctor, DoctorQualification, DoctorSpeciality, DoctorChamber, DoctorWorkPlace, AdminPanelActivity, Pharmacy, Clinic
 
 
 class AdminRepo(BaseRepo[User, UserCreate, UserUpdate]):
@@ -26,9 +26,23 @@ class AdminRepo(BaseRepo[User, UserCreate, UserUpdate]):
         data = self.update(db=db, id=id, data_update=UserUpdate(is_active=not current_status))
         return data
 
+
     # all doctor repo
 
-    def doctors_active_list(self, db: Session, start_date: str, end_date: str,  skip: int = 0, limit: int = 10):
+    def doctors_active_list(self, db: Session, name: str, phone: str, speciality: str, district: str, bmdc: str, start_date: str, end_date: str,  skip: int = 0, limit: int = 10):
+
+        # for all result
+        if name is None:
+            name = ''
+        if speciality is None:
+            speciality = ''
+        if district is None:
+            district = ''
+        if phone is None:
+            phone = ''
+        if bmdc is None:
+            bmdc = ''
+
         doctor_role_id = roles_repo.search_name_id(db, name='doctor')
         query = db.query(
             User, Doctor, DoctorQualification, DoctorSpeciality).join(Doctor).filter(
@@ -37,7 +51,11 @@ class AdminRepo(BaseRepo[User, UserCreate, UserUpdate]):
             User.is_active == True).filter(
             User.id == DoctorQualification.user_id).filter(
             User.id == DoctorSpeciality.user_id).filter(
-            User.created_at.between(start_date, end_date)).offset(skip).limit(limit).all()
+            User.created_at.between(start_date, end_date)).filter(
+            User.name.like(f"%{name}%")).filter(
+            User.phone.like(f"%{phone}%")).filter(
+            DoctorSpeciality.speciality.like(f"%{speciality}%")).filter(
+            Doctor.bmdc.like(f"%{bmdc}%")).offset(skip).limit(limit).all()
         query_all = db.query(
             User, Doctor, DoctorQualification, DoctorSpeciality).join(Doctor).filter(
             User.role_id == doctor_role_id).order_by(
@@ -45,7 +63,50 @@ class AdminRepo(BaseRepo[User, UserCreate, UserUpdate]):
             User.is_active == True).filter(
             User.id == DoctorQualification.user_id).filter(
             User.id == DoctorSpeciality.user_id).filter(
-            User.created_at.between(start_date, end_date)).all()
+            User.created_at.between(start_date, end_date)).filter(
+            User.name.like(f"%{name}%")).filter(
+            User.phone.like(f"%{phone}%")).filter(
+            DoctorSpeciality.speciality.like(f"%{speciality}%")).filter(
+            Doctor.bmdc.like(f"%{bmdc}%")).all()
+        results = len(query_all)
+        return [{"results": results}, query]
+    
+    # antor
+    def doctors_active_list_with_area(self, db: Session, name: str, speciality: str, district: str, start_date: str, end_date: str, skip: int = 0, limit: int = 10):
+
+        # for all result
+        if name is None:
+            name = ''
+        if speciality is None:
+            speciality = ''
+        if district is None:
+            district = ''
+
+        doctor_role_id = roles_repo.search_name_id(db, name='doctor')
+        query = db.query(
+            User, Doctor, DoctorQualification, DoctorSpeciality).join(Doctor).filter(
+            User.role_id == doctor_role_id).order_by(
+            desc(self.model.created_at)).filter(
+            User.is_active == True).filter(
+            User.id == DoctorQualification.user_id).filter(
+            User.id == DoctorSpeciality.user_id).filter(
+            User.id == DoctorChamber.user_id).filter(
+            User.created_at.between(start_date, end_date)).filter(
+            User.name.like(f"%{name}%")).filter(
+            DoctorSpeciality.speciality.like(f"%{speciality}%")).filter(
+            DoctorChamber.district.like(f"%{district}%")).offset(skip).limit(limit).all()
+        query_all = db.query(
+            User, Doctor, DoctorQualification, DoctorSpeciality).join(Doctor).filter(
+            User.role_id == doctor_role_id).order_by(
+            desc(self.model.created_at)).filter(
+            User.is_active == True).filter(
+            User.id == DoctorQualification.user_id).filter(
+            User.id == DoctorSpeciality.user_id).filter(
+            User.id == DoctorChamber.user_id).filter(
+            User.created_at.between(start_date, end_date)).filter(
+            User.name.like(f"%{name}%")).filter(
+            DoctorSpeciality.speciality.like(f"%{speciality}%")).filter(
+            DoctorChamber.district.like(f"%{district}%")).all()
         results = len(query_all)
         return [{"results": results}, query]
 
