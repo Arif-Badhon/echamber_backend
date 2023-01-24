@@ -224,8 +224,30 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
 
             return ServiceResult(created_by_employee, status_code=status.HTTP_201_CREATED)
 
-    def doctor_active_list(self, db: Session, start_date: str, end_date: str,  skip: int = 0, limit: int = 10):
-        all_doc = self.repo.doctors_active_list(db=db, start_date=start_date, end_date=end_date, skip=skip, limit=limit)
+    def doctor_active_list(self, db: Session, name: str, phone: str, speciality: str, district: str, bmdc: str, start_date: str, end_date: str,  skip: int = 0, limit: int = 10):
+        all_doc = self.repo.doctors_active_list(db=db, name=name, phone=phone, speciality=speciality, district=district, bmdc=bmdc, start_date=start_date, end_date=end_date, skip=skip, limit=limit)
+
+        data_with_images_workplaces = []
+        for i in all_doc[1]:
+            doc_image_serve = image_log_service.get_by_two_key(db=db, skip=0, limit=100, descending=True, count_results=False, user_id=i.User.id, service_name='propic')
+            doc_workplace_serve = doctor_workplace_service.get_by_key(db=db, skip=0, limit=100, descending=True, count_results=False, user_id=i.User.id)
+            doc_images = handle_result(doc_image_serve)
+            doc_workplace = handle_result(doc_workplace_serve)
+
+            i.Doctor.images = doc_images
+            i.Doctor.workplace = doc_workplace
+            data_with_images_workplaces.append(i)
+
+        data = [{"results": all_doc[0]["results"]}, data_with_images_workplaces]
+
+        if not all_doc:
+            return ServiceResult([], status_code=status.HTTP_200_OK)
+        else:
+            return ServiceResult(data, status_code=status.HTTP_200_OK)
+
+    # antor
+    def doctor_active_list_with_area(self, db: Session, name: str, speciality: str, district: str, start_date: str, end_date: str,  skip: int = 0, limit: int = 10):
+        all_doc = self.repo.doctors_active_list_with_area(db=db, name=name, speciality=speciality, district=district, start_date=start_date, end_date=end_date, skip=skip, limit=limit)
 
         data_with_images = []
         for i in all_doc[1]:
@@ -267,6 +289,7 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
                                  ' - HEALTHx এর SMART DOCTOR পোর্টালে আপনার DIGITAL PROFILE টি ACTIVE হয়েছে। লগ ইন করে প্রোফাইলটি কমপ্লিট করুন, আর ছড়িয়ে দিন আপনার পরিচিতি দেশব্যাপী। -ধন্যবাদ')
 
         return doc
+
 
     def signup_patient(self, db: Session, data_in: UserCreate, creator_id: int):
         singnup_data = UserCreate(
