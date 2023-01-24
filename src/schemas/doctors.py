@@ -2,10 +2,12 @@ from datetime import datetime, date
 from typing import List, Optional
 from pydantic import BaseModel
 from pydantic.types import constr
+
 from .image_log import ImageLogOut
 from schemas.users import UserOut
 from schemas.doctor_specialities import DoctorSpecialityOut
 from schemas.doctor_qualifications import DoctorQualificationOut
+from schemas.doctor_workplace import DoctorWorkPlaceOut
 
 
 class DoctorBase(BaseModel):
@@ -48,6 +50,16 @@ class DoctorWithImages(DoctorBase):
     user_id: int
     created_at: datetime
     images: List[ImageLogOut]
+
+    class Config:
+        orm_mode = True
+
+class DoctorWithImagesAndWorkplace(DoctorBase):
+    id: int
+    user_id: int
+    created_at: datetime
+    images: List[ImageLogOut]
+    workplace: List[DoctorWorkPlaceOut]
 
     class Config:
         orm_mode = True
