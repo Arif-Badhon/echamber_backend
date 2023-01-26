@@ -3,7 +3,7 @@ from fastapi import status
 from exceptions import handle_result, ServiceResult, AppException
 from models import ServiceOrder
 from schemas import ServiceOrderIn, ServiceOrderUpdate, MedicineOrderIn, MedicineOrderInWithService, AdminPanelActivityIn
-from repositories import service_order_repo, admin_panel_activity_repo, follow_up_repo, users_repo
+from repositories import service_order_repo, admin_panel_activity_repo, follow_up_repo, users_repo, health_plan_for_patient_repo
 from services import BaseService
 from .medicine_order import medicine_order_service
 from .users import users_service
@@ -16,8 +16,17 @@ class ServiceOrderService(BaseService[ServiceOrder, ServiceOrderIn, ServiceOrder
     def service_with_patient(
             self, db: Session, service_id: int, customer_id: int, customer_name: str, customer_phone: str, address: str, service_name: str, start_date: str, end_date: str, order_date: str,
             order_status: str, skip: int, limit: int):
-        data = self.repo.service_with_patient(db=db, service_id=service_id, customer_id=customer_id, customer_name=customer_name, customer_phone=customer_phone, address=address,
-                                              service_name=service_name, start_date=start_date, end_date=end_date, order_date=order_date, order_status=order_status, skip=skip, limit=limit)
+        all_service = self.repo.service_with_patient(db=db, service_id=service_id, customer_id=customer_id, customer_name=customer_name, customer_phone=customer_phone, address=address,
+        service_name=service_name, start_date=start_date, end_date=end_date, order_date=order_date, order_status=order_status, skip=skip, limit=limit)
+
+        data_with_plan = []
+        for i in all_service[1]:
+            plans = health_plan_for_patient_repo.health_plan_patient(db=db, service_id=i.ServiceOrder.id)
+
+            i.ServiceOrder.plan = plans
+            data_with_plan.append(i)
+
+        data = [{"results": all_service[0]["results"]}, data_with_plan]
         return data
 
     def patient_with_multiservice(self, db: Session):
