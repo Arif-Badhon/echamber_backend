@@ -1,21 +1,18 @@
-from models.models import HealthPlanList
+from models.models import HealthPlanList, ServiceOrder
 from repositories import BaseRepo
 from schemas import TelemedicineIn, TelemedicineInWithService, TelemedicineUpdate
 from models import TeleMedicineOrder
 from sqlalchemy.orm import Session
-from sqlalchemy import desc
 
 
 class TelemedicineRepo(BaseRepo[TeleMedicineOrder, TelemedicineInWithService, TelemedicineUpdate]):
-    def telemedicine_with_plan(self, db: Session, skip: str, limit: str):
-        query = db.query(TeleMedicineOrder, HealthPlanList).join(
-        HealthPlanList, TeleMedicineOrder.health_plan_id == HealthPlanList.id).order_by(
-            desc(self.model.created_at)).offset(skip).limit(limit).all()
+
+    def telemedicine_with_plan(self, db: Session, service_id: int):
+        query = db.query(HealthPlanList).filter(
+        TeleMedicineOrder.health_plan_id == HealthPlanList.id).filter(
+        TeleMedicineOrder.service_order_id == service_id).all()
         
-        query_all = db.query(TeleMedicineOrder, HealthPlanList).join(
-        HealthPlanList, TeleMedicineOrder.health_plan_id == HealthPlanList.id).all()
-        
-        results = len(query_all)
-        return [{"results": results}, query]
+        return query
+
                 
 telemedicine_repo = TelemedicineRepo(TeleMedicineOrder)
