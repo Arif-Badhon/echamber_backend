@@ -65,6 +65,15 @@ class HealthPlanForPatient(BaseService[HealthPlanForPatient, HealthPlanForPatien
             else:
                 print('')
             return ServiceResult(created_by_employee, status_code=status.HTTP_201_CREATED)
+    
+
+    def health_plan_patient(self, db: Session, service_id: int):
+        data = health_plan_for_patient_repo.health_plan_patient(db=db, service_id=service_id)
+        
+        if not data:
+            return ServiceResult([], status_code=status.HTTP_200_OK)
+        else:
+            return ServiceResult(data, status_code=status.HTTP_200_OK)
 
 
 health_plan_for_patient_service = HealthPlanForPatient(HealthPlanForPatient, health_plan_for_patient_repo)
