@@ -44,8 +44,8 @@ class TelemedicineService(BaseService[TeleMedicineOrder, TelemedicineInWithServi
             return ServiceResult(created_by_employee, status_code=status.HTTP_201_CREATED)
 
 
-    def telemedicine_wth_plan(self, db: Session, skip: str, limit: str):
-        data = telemedicine_repo.telemedicine_with_plan(db=db, skip=skip, limit=limit)
+    def telemedicine_wth_plan(self, db: Session, service_id: int):
+        data = telemedicine_repo.telemedicine_with_plan(db=db, service_id=service_id)
         
         if not data:
             return ServiceResult([], status_code=status.HTTP_200_OK)
