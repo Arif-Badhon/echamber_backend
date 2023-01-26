@@ -23,8 +23,7 @@ def all_service_order(skip: int = 0, limit: int = 15, db: Session = Depends(get_
 @router.get('/filter', response_model=List[Union[ResultInt, List[ServiceOrderoutWithUser]]], description='Access: employee')
 def all_service_filter(
         service_id: int = None, customer_id: int = None, customer_name: str = None, customer_phone: str = None, address: str = None, service_name: str = None, start_date: str = None, end_date: str = None,
-        order_date: str = None, order_status: str = None, skip: int = 0, limit: int = 15, db: Session = Depends(get_db),
-        current_user: Session = Depends(logged_in_employee)):
+        order_date: str = None, order_status: str = None, skip: int = 0, limit: int = 15, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_employee)):
     data = service_order_service.service_with_patient(
         db=db, service_id=service_id, customer_id=customer_id, customer_name=customer_name, customer_phone=customer_phone, address=address, service_name=service_name, start_date=start_date,
         end_date=end_date, order_date=order_date, order_status=order_status, skip=skip, limit=limit)

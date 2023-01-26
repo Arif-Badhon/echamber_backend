@@ -5,7 +5,8 @@ from typing import List, Union
 from sqlalchemy.orm import Session
 from db import get_db
 from api.v1.auth_dependcies import logged_in, logged_in_moderator
-from schemas.telemedicine_orders import TelemedicineWithHealthplanOut
+from schemas.health_plan import HealthPlanListOut
+from schemas.health_plan_service import HealthPlanServiceOut
 from services import telemedicine_service
 
 
@@ -33,7 +34,7 @@ def update(id: int, data_update: TelemedicineUpdate, db: Session = Depends(get_d
     return handle_result(edit)
 
 
-@router.get('/telemedicine-with-plan')
-def telemedicine_with_plan(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
-    data = telemedicine_service.telemedicine_wth_plan(db=db, skip=skip, limit=limit)
+@router.get('/telemedicine-with-plan/{service_id}', response_model=List[HealthPlanServiceOut])
+def telemedicine_with_plan(service_id: int, db: Session = Depends(get_db)):
+    data = telemedicine_service.telemedicine_wth_plan(db=db, service_id=service_id)
     return handle_result(data)

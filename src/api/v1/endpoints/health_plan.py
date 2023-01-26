@@ -33,3 +33,8 @@ def single_health_plan(id: int, db: Session = Depends(get_db)):
 def edit(id: int, data_update: HealthPlanListUpdate, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_admin)):
     up = healtth_plan_list_service.update(db=db, id=id, data_update=data_update)
     return handle_result(up)
+
+@router.get('/patient-plan-with-service_id/{service_id}')
+def health_plan_patient(service_id: int, db: Session = Depends(get_db)):
+    data = health_plan_for_patient_service.health_plan_patient(db=db, service_id=service_id)
+    return handle_result(data)
