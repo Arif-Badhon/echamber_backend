@@ -1,6 +1,8 @@
 from datetime import date, datetime
 from pydantic import BaseModel
-from typing import Optional
+from typing import List, Optional
+
+from schemas.health_plan_service import HealthPlanServiceOut
 from .users import UserOut
 
 
@@ -54,8 +56,17 @@ class ServiceOrderOut(ServiceOrderBase):
         orm_mode = True
 
 
+class ServiceOrderWithPlanOut(ServiceOrderBase):
+    id: int
+    created_at: date
+    plan: List[HealthPlanServiceOut]
+
+    class Config:
+        orm_mode = True
+
+
 class ServiceOrderoutWithUser(BaseModel):
-    ServiceOrder: ServiceOrderOut
+    ServiceOrder: ServiceOrderWithPlanOut
     User: UserOut
 
     class Config:
