@@ -119,14 +119,14 @@ def doctor_register(data_in: DoctorSignup, db: Session = Depends(get_db), curren
 
 
 @router.get('/doctors/active', response_model=List[Union[ResultInt, List[UserDoctorOut]]])
-def doctors_active_list(name: str = None, phone: str= None, speciality: str = None, district: str = None, bmdc: str = None, start_date: str = beginning_date, end_date: str = current_date, skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
-    docs = admin_service.doctor_active_list(db, name=name, phone=phone, speciality=speciality, district=district, bmdc=bmdc, start_date=start_date, end_date=end_date, skip=skip, limit=limit)
+def doctors_active_list(name: str = None, phone: str= None, speciality: str = None, qualification: str = None, district: str = None, bmdc: str = None, start_date: str = beginning_date, end_date: str = current_date, skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+    docs = admin_service.doctor_active_list(db, name=name, phone=phone, speciality=speciality, qualification=qualification, district=district, bmdc=bmdc, start_date=start_date, end_date=end_date, skip=skip, limit=limit)
     return handle_result(docs)
 
 
 @router.get('/doctors/active/area', response_model=List[Union[ResultInt, List[UserDoctorOut]]])
-def doctors_active_list_with_area(name: str = None, speciality: str = None, district: str = None, start_date: str = beginning_date, end_date: str = current_date, skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
-    docs = admin_service.doctor_active_list_with_area(db, name=name, speciality=speciality, district=district, start_date=start_date, end_date=end_date, skip=skip, limit=limit)
+def doctors_active_list_with_area(name: str = None, phone: str = None, speciality: str = None, qualification: str = None, district: str = None, bmdc: str = None, start_date: str = beginning_date, end_date: str = current_date, skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+    docs = admin_service.doctor_active_list_with_area(db, name=name, phone=phone, speciality=speciality, qualification=qualification, district=district, bmdc=bmdc, start_date=start_date, end_date=end_date, skip=skip, limit=limit)
     return handle_result(docs)
 
 

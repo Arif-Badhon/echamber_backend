@@ -29,17 +29,19 @@ class AdminRepo(BaseRepo[User, UserCreate, UserUpdate]):
 
     # all doctor repo
 
-    def doctors_active_list(self, db: Session, name: str, phone: str, speciality: str, district: str, bmdc: str, start_date: str, end_date: str,  skip: int = 0, limit: int = 10):
+    def doctors_active_list(self, db: Session, name: str, phone: str, speciality: str, qualification: str, district: str, bmdc: str, start_date: str, end_date: str,  skip: int = 0, limit: int = 10):
 
         # for all result
         if name is None:
             name = ''
-        if speciality is None:
-            speciality = ''
-        if district is None:
-            district = ''
         if phone is None:
             phone = ''
+        if speciality is None:
+            speciality = ''
+        if qualification is None:
+            qualification = ''
+        if district is None:
+            district = ''
         if bmdc is None:
             bmdc = ''
 
@@ -55,6 +57,7 @@ class AdminRepo(BaseRepo[User, UserCreate, UserUpdate]):
             User.name.like(f"%{name}%")).filter(
             User.phone.like(f"%{phone}%")).filter(
             DoctorSpeciality.speciality.like(f"%{speciality}%")).filter(
+            DoctorQualification.qualification.like(f"%{qualification}%")).filter(
             Doctor.bmdc.like(f"%{bmdc}%")).offset(skip).limit(limit).all()
         query_all = db.query(
             User, Doctor, DoctorQualification, DoctorSpeciality).join(Doctor).filter(
@@ -67,20 +70,27 @@ class AdminRepo(BaseRepo[User, UserCreate, UserUpdate]):
             User.name.like(f"%{name}%")).filter(
             User.phone.like(f"%{phone}%")).filter(
             DoctorSpeciality.speciality.like(f"%{speciality}%")).filter(
+            DoctorQualification.qualification.like(f"%{qualification}%")).filter(
             Doctor.bmdc.like(f"%{bmdc}%")).all()
         results = len(query_all)
         return [{"results": results}, query]
     
     # antor
-    def doctors_active_list_with_area(self, db: Session, name: str, speciality: str, district: str, start_date: str, end_date: str, skip: int = 0, limit: int = 10):
+    def doctors_active_list_with_area(self, db: Session, name: str, phone: str, speciality: str, qualification: str, district: str, bmdc: str, start_date: str, end_date: str, skip: int = 0, limit: int = 10):
 
         # for all result
         if name is None:
             name = ''
+        if phone is None:
+            phone = ''
         if speciality is None:
             speciality = ''
+        if qualification is None:
+            qualification = ''
         if district is None:
             district = ''
+        if bmdc is None:
+            bmdc = ''
 
         doctor_role_id = roles_repo.search_name_id(db, name='doctor')
         query = db.query(
@@ -93,7 +103,10 @@ class AdminRepo(BaseRepo[User, UserCreate, UserUpdate]):
             User.id == DoctorChamber.user_id).filter(
             User.created_at.between(start_date, end_date)).filter(
             User.name.like(f"%{name}%")).filter(
+            User.phone.like(f"%{phone}%")).filter(
             DoctorSpeciality.speciality.like(f"%{speciality}%")).filter(
+            DoctorQualification.qualification.like(f"%{qualification}%")).filter(
+            Doctor.bmdc.like(f"%{bmdc}%")).filter(
             DoctorChamber.district.like(f"%{district}%")).offset(skip).limit(limit).all()
         query_all = db.query(
             User, Doctor, DoctorQualification, DoctorSpeciality).join(Doctor).filter(
@@ -105,7 +118,10 @@ class AdminRepo(BaseRepo[User, UserCreate, UserUpdate]):
             User.id == DoctorChamber.user_id).filter(
             User.created_at.between(start_date, end_date)).filter(
             User.name.like(f"%{name}%")).filter(
+            User.phone.like(f"%{phone}%")).filter(
             DoctorSpeciality.speciality.like(f"%{speciality}%")).filter(
+            DoctorQualification.qualification.like(f"%{qualification}%")).filter(
+            Doctor.bmdc.like(f"%{bmdc}%")).filter(
             DoctorChamber.district.like(f"%{district}%")).all()
         results = len(query_all)
         return [{"results": results}, query]
@@ -136,6 +152,7 @@ class AdminRepo(BaseRepo[User, UserCreate, UserUpdate]):
             {self.model.is_active: True}, synchronize_session=False)
         db.commit()
         return self.get_one(db, id)
+
 
     # all patient repo
 
@@ -198,6 +215,7 @@ class AdminRepo(BaseRepo[User, UserCreate, UserUpdate]):
                 User.created_at.between(start_date, end_date)).order_by(desc(self.model.created_at)).offset(skip).limit(limit).all()
             return [{"results": query_len}, query]
 
+
     # Pharmacy
 
     def pharmacy_active_list(self, db: Session, skip: int, limit: int):
@@ -214,6 +232,7 @@ class AdminRepo(BaseRepo[User, UserCreate, UserUpdate]):
         current_status = pharmacy_repo.get_one(db=db, id=id).pharmacy_is_active
         data = pharmacy_repo.update(db=db, id=id, data_update=PharmacyUpdate(pharmacy_is_active=not current_status))
         return data
+
 
     # Clinic
 
