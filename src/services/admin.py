@@ -270,15 +270,18 @@ class Admin(BaseService[User, UserCreate, UserUpdate]):
     def doctor_inactive_list(self, db: Session, start_date: str, end_date: str, skip: int = 0, limit: int = 10):
         all_doc = self.repo.doctors_inactive_list(db=db, start_date=start_date, end_date=end_date, skip=skip, limit=limit)
 
-        data_with_images = []
+        data_with_images_workplaces = []
         for i in all_doc[1]:
             doc_image_serve = image_log_service.get_by_two_key(db=db, skip=0, limit=100, descending=True, count_results=False, user_id=i.User.id, service_name='propic')
+            doc_workplace_serve = doctor_workplace_service.get_by_key(db=db, skip=0, limit=100, descending=True, count_results=False, user_id=i.User.id)
             doc_images = handle_result(doc_image_serve)
+            doc_workplace = handle_result(doc_workplace_serve)
 
             i.Doctor.images = doc_images
-            data_with_images.append(i)
+            i.Doctor.workplace = doc_workplace
+            data_with_images_workplaces.append(i)
 
-        data = [{"results": all_doc[0]["results"]}, data_with_images]
+        data = [{"results": all_doc[0]["results"]}, data_with_images_workplaces]
 
         if not all_doc:
             return ServiceResult([], status_code=status.HTTP_200_OK)
