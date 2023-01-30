@@ -28,6 +28,7 @@ class DoctorScheduleUpdate(DoctorScheduleBase):
 
 
 class DoctorScheduleOut(DoctorScheduleBase):
+    id: int
     user_id: int
     time: Optional[str] = None
 
