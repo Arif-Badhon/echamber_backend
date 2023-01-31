@@ -3,11 +3,12 @@ from pydantic import BaseModel
 from typing import List, Optional
 
 from schemas.health_plan_service import HealthPlanServiceOut
-from .users import UserOut
+from .users import UserOut, UserOutAuth
 
 
 class ServiceOrderBase(BaseModel):
     service_name: Optional[str] = None
+    service_issuer_id: Optional[int] = None
     patient_id: Optional[int] = None
     order_placement: Optional[datetime] = None
     order_completion: Optional[datetime] = None
@@ -60,6 +61,8 @@ class ServiceOrderWithPlanOut(ServiceOrderBase):
     id: int
     created_at: date
     plan: List[HealthPlanServiceOut]
+    issuer: List[UserOutAuth]
+
 
     class Config:
         orm_mode = True
