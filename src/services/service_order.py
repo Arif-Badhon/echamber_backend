@@ -19,14 +19,16 @@ class ServiceOrderService(BaseService[ServiceOrder, ServiceOrderIn, ServiceOrder
         all_service = self.repo.service_with_patient(db=db, service_id=service_id, customer_id=customer_id, customer_name=customer_name, customer_phone=customer_phone, address=address,
         service_name=service_name, start_date=start_date, end_date=end_date, order_date=order_date, order_status=order_status, skip=skip, limit=limit)
 
-        data_with_plan = []
+        data_with_plan_and_issuer = []
         for i in all_service[1]:
             plans = health_plan_for_patient_repo.health_plan_patient(db=db, service_id=i.ServiceOrder.id)
+            issuer = users_repo.get_by_key(db=db, skip=0, limit=100, descending=True, count_results=False, id=i.ServiceOrder.service_issuer_id)
 
             i.ServiceOrder.plan = plans
-            data_with_plan.append(i)
+            i.ServiceOrder.issuer = issuer
+            data_with_plan_and_issuer.append(i)
 
-        data = [{"results": all_service[0]["results"]}, data_with_plan]
+        data = [{"results": all_service[0]["results"]}, data_with_plan_and_issuer]
         return data
 
     def patient_with_multiservice(self, db: Session):
