@@ -106,6 +106,7 @@ class Notice(BaseModel):
 class ServiceOrder(BaseModel):
     __tablename__ = "service_orders"
     service_name = Column(String(100), nullable=False)
+    service_issuer_id = Column(Integer, nullable=True)
     patient_id = Column(Integer, nullable=False)
     order_placement = Column(DateTime, nullable=True)
     order_completion = Column(DateTime, nullable=True)
