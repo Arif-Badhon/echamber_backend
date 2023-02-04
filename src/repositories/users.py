@@ -21,5 +21,9 @@ class UserRepo(BaseRepo[User, UserCreate, UserUpdate]):
         db.commit()
         return self.get_one(db, id=user_id)
 
+    # def user_info_with_role_name(self, db: Session, id: int):
+    #     data = db.query(User, Role).join(Role).filter(Role.id == User.role_id).filter(User.id == id).all()
+    #     return data
+
 
 users_repo = UserRepo(User)
