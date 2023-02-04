@@ -22,7 +22,7 @@ class ServiceOrderService(BaseService[ServiceOrder, ServiceOrderIn, ServiceOrder
         data_with_plan_and_issuer = []
         for i in all_service[1]:
             plans = health_plan_for_patient_repo.health_plan_patient(db=db, service_id=i.ServiceOrder.id)
-            issuer = users_repo.get_by_key(db=db, skip=0, limit=100, descending=True, count_results=False, id=i.ServiceOrder.service_issuer_id)
+            issuer = users_repo.get_by_key(db=db, skip=0, limit=2, descending=True, count_results=False, id=i.ServiceOrder.service_issuer_id)
 
             i.ServiceOrder.plan = plans
             i.ServiceOrder.issuer = issuer
