@@ -1,83 +1,102 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', path='/css/style.css') }}">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', path='/css/style.css') }}"
+    />
 
     <title>Hx Smart-Chamber API</title>
-
-</head>
-<body>
+  </head>
+  <body>
     <div class="hero">
-        <div class="wrapper">
-            <div>        
-                <h2>HEALTHx</h2>
-                <h1>Smart Chamber API</h1>
-                <a href="/docs" target="_blank">API DOCS</a>
-            </div>
-            <div class="form-div">
-                <div class="form-wrapper">
-                    <h2>Login for Token</h2>
-                    <form>
-                        <label for="user">Email or Phone number</label>
-                        <input type="text" id="user">
-                        <label for="pass">Password</label>
-                        <input type="password" id="pass">
-                        <input type="button" onclick="get()" value='Submit' >
-                    </form>
-                    <textarea id="token" class="token" onclick="cp()" readonly="readonly"></textarea>
-                </div>
-            </div>
+      <div class="wrapper">
+        <div>
+          <h2>HEALTHx</h2>
+          <h1>Smart Chamber API</h1>
+          <a href="/docs" target="_blank">API DOCS</a>
         </div>
+        <div class="form-div">
+          <span class="api">API Count: <span id="api"></span></span>
+          <div class="form-wrapper">
+            <h2>Login for Token</h2>
+            <form>
+              <label for="user">Email or Phone number</label>
+              <input type="text" id="user" />
+              <label for="pass">Password</label>
+              <input type="password" id="pass" />
+              <input type="button" onclick="get()" value="Submit" />
+            </form>
+            <textarea
+              id="token"
+              class="token"
+              onclick="cp()"
+              readonly="readonly"
+            ></textarea>
+          </div>
+        </div>
+      </div>
     </div>
     <script>
-        function get(){
-            let user = document.getElementById('user').value
-            let pass = document.getElementById('pass').value
+      function get() {
+        let user = document.getElementById("user").value;
+        let pass = document.getElementById("pass").value;
 
-            let funFetch = async ()=>{
+        let funFetch = async () => {
+          let logFetch = await fetch(`http://localhost:8000/api/v1/login`, {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            dataType: "json",
+            method: "POST",
+            body: JSON.stringify({
+              identifier: user,
+              password: pass,
+            }),
+          });
 
-                let logFetch = await fetch(`http://localhost:8000/api/v1/login`, {
-                    headers: {
-                        Accept: 'application/json',
-                        'Content-Type': 'application/json',
-                    },
-                    dataType: 'json',
-                    method: 'POST',
-                    body: JSON.stringify({
-                        identifier: user,
-                        password: pass,
-                    }),
-                })
+          let log = await logFetch.json();
 
-                let log = await logFetch.json()
+          if (logFetch.ok) {
+            document.getElementById("token").value = log.access_token;
+            console.log(log);
+          } else {
+            document.getElementById("token").value = log.context;
+          }
+        };
+        funFetch();
+      }
 
-                if (logFetch.ok) {
-                    document.getElementById('token').value = log.access_token
-                    console.log(log)
-                } else {
-                    document.getElementById('token').value = log.context
-                }
-            }
-            funFetch()
+      function cp() {
+        var copyText = document.getElementById("token");
 
+        /* Select the text field */
+        copyText.select();
+        copyText.setSelectionRange(0, 99999); /* For mobile devices */
+
+        /* Copy the text inside the text field */
+        navigator.clipboard.writeText(copyText.value);
+
+        /* Alert the copied text */
+        alert("Copied the text: " + copyText.value);
+      }
+
+      //  api count //
+      let dataFetch = async () => {
+        let response = await fetch(`http://127.0.0.1:8000/openapi.json`);
+        let data = await response.json();
+
+        if (response.ok) {
+          document.getElementById("api").innerText = Object.keys(
+            data.paths
+          ).length;
         }
-
-        function cp(){
-            var copyText = document.getElementById("token");
-
-            /* Select the text field */
-            copyText.select();
-            copyText.setSelectionRange(0, 99999); /* For mobile devices */
-
-            /* Copy the text inside the text field */
-            navigator.clipboard.writeText(copyText.value);
-
-            /* Alert the copied text */
-            alert("Copied the text: " + copyText.value);
-        }
+      };
+      dataFetch();
     </script>
-</body>
+  </body>
 </html>
