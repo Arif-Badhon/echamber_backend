@@ -1,6 +1,8 @@
 from datetime import datetime
 from pydantic import BaseModel
 from typing import List, Optional
+
+from schemas.users import UserOut
 from .ep_chief_complaints import ChiefComplaintsOut, ChiefComplaintsIn
 from .ep_history import HistoryOut, HistoryIn
 from .ep_comorbidity import EpCoMorbidityOut, EpCoMorbidityIn
@@ -40,10 +42,20 @@ class EpOut(EpBase):
         orm_mode = True
 
 
-class EpOutWithDoctorName(EpBase):
+class EpOutWithDoctorAndPatient(EpBase):
     id: int
     created_at: datetime
-    doctor_name: Optional[str] = None
+    doctor: List[UserOut]
+    patient: List [UserOut]
+
+    class Config:
+        orm_mode = True
+
+
+class EpOutWithPatient(EpBase):
+    id: int
+    created_at: datetime
+    patient: List [UserOut]
 
     class Config:
         orm_mode = True
