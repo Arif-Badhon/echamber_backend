@@ -2,12 +2,12 @@ from typing import List, Union
 from fastapi import APIRouter
 from db import get_db
 from exceptions.service_result import handle_result
-from schemas.eprescriptions import EpIn, EpAllOut, EpOut
+from schemas.eprescriptions import EpIn, EpAllOut, EpOut, EpOutWithDoctorAndPatient, EpOutWithPatient
 from services import patients_service, ep_service, doctor_ep_header_service
 from sqlalchemy.orm import Session
 from fastapi import Depends
-from schemas import EpPatientSearchOut, EpOut, EpOutWithDoctorName, EpAllOut, EpDiagnosisOut, DoctorEpHeaderOut, DoctorEpHeaderUpdate, ResultInt
-from api.v1.auth_dependcies import logged_in, logged_in_doctor, logged_in_employee, logged_in_moderator, logged_in_patient
+from schemas import EpPatientSearchOut, EpOut, EpAllOut, EpDiagnosisOut, DoctorEpHeaderOut, DoctorEpHeaderUpdate, ResultInt
+from api.v1.auth_dependcies import logged_in, logged_in_crm, logged_in_doctor, logged_in_employee, logged_in_moderator, logged_in_patient
 from utils import beginning_date, current_date
 
 router = APIRouter()
@@ -47,30 +47,35 @@ def single_prescription(id: int, db: Session = Depends(get_db)):
     return e
 
 
-@router.get('/patient/ep/', response_model=List[Union[ResultInt, List[EpOutWithDoctorName]]])
+@router.get('/patient/', response_model=List[Union[ResultInt, List[EpOutWithDoctorAndPatient]]])
 def patient_prescriptions(skip: int = 0, limit: int = 10, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_patient)):
     e = ep_service.patient_prescriptions(db=db, skip=skip, limit=limit, descending=True, count_results=True, patient_id=current_user.id)
     return handle_result(e)
 
 
-@router.get('/doctor/ep/', response_model=List[Union[ResultInt, List[EpOutWithDoctorName]]])
+@router.get('/doctor/', response_model=List[Union[ResultInt, List[EpOutWithPatient]]])
 def doctor_prescriptions(start_date: str = beginning_date, end_date: str = current_date, skip: int = 0, limit: int = 10, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_doctor)):
     e = ep_service.doctor_prescriptions(db=db, start_date=start_date, end_date=end_date, skip=skip, limit=limit, descending=True, count_results=True, doctor_id=current_user.id)
     return handle_result(e)
 
 ### antor ### 
-@router.get('/all/ep/', response_model=List[Union[ResultInt, List[EpOutWithDoctorName]]])
-def all_prescriptions(start_date: str = beginning_date, end_date: str = current_date, skip: int = 0, limit: int = 10, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_employee)):
+@router.get('/all/', response_model=List[Union[ResultInt, List[EpOutWithDoctorAndPatient]]])
+def all_prescriptions(start_date: str = beginning_date, end_date: str = current_date, skip: int = 0, limit: int = 10, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_crm)):
     e = ep_service.all_prescriptions(db=db, start_date=start_date, end_date=end_date, skip=skip, limit=limit, descending=True, count_results=True)
     return handle_result(e)
 
-@router.get('/count/ep/')
-def prescription_count(start_date: str = beginning_date, end_date: str = current_date, skip: int = 0, limit: int = 0, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_employee)):
-    e = ep_service.prescription_count(db=db, start_date=start_date, end_date=end_date, skip=skip, limit=limit, descending=True, count_results=True)
+@router.get('/count/')
+def prescriptions_count(start_date: str = beginning_date, end_date: str = current_date, skip: int = 0, limit: int = 0, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_employee)):
+    e = ep_service.prescriptions_count(db=db, start_date=start_date, end_date=end_date, skip=skip, limit=limit, descending=True, count_results=True)
     return handle_result(e)
 
-@router.get('/single/ep/{user_id}', response_model=List[Union[ResultInt, List[EpOutWithDoctorName]]])
-def single_prescription_by_user_id(user_id: int, skip: int = 0, limit: int = 10, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_moderator)):
-    e = ep_service.single_prescription_by_user_id(db=db, patient_id=user_id, skip=skip, limit=limit, descending=True, count_results=True)
+@router.get('/patient/{user_id}', response_model=List[Union[ResultInt, List[EpOutWithDoctorAndPatient]]])
+def patient_prescriptions_by_user_id(user_id: int, skip: int = 0, limit: int = 10, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_crm)):
+    e = ep_service.patient_prescriptions_by_user_id(db=db, patient_id=user_id, skip=skip, limit=limit, descending=True, count_results=True)
+    return handle_result(e)
+
+@router.get('/doctor/{user_id}', response_model=List[Union[ResultInt, List[EpOutWithDoctorAndPatient]]])
+def doctor_prescriptions_by_user_id(user_id: int, skip: int = 0, limit: int = 10, db: Session = Depends(get_db), current_user: Session = Depends(logged_in_crm)):
+    e = ep_service.doctor_prescriptions_by_user_id(db=db, doctor_id=user_id, skip=skip, limit=limit, descending=True, count_results=True)
     return handle_result(e)
     

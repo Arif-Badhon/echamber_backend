@@ -133,47 +133,90 @@ class EPrescriptionService(BaseService[EPrescription, EpBase, EpUpdate]):
     def patient_prescriptions(self, db: Session, skip: int, limit: int, descending: bool, count_results: bool, patient_id: int):
         data = self.repo.get_by_key(db=db, skip=skip, limit=limit, descending=descending, count_results=count_results, patient_id=patient_id)
 
-        if not data:
-            data = []
+        ep =  []
+        for i in data[1]:
+            i.doctor = users_repo.get_by_key(db=db, skip=0, limit=2, descending=True, count_results=False, id=i.doctor_id)
+            i.patient = users_repo.get_by_key(db=db, skip=0, limit=2, descending=True, count_results=False, id=i.patient_id)
+            
+            ep.append(i)
+            data[1] = ep
 
-        return ServiceResult(data, status_code=status.HTTP_200_OK)
+        if not data:
+            return ServiceResult([], status_code=status.HTTP_200_OK)
+        else:
+            return ServiceResult(data, status_code=status.HTTP_200_OK)
 
     def doctor_prescriptions(self, db: Session, start_date: str, end_date: str, skip: int, limit: int, descending: bool, count_results: bool, doctor_id: int):
         data = self.repo.get_by_key_and_date(db=db, start_date=start_date, end_date=end_date, skip=skip, limit=limit, descending=descending, count_results=count_results, doctor_id=doctor_id)
 
-        if not data:
-            data = []
-
+        ep =  []
         for i in data[1]:
-            i.doctor_name = users_repo.get_one(db=db, id=i.doctor_id).name
-        return ServiceResult(data, status_code=status.HTTP_200_OK)
+            i.patient = users_repo.get_by_key(db=db, skip=0, limit=2, descending=True, count_results=False, id=i.patient_id)
+            
+            ep.append(i)
+            data[1] = ep
+
+        if not data:
+            return ServiceResult([], status_code=status.HTTP_200_OK)
+        else:
+            return ServiceResult(data, status_code=status.HTTP_200_OK)
 
     # Antor #
     def all_prescriptions(self, db: Session, start_date: str, end_date: str, skip: int, limit: int, descending: bool, count_results: bool):
         data = self.repo.get_with_pagination_and_date(db=db, start_date=start_date, end_date=end_date, skip=skip, limit=limit, descending=descending, count_results=count_results)
 
-        if not data:
-            data = []
+        ep =  []
+        for i in data[1]:
+            i.doctor = users_repo.get_by_key(db=db, skip=0, limit=2, descending=True, count_results=False, id=i.doctor_id)
+            i.patient = users_repo.get_by_key(db=db, skip=0, limit=2, descending=True, count_results=False, id=i.patient_id)
+            
+            ep.append(i)
+            data[1] = ep
 
-        return ServiceResult(data, status_code=status.HTTP_200_OK)
+        if not data:
+            return ServiceResult([], status_code=status.HTTP_200_OK)
+        else:
+            return ServiceResult(data, status_code=status.HTTP_200_OK)
     
-    def prescription_count(self, db: Session, start_date: str, end_date: str, skip: int, limit: int, descending: bool, count_results: bool):
+    def prescriptions_count(self, db: Session, start_date: str, end_date: str, skip: int, limit: int, descending: bool, count_results: bool):
         data = self.repo.get_with_pagination_and_date(db=db, start_date=start_date, end_date=end_date, skip=skip, limit=limit, descending=descending, count_results=count_results)
 
         if not data:
-            data = []
+            return ServiceResult([], status_code=status.HTTP_200_OK)
+        else:
+            return ServiceResult(data, status_code=status.HTTP_200_OK)
 
-        return ServiceResult(data, status_code=status.HTTP_200_OK)
-
-    def single_prescription_by_user_id(self, db: Session, patient_id: int, skip: int, limit: int, descending: bool, count_results: bool):
+    def patient_prescriptions_by_user_id(self, db: Session, patient_id: int, skip: int, limit: int, descending: bool, count_results: bool):
         data = self.repo.get_by_key(db=db, patient_id=patient_id, skip=skip, limit=limit, descending=descending, count_results=count_results)
 
-        if not data:
-            data = []
-
+        ep =  []
         for i in data[1]:
-            i.doctor_name = users_repo.get_one(db=db, id=i.doctor_id).name
-        return ServiceResult(data, status_code=status.HTTP_200_OK)
+            i.doctor = users_repo.get_by_key(db=db, skip=0, limit=2, descending=True, count_results=False, id=i.doctor_id)
+            i.patient = users_repo.get_by_key(db=db, skip=0, limit=2, descending=True, count_results=False, id=i.patient_id)
+            
+            ep.append(i)
+            data[1] = ep
+
+        if not data:
+            return ServiceResult([], status_code=status.HTTP_200_OK)
+        else:
+            return ServiceResult(data, status_code=status.HTTP_200_OK)
+    
+    def doctor_prescriptions_by_user_id(self, db: Session, doctor_id: int, skip: int, limit: int, descending: bool, count_results: bool):
+        data = self.repo.get_by_key(db=db, doctor_id=doctor_id, skip=skip, limit=limit, descending=descending, count_results=count_results)
+
+        ep =  []
+        for i in data[1]:
+            i.doctor = users_repo.get_by_key(db=db, skip=0, limit=2, descending=True, count_results=False, id=i.doctor_id)
+            i.patient = users_repo.get_by_key(db=db, skip=0, limit=2, descending=True, count_results=False, id=i.patient_id)
+            
+            ep.append(i)
+            data[1] = ep
+
+        if not data:
+            return ServiceResult([], status_code=status.HTTP_200_OK)
+        else:
+            return ServiceResult(data, status_code=status.HTTP_200_OK)
 
 
 ep_service = EPrescriptionService(EPrescription, ep_repo)
