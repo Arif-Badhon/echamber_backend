@@ -16,7 +16,6 @@ router = APIRouter()
 
 
 @router.get('/', response_model=List[DoctorUserWithSpecialities])
-# @router.get('/')
 def search(search: str, skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
     data = doctors_search_service.doctor_search(db=db, skip=skip, limit=limit, search=search)
     return data

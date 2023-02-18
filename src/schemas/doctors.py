@@ -75,7 +75,9 @@ class DoctorDetails(BaseModel):
 class DoctorUserWithSpecialities(BaseModel):
     id: int
     name: str
+    phone: str
     sex: str
+    doctor: List[DoctorOut]
     specialities: List[DoctorSpecialityOut]
 
     class Config:
