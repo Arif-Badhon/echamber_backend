@@ -50,11 +50,12 @@ class HealthPlanForPatient(BaseService[HealthPlanForPatient, HealthPlanForPatien
         if not created_by_employee:
             return ServiceResult(AppException.ServerError("Problem with Health Plan Activity"))
         else:
-            if voucher_code[0:3] == 'BHP':
-                s = sms_service.send_sms(
-                    sms_to='88' + handle_result(patient_data).phone,
-                    sms='ধন্যবাদ, আমাদের বেসিক হেলথ প্ল্যান টি নেয়ার জন্য। ভবিষ্যতে আপনার স্বাস্থ্য সম্পর্কিত যেকোনো প্রয়োজনে যোগাযোগ করুন 01571-016461, 01322-658481 এই নাম্বারে। \nধন্যবাদান্তে \nHEALTHx ')
-            elif voucher_code[0:3] == 'FHP':
+            # if voucher_code[0:3] == 'BHP':
+            #     s = sms_service.send_sms(
+            #         sms_to='88' + handle_result(patient_data).phone,
+            #         sms='ধন্যবাদ, আমাদের বেসিক হেলথ প্ল্যান টি নেয়ার জন্য। ভবিষ্যতে আপনার স্বাস্থ্য সম্পর্কিত যেকোনো প্রয়োজনে যোগাযোগ করুন 01571-016461, 01322-658481 এই নাম্বারে। \nধন্যবাদান্তে \nHEALTHx ')
+            # el
+            if voucher_code[0:3] == 'FHP':
                 s = sms_service.send_sms(sms_to='88' + handle_result(patient_data).phone, sms='"ফ্যামিলি হেলথ প্ল্যানে" আপনার রেজিস্ট্রেশন টি সঠিকভাবে সম্পন্ন হয়েছে। আপনার প্ল্যান টির মেয়াদ থাকছে ' +
                                          str(data_in.service.order_completion).split(' ')[0] +
                                          ' পর্যন্ত। প্যাকেজ সংক্রান্ত যেকোনো সেবা গ্রহনের জন্য সরাসরি যোগাযোগ করুন 01571-016461, 01322-658481 এই নাম্বারে। \nধন্যবাদান্তে \nHEALTHx')
